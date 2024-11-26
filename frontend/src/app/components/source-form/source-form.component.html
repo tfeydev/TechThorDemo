@@ -1,0 +1,15 @@
+<mat-form-field>
+  <mat-label>Source Type</mat-label>
+  <mat-select (selectionChange)="onTypeChange($event)">
+    <mat-option value="select">Select</mat-option>
+    <mat-option value="csv">CSV</mat-option>
+    <mat-option value="json">JSON</mat-option>
+    <mat-option value="api">API</mat-option>
+    <mat-option value="database">Database</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<app-csv-source *ngIf="sourceType === 'csv'"></app-csv-source>
+<app-json-source *ngIf="sourceType === 'json'"></app-json-source>
+<app-api-source *ngIf="sourceType === 'api'"></app-api-source>
+<app-database-source *ngIf="sourceType === 'database'"></app-database-source>

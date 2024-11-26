@@ -1,0 +1,63 @@
+<h3>Database Source Configuration</h3>
+
+<form [formGroup]="databaseForm" (ngSubmit)="onSubmit()" fxLayout="column" fxLayoutGap="20px">
+  <!-- Row 1: Database Type, Host, Port -->
+  <div fxLayout="row" fxLayoutGap="20px">
+    <mat-form-field appearance="fill" fxFlex>
+      <mat-label>Database Type</mat-label>
+      <mat-select formControlName="db_type">
+        <mat-option value="postgresql">PostgreSQL</mat-option>
+        <mat-option value="mysql">MySQL</mat-option>
+        <mat-option value="sqlite">SQLite</mat-option>
+      </mat-select>
+      <mat-error *ngIf="databaseForm.get('db_type')?.invalid">Database type is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" fxFlex>
+      <mat-label>Host</mat-label>
+      <input matInput formControlName="host" />
+      <mat-error *ngIf="databaseForm.get('host')?.invalid">Host is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" fxFlex>
+      <mat-label>Port</mat-label>
+      <input matInput type="number" formControlName="port" />
+      <mat-error *ngIf="databaseForm.get('port')?.invalid">Port is required.</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Row 2: User, Password, Database Name -->
+  <div fxLayout="row" fxLayoutGap="20px">
+    <mat-form-field appearance="fill" fxFlex>
+      <mat-label>User</mat-label>
+      <input matInput formControlName="user" />
+      <mat-error *ngIf="databaseForm.get('user')?.invalid">User is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" fxFlex>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+      <mat-error *ngIf="databaseForm.get('password')?.invalid">Password is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" fxFlex>
+      <mat-label>Database Name</mat-label>
+      <input matInput formControlName="dbname" />
+      <mat-error *ngIf="databaseForm.get('dbname')?.invalid">Database name is required.</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Row 3: Tables -->
+  <div>
+    <mat-form-field appearance="fill" fxFlex>
+      <mat-label>Tables</mat-label>
+      <textarea matInput formControlName="tables"></textarea>
+      <mat-error *ngIf="databaseForm.get('tables')?.invalid">Tables are required.</mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Submit Button -->
+  <button mat-raised-button color="primary" type="submit" [disabled]="databaseForm.invalid">
+    Add Database Source
+  </button>
+</form>

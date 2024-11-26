@@ -1,0 +1,14 @@
+<h3>CSV Source Configuration</h3>
+<form [formGroup]="csvForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>File Path</mat-label>
+    <input matInput id="file-path" formControlName="file_path" />
+    <mat-error *ngIf="csvForm.get('file_path')?.invalid && csvForm.get('file_path')?.touched">
+      File Path is required.
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="csvForm.invalid">
+    Add CSV Source
+  </button>
+</form>

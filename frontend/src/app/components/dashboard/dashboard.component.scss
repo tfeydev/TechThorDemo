@@ -1,0 +1,31 @@
+.error {
+    color: red;
+    font-weight: bold;
+  }
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .error-message {
+    margin: 20px 0;
+  }
+  
+  .error-card {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  mat-card {
+    margin: 20px 0;
+  }
+  

@@ -1,0 +1,19 @@
+<h3>JSON Source Configuration</h3>
+<form [formGroup]="jsonForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>File Path</mat-label>
+    <input matInput id="file-path" formControlName="file_path" />
+    <mat-error *ngIf="jsonForm.get('file_path')?.invalid && jsonForm.get('file_path')?.touched">
+      File Path is required.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Keys (Comma-Separated)</mat-label>
+    <input matInput id="keys" formControlName="keys" />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="jsonForm.invalid">
+    Add JSON Source
+  </button>
+</form>
