@@ -1,0 +1,19 @@
+sources:
+- file_path: data/sample.json
+  name: test_json
+  type: json
+- headers: {}
+  name: test_api
+  params: {}
+  type: api
+  url: https://api.example.com/data
+- connection:
+    dbname: test_db
+    host: localhost
+    password: passwd
+    port: 5432
+    user: postgres
+  name: test_database
+  tables:
+  - customer
+  type: database

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.services.data_service import get_all_sources, add_source, update_source, delete_source
 from app.models.source_models import Source
+import logging
 
 router = APIRouter()
 
@@ -24,5 +25,7 @@ async def update_existing_source(updated_source: Source):
 @router.delete("/delete-source/{source_name}")
 async def remove_source(source_name: str):
     """Delete a source by name."""
+    logging.info(f"Received request to delete source: {source_name}")
     delete_source(source_name)
-    return {"message": "Source deleted successfully"}
+    return {"message": f"Source {source_name} deleted successfully"}
+

@@ -1,2 +1,5 @@
-# Define the path to your YAML configuration file
-CONFIG_PATH = "config/config.yaml"
+import os
+
+# Ensure path is absolute for reliability
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(BASE_DIR, "config.yaml")
