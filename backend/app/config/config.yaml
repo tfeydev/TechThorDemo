@@ -1,0 +1,12 @@
+sources:
+- sources:
+  - connection: null
+    file_path: data/sample.csv
+    name: Sample CSV Source
+    tables: null
+    type: csv
+  - connection: null
+    file_path: data/sample.csv
+    name: Sample CSV Source3
+    tables: null
+    type: csv

@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable({ 
   providedIn: 'root' })
 export class SourceService {
-  private baseUrl = 'http://127.0.0.1:8000/data/';
+  private readonly baseUrl = 'http://127.0.0.1:8000/data';
 
   constructor(private readonly http: HttpClient) {}
 
@@ -22,13 +22,12 @@ export class SourceService {
     return this.http.get(`${this.baseUrl}/load-data`);
   }
 
-
   editSource(source: any): Observable<any> {
-    return this.http.put('/api/edit-source', source);
+    return this.http.put(`${this.baseUrl}/edit-source`, source);
   }
   
   deleteSource(source: any): Observable<any> {
-    return this.http.delete(`/api/delete-source/${source.id}`);
+    return this.http.delete(`${this.baseUrl}/delete-source/${source.name}`);
   }
   
 }

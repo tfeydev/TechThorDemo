@@ -104,18 +104,30 @@ export class DashboardComponent {
   }
 
   deleteSource(source: any): void {
+    if (!source.name) {
+      console.error('Source name is missing!');
+      return;
+    }
+  
     const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
       width: '300px',
-      data: { source },
+      data: { sourceName: source.name }, // Ensure you pass the name
     });
-
+  
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this.sourceService.deleteSource(source).subscribe(() => this.fetchSources());
+        this.sourceService.deleteSource(source.name).subscribe({
+          next: () => {
+            this.fetchSources(); // Refresh the list after deletion
+          },
+          error: (err) => {
+            console.error('Failed to delete source:', err);
+          },
+        });
       }
     });
   }
-
+  
   confirmDeleteSource(sourceName: string): void {
     this.confirmDelete = true;
     const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
@@ -123,10 +135,13 @@ export class DashboardComponent {
       data: { name: sourceName },
     });
 
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.deleteSource(sourceName);
       }
     });
+    
   }
+  
 }

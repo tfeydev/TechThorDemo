@@ -20,10 +20,10 @@
     <div *ngIf="!loading && !error && sources.length > 0">
       <mat-card>
         <mat-card-title>Available Sources</mat-card-title>
-        <mat-card-content>
+        <mat-card-content *ngFor="let source of sources">
           <mat-list>
-            <mat-list-item *ngFor="let source of sources">
-              <span matLine>{{ source.name }}</span>
+            <span matLine>{{ source.name }}</span>
+            <mat-list-item >
             </mat-list-item>
           </mat-list>
         </mat-card-content>
@@ -60,20 +60,6 @@
 
 <h3>Available Sources</h3>
 
-<mat-list *ngIf="sources.length > 0">
-  <mat-list-item *ngFor="let source of sources">
-    <span>{{ source.name }}</span>
-    <span class="actions">
-      <button mat-icon-button color="primary" (click)="editSource(source)">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button mat-icon-button color="warn" (click)="deleteSource(source)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </span>
-  </mat-list-item>
-</mat-list>
-
 <mat-table [dataSource]="sources" class="mat-elevation-z8">
   <!-- Name Column -->
   <ng-container matColumnDef="name">
@@ -103,8 +89,6 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
-
-
 
 <!-- Confirmation Dialog for Delete -->
 <mat-dialog-content *ngIf="confirmDelete">

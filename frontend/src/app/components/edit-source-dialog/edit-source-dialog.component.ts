@@ -8,25 +8,26 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./edit-source-dialog.component.scss'],
 })
 export class EditSourceDialogComponent {
-  editForm: FormGroup;
+  editSourceForm: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<EditSourceDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly dialogRef: MatDialogRef<EditSourceDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.editForm = this.fb.group({
+    this.editSourceForm = this.fb.group({
       name: [data.source.name, Validators.required],
       type: [data.source.type, Validators.required],
+      file_path: [data.source.file_path],
     });
   }
 
-  onSave(): void {
-    if (this.editForm.valid) {
-      this.dialogRef.close(this.editForm.value);
+  onSubmit(): void {
+    if (this.editSourceForm.valid) {
+      this.dialogRef.close(this.editSourceForm.value); // Pass the edited data back to the parent
     }
   }
-
+  
   onCancel(): void {
     this.dialogRef.close();
   }
