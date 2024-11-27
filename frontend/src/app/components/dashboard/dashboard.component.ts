@@ -8,11 +8,10 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { SourceService } from '../../services/source.service';
 import { CommonModule } from '@angular/common';
-import { EditSourceDialogComponent } from '../edit-source-dialog/edit-source-dialog.component';
-import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
+import { ConfirmDeleteDialogComponent } from '../dialogs/confirm-delete-dialog/confirm-delete-dialog.component';
 import { ViewYamlDialogComponent } from '../dialogs/view-yaml-dialog/view-yaml-dialog.component';
 import { Router } from '@angular/router';
-import { EditYamlDialogComponent } from '../edit-yaml-dialog/edit-yaml-dialog.component';
+import { EditYamlDialogComponent } from '../dialogs/edit-yaml-dialog/edit-yaml-dialog.component';
 
 
 @Component({
@@ -147,25 +146,12 @@ export class DashboardComponent {
     this.sources = this.sources.slice(start, end);
   }
 
-  editSource(source: any): void {
-    const dialogRef = this.dialog.open(EditSourceDialogComponent, {
-      width: '400px',
-      data: { source },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.sourceService.editSource(result).subscribe(() => this.fetchSources());
-      }
-    });
-  }
 
   deleteSource(source: any): void {
     if (!source.name) {
       console.error('Source name is missing!');
       return;
     }
-  
     const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
       width: '300px',
       data: { sourceName: source.name }, // Ensure you pass the name
