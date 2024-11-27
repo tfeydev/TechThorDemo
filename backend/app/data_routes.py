@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict
 from app.yaml_service import load_sources, save_source_to_yaml
 from app.validators import (
     validate_csv_source,
@@ -17,9 +17,13 @@ logging.basicConfig(level=logging.INFO)
 class Source(BaseModel):
     name: str
     type: str
-    file_path: Optional[str] = None
-    connection: Optional[dict] = None
-    tables: Optional[List[str]] = None
+    connection: Dict[str, str] = None
+    file_path: str = None
+    keys: List[str] = None
+
+class YamlConfig(BaseModel):
+    sources: List[Source]   
+
 
 # FastAPI router
 data_router = APIRouter()
@@ -137,15 +141,11 @@ async def load_data(page: int = Query(1, ge=1, description="Page number (startin
 
 
 @data_router.put("/update-yaml")
-async def update_yaml(request: Request):
-    """
-    Update the YAML file directly.
-    """
+async def update_yaml(config: YamlConfig):
     try:
-        yaml_data = await request.json()
-        with open(CONFIG_PATH, "w") as file:
-            file.write(yaml_data.get("updatedYaml", ""))
-        return {"message": "YAML updated successfully."}
+        # Assuming `save_source_to_yaml` can handle the entire config at once
+        save_source_to_yaml(config.dict(), overwrite=True)
+        return {"message": "YAML configuration updated successfully"}
     except Exception as e:
-        logging.error(f"Failed to update YAML: {e}")
-        raise HTTPException(status_code=500, detail="Failed to update YAML.")
+        raise HTTPException(status_code=500, detail=f"Failed to update YAML: {str(e)}")
+    

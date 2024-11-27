@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({ 
   providedIn: 'root' })
@@ -30,8 +29,8 @@ export class SourceService {
     return this.http.put(`${this.baseUrl}/edit-source`, source);
   }
 
-  updateSource(updatedSource: any) {
-    return this.http.put(`${this.baseUrl}/update-source`, updatedSource);
+  updateYaml(source: any) {
+    return this.http.put(`${this.baseUrl}/update-source`, source);
   }
   
   deleteSource(source: any): Observable<any> {

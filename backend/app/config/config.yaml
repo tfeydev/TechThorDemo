@@ -1,12 +1,16 @@
 sources:
-- sources:
-  - connection: null
-    file_path: data/sample.csv
-    name: Sample CSV Source
-    tables: null
-    type: csv
-  - connection: null
-    file_path: data/sample.csv
-    name: Sample CSV Source3
-    tables: null
-    type: csv
+- connection: null
+  file_path: data/test.csv
+  keys: null
+  name: test_csv
+  type: csv
+- connection:
+    dbname: test_db
+    host: localhost
+    password: passwd
+    port: '5432'
+    user: postgres
+  file_path: null
+  keys: null
+  name: test_database
+  type: database

@@ -1,8 +1,9 @@
 <h2 mat-dialog-title>YAML Configuration</h2>
 <mat-dialog-content>
   <!-- json pipe used here -->
-  <pre>{{ data.source | json }}</pre>
+  <pre>{{ yamlData | json }}</pre>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="close()">Close</button>
+  <button mat-raised-button color="primary" (click)="editYaml()">Edit</button>
+  <button mat-raised-button color="warn" (click)="close()">Close</button>
 </mat-dialog-actions>

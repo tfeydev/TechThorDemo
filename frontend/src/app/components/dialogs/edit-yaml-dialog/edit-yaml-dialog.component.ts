@@ -18,11 +18,16 @@ export class EditYamlDialogComponent {
     public dialogRef: MatDialogRef<EditYamlDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.yamlData = data.yamlData; // Initialize the text area with the existing YAML
+    this.yamlData = JSON.stringify(data.yamlData, null, 2);
   }
 
   save(): void {
-    this.dialogRef.close({ updatedYaml: this.yamlData });
+    try {
+      const parsedYaml = JSON.parse(this.yamlData); // Überprüfen, ob JSON gültig ist
+      this.dialogRef.close(parsedYaml); // Geänderte Daten zurückgeben
+    } catch (e) {
+      alert('Ungültiges YAML-Format. Bitte überprüfen Sie die Eingabe.');
+    }
   }
 
   cancel(): void {
