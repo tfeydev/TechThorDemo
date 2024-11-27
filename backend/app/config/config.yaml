@@ -1,16 +1,25 @@
 sources:
-- connection: null
-  file_path: data/test.csv
-  keys: null
-  name: test_csv
-  type: csv
-- connection:
-    dbname: test_db
-    host: localhost
-    password: passwd
-    port: '5432'
-    user: postgres
-  file_path: null
-  keys: null
-  name: test_database
-  type: database
+  - name: test_csv
+    type: csv
+    file_path: data/sample.csv
+
+  - name: test_json
+    type: json
+    file_path: data/sample.json
+
+  - name: test_api
+    type: api
+    url: https://api.example.com/data
+    headers: {}
+    params: {}
+
+  - name: test_database
+    type: database
+    connection:
+      host: localhost
+      port: 5432
+      user: postgres
+      password: passwd
+      dbname: test_db
+    tables:
+      - customer

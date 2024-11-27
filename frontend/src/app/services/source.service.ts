@@ -16,6 +16,10 @@ export class SourceService {
   addSource(source: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/add-source`, source);
   }
+
+  updateSource(source: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update-source`, source);
+  }
   
   loadData(): Observable<any> {
     return this.http.get(`${this.baseUrl}/load-data`);
