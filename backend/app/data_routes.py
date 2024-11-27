@@ -70,6 +70,28 @@ async def get_sources():
     except Exception as e:
         logging.error(f"Failed to load sources: {e}")
         raise HTTPException(status_code=500, detail="Error loading sources.")
+    
+
+@data_router.get("/load/{source_name}")
+async def load_data_by_name(source_name: str):
+    """
+    Load data for a specific source.
+    """
+    try:
+        sources = load_sources().get("sources", [])
+        source = next((s for s in sources if s.get("name") == source_name), None)
+
+        if not source:
+            raise HTTPException(status_code=404, detail=f"Source '{source_name}' not found.")
+
+        # Load data based on source type (extend this as needed)
+        if source["type"] == "csv":
+            return load_csv(source["file_path"])
+        else:
+            return {"message": f"Data loading for type '{source['type']}' is not implemented yet."}
+    except Exception as e:
+        logging.error(f"Error loading data for source '{source_name}': {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load data: {e}")    
 
 
 @data_router.delete("/delete-source/{source_name}")

@@ -77,10 +77,16 @@
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
     <mat-cell *matCellDef="let source">
-      <button mat-icon-button (click)="editSource(source)">
+      <!-- Load Data Icon -->
+      <button mat-icon-button color="primary" (click)="viewSourceConfig(source)">
+        <mat-icon>visibility</mat-icon>
+      </button>
+      <!-- Edit Icon -->
+      <button mat-icon-button color="accent" (click)="editSource(source)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteSource(source)">
+      <!-- Delete Icon -->
+      <button mat-icon-button color="warn" (click)="deleteSource(source)">
         <mat-icon>delete</mat-icon>
       </button>
     </mat-cell>
@@ -89,6 +95,7 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
+
 
 <!-- Confirmation Dialog for Delete -->
 <mat-dialog-content *ngIf="confirmDelete">

@@ -10,6 +10,9 @@ import { SourceService } from '../../services/source.service';
 import { CommonModule } from '@angular/common';
 import { EditSourceDialogComponent } from '../edit-source-dialog/edit-source-dialog.component';
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
+import { ViewYamlDialogComponent } from '../view-yaml-dialog/view-yaml-dialog.component';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +27,7 @@ import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-d
     MatCardModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    MatTableModule,
+    MatTableModule
   ],
 })
 export class DashboardComponent {
@@ -39,7 +42,11 @@ export class DashboardComponent {
   confirmDelete = false; // Added this property to manage delete confirmation
   displayedColumns: string[] = ['name', 'type', 'actions']; // Added displayedColumns for mat-table
 
-  constructor(private sourceService: SourceService, private dialog: MatDialog) {}
+  constructor(
+    private sourceService: SourceService, 
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchSources();
@@ -62,6 +69,20 @@ export class DashboardComponent {
     });
   }
 
+  viewYaml(source: any): void {
+    // Open the View YAML dialog
+    const dialogRef = this.dialog.open(ViewYamlDialogComponent, {
+      width: '400px',
+      data: { source },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.viewData) {
+        this.router.navigate(['/data', source.name]); // Use Router to navigate
+      }
+    });
+  }
+
   loadData(): void {
     this.loading = true;
     this.error = null;
@@ -75,6 +96,20 @@ export class DashboardComponent {
         this.error = 'Failed to load data.';
         this.loading = false;
       },
+    });
+  }
+
+  viewSourceConfig(source: any): void {
+    const dialogRef = this.dialog.open(ViewYamlDialogComponent, {
+      width: '500px',
+      data: { source },
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.viewData) {
+        // Navigate to /data/... when "Load Data" is clicked in the dialog
+        this.router.navigateByUrl(`/data/${source.name}`);
+      }
     });
   }
 

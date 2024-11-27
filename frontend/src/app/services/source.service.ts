@@ -22,6 +22,10 @@ export class SourceService {
     return this.http.get(`${this.baseUrl}/load-data`);
   }
 
+  loadDataByName(name: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/data/load/${name}`);
+  }
+
   editSource(source: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/edit-source`, source);
   }
