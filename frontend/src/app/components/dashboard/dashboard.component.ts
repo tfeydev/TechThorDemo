@@ -10,7 +10,7 @@ import { SourceService } from '../../services/source.service';
 import { CommonModule } from '@angular/common';
 import { EditSourceDialogComponent } from '../edit-source-dialog/edit-source-dialog.component';
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
-import { ViewYamlDialogComponent } from '../view-yaml-dialog/view-yaml-dialog.component';
+import { ViewYamlDialogComponent } from '../dialogs/view-yaml-dialog/view-yaml-dialog.component';
 import { Router } from '@angular/router';
 import { EditYamlDialogComponent } from '../edit-yaml-dialog/edit-yaml-dialog.component';
 

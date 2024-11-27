@@ -14,12 +14,18 @@ def load_sources() -> dict:
         raise ValueError(f"Failed to parse YAML: {str(e)}")
 
 
-def save_source_to_yaml(new_source: dict, overwrite: bool = False):
-    """Save or overwrite sources in YAML file."""
-    config = load_sources()
+def save_source_to_yaml(data, overwrite=False):
+    """
+    Save the YAML configuration.
+    :param data: Data to save.
+    :param overwrite: If True, overwrite the entire file. Otherwise, append.
+    """
     if overwrite:
-        config["sources"] = [new_source]
+        config = data
     else:
-        config["sources"].append(new_source)
+        config = load_sources()
+        config["sources"].append(data)
+
     with open(CONFIG_PATH, "w") as file:
         yaml.dump(config, file)
+
