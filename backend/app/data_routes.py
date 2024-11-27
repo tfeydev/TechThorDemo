@@ -2,8 +2,40 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from app.yaml_service import load_sources, save_source_to_yaml
 from app.validators import validate_csv_source
 import logging
+from pydantic import BaseModel, Field
+from typing import Optional, List
 
 data_router = APIRouter()
+
+# FastAPI router
+data_router = APIRouter()
+
+# Pydantic model for request body
+class Source(BaseModel):
+    name: str = Field(..., description="The name of the source")
+    type: str = Field(..., description="The type of the source (e.g., csv, json, database, api)")
+    connection: Optional[dict] = Field(None, description="Connection details for database sources")
+    file_path: Optional[str] = Field(None, description="File path for CSV/JSON sources")
+    url: Optional[str] = Field(None, description="URL for API sources")
+    headers: Optional[dict] = Field(None, description="Headers for API sources")
+    params: Optional[dict] = Field(None, description="Parameters for API sources")
+    tables: Optional[List[str]] = Field(None, description="List of tables for database sources")
+
+# Endpoint to add a source
+@data_router.post("/data/add-source", status_code=201)
+async def add_source(source: Source):
+    """
+    Add a new data source.
+    """
+    try:
+        # Simulate saving the source (you would use save_source_to_yaml in real use case)
+        # Example:
+        # save_source_to_yaml(source.dict())
+        print(f"Source added: {source}")
+        return {"message": "Source added successfully", "source": source}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to add source: {e}")
+
 
 @data_router.get("/get-sources")
 async def get_sources():

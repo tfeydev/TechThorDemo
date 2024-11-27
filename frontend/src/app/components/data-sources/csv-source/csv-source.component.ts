@@ -5,8 +5,9 @@ import { SourceService } from '../../../services/source.service';
 @Component({
   selector: 'app-csv-source',
   templateUrl: './csv-source.component.html',
-  styleUrls: ['./csv-source.component.scss'],
+  styleUrls: ['./csv-source.component.scss']
 })
+
 export class CsvSourceComponent {
   csvForm: FormGroup;
 

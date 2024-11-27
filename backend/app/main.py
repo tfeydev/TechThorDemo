@@ -11,8 +11,7 @@ logging.info("Starting the TechThor Backend...")
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
-    # allow_origins=["*"],  # Replace "*" with specific origins if needed (e.g., ["http://localhost:4200"])
+    allow_origins=["http://localhost:4200"], # allow_origins=["*"],  # Replace "*" with specific origins if needed (e.g., ["http://localhost:4200"])
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods
     allow_headers=["*"],  # Allow all headers
