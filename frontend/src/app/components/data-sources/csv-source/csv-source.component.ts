@@ -1,36 +1,31 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { csvFilePathValidator } from '../../../utils/validators';
-import { CommonModule } from '@angular/common';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SourceService } from '../../../services/source.service';
 
 @Component({
   selector: 'app-csv-source',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  template: `
-    <form [formGroup]="csvForm" (ngSubmit)="onSubmit()">
-      <label for="filePath">CSV File Path</label>
-      <input id="filePath" formControlName="filePath" />
-      <div *ngIf="csvForm.get('filePath')?.errors?.['invalidFilePath']">
-        {{ csvForm.get('filePath')?.errors?.['invalidFilePath'] }}
-      </div>
-      <button type="submit" [disabled]="csvForm.invalid">Submit</button>
-    </form>
-  `,
+  templateUrl: './csv-source.component.html',
+  styleUrls: ['./csv-source.component.scss'],
 })
 export class CsvSourceComponent {
-  csvForm; 
+  csvForm: FormGroup;
 
-  constructor(private readonly fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private sourceService: SourceService) {
     this.csvForm = this.fb.group({
-        filePath: ['', [Validators.required, csvFilePathValidator]],
-      });
+      file_path: ['', Validators.required],
+    });
   }
 
   onSubmit() {
     if (this.csvForm.valid) {
-      console.log(this.csvForm.value);
+      this.sourceService.addSource({ ...this.csvForm.value, type: 'csv' }).subscribe({
+        next: (response) => {
+          console.log('Source added:', response);
+        },
+        error: (err) => {
+          console.error('Error adding source:', err);
+        },
+      });
     }
   }
 }

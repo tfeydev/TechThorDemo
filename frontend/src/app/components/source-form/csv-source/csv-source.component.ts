@@ -27,9 +27,12 @@ export class CsvSourceComponent {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.csvForm.valid) {
-      console.log('CSV Source:', this.csvForm.value);
+      console.log('CSV Source Data:', this.csvForm.value);
+      // Add logic to send data to backend
+    } else {
+      console.error('CSV Form is invalid.');
     }
   }
 }

@@ -1,24 +1,27 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ 
+  providedIn: 'root' })
 export class SourceService {
-  private baseUrl = 'http://127.0.0.1:8000';
+  private baseUrl = 'http://127.0.0.1:8000/data/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getSources(): Observable<any> {
     return this.http.get(`${this.baseUrl}/get-sources`);
   }
 
+  addSource(source: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/add-source`, source);
+  }
+  
   loadData(): Observable<any> {
     return this.http.get(`${this.baseUrl}/load-data`);
   }
 
-  addSource(source: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/add-source`, source);
-  }
 
   editSource(source: any): Observable<any> {
     return this.http.put('/api/edit-source', source);

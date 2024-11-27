@@ -1,26 +1,45 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from app.yaml_service import load_sources, save_source_to_yaml
+from app.validators import validate_csv_source
+import logging
 
 data_router = APIRouter()
 
 @data_router.get("/get-sources")
 async def get_sources():
-    """Retrieve all sources from the YAML configuration."""
+    """Retrieve all sources from the YAML file."""
     try:
         sources = load_sources()
         return {"sources": sources.get("sources", [])}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to load sources: {e}")
-
+        logging.error(f"Failed to load sources: {e}")
+        raise HTTPException(status_code=500, detail="Error loading sources.")
 
 @data_router.post("/add-source")
-async def add_source(source: dict):
-    """Add a new source to the YAML configuration."""
+async def add_source(request: Request):
+    """Add a new source."""
     try:
-        save_source_to_yaml(source)
-        return {"message": "Source added successfully"}
+        new_source = await request.json()
+        logging.debug(f"Received new source: {new_source}")
+
+        # Validate source based on type
+        source_type = new_source.get("type")
+        if source_type == "csv":
+            validate_csv_source(new_source)
+        elif source_type == "json":
+            validate_json_source(new_source)
+        elif source_type == "api":
+            validate_api_source(new_source)
+        elif source_type == "database":
+            validate_database_source(new_source)
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported source type.")
+
+        save_source_to_yaml(new_source)
+        return {"message": "Source added successfully."}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to save source: {e}")
+        logging.error(f"Error adding source: {e}")
+        raise HTTPException(status_code=400, detail=f"Error adding source: {str(e)}")
 
 
 @data_router.delete("/delete-source/{source_name}")

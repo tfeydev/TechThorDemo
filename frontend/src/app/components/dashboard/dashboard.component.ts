@@ -3,7 +3,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { SourceService } from '../../services/source.service';
 import { CommonModule } from '@angular/common';
 import { EditSourceDialogComponent } from '../edit-source-dialog/edit-source-dialog.component';
@@ -20,14 +22,22 @@ import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-d
     MatListModule,
     MatIconModule,
     MatCardModule,
-    MatProgressSpinnerModule 
-  ]
+    MatProgressSpinnerModule,
+    MatPaginatorModule,
+    MatTableModule,
+  ],
 })
 export class DashboardComponent {
-  sources: any[] = [];
-  loadedData: any;
-  loading = false;
-  error = '';
+  sources: any[] = []; // List of sources
+  totalSources: number = 0; // Total number of sources
+  pageSize: number = 5; // Items per page
+  currentPage: number = 0; // Current page index
+  loading = false; // Loading state
+  error: string | null = null; // Error state
+  loadedData: any = null; // Data loaded from the backend
+
+  confirmDelete = false; // Added this property to manage delete confirmation
+  displayedColumns: string[] = ['name', 'type', 'actions']; // Added displayedColumns for mat-table
 
   constructor(private sourceService: SourceService, private dialog: MatDialog) {}
 
@@ -37,9 +47,12 @@ export class DashboardComponent {
 
   fetchSources(): void {
     this.loading = true;
+    this.error = null;
+
     this.sourceService.getSources().subscribe({
       next: (data) => {
         this.sources = data.sources || [];
+        this.totalSources = this.sources.length;
         this.loading = false;
       },
       error: (err) => {
@@ -51,7 +64,7 @@ export class DashboardComponent {
 
   loadData(): void {
     this.loading = true;
-    this.error = '';
+    this.error = null;
 
     this.sourceService.loadData().subscribe({
       next: (data) => {
@@ -63,6 +76,18 @@ export class DashboardComponent {
         this.loading = false;
       },
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updateVisibleSources();
+  }
+
+  updateVisibleSources(): void {
+    const start = this.currentPage * this.pageSize;
+    const end = start + this.pageSize;
+    this.sources = this.sources.slice(start, end);
   }
 
   editSource(source: any): void {
@@ -91,12 +116,16 @@ export class DashboardComponent {
     });
   }
 
-  confirmDelete(sourceName: string): void {
-    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent);
-  
+  confirmDeleteSource(sourceName: string): void {
+    this.confirmDelete = true;
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '300px',
+      data: { name: sourceName },
+    });
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.deleteSource(sourceName); // Proceed with deletion if confirmed
+        this.deleteSource(sourceName);
       }
     });
   }

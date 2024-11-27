@@ -1,0 +1,8 @@
+<form [formGroup]="csvForm" (ngSubmit)="onSubmit()">
+    <label for="filePath">CSV File Path</label>
+    <input id="filePath" formControlName="filePath" />
+    <div *ngIf="csvForm.get('filePath')?.errors?.['invalidFilePath']">
+      {{ csvForm.get('filePath')?.errors?.['invalidFilePath'] }}
+    </div>
+    <button type="submit" [disabled]="csvForm.invalid">Submit</button>
+  </form>
