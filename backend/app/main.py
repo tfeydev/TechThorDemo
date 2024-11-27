@@ -1,16 +1,22 @@
 from fastapi import FastAPI
-from app.endpoints.source_endpoints import source_router
-from app.endpoints.data_endpoints import data_router
-from app.services.logging_config import setup_logging
+from app.data_routes import data_router
+import logging
+from app.websockets import ws_router
 
-# Initialize Logging
-setup_logging()
+# Initialize the FastAPI app
+app = FastAPI()
+logging.info("Starting the TechThor Backend...")
 
-app = FastAPI(title="TechThor Backend")
+# Include the data router
+app.include_router(data_router, prefix="/data")
 
-app.include_router(source_router, prefix="/sources", tags=["Sources"])
-app.include_router(data_router, prefix="/data", tags=["Data"])
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler()],
+)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the TechThor Backend"}
+    return {"message": "Welcome to the TechThor Backend!"}

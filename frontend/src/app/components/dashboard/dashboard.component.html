@@ -74,6 +74,26 @@
   </mat-list-item>
 </mat-list>
 
+<mat-table [dataSource]="sources" class="mat-elevation-z8">
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let source"> {{ source.name }} </mat-cell>
+  </ng-container>
+
+  <!-- Type Column -->
+  <ng-container matColumnDef="type">
+    <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+    <mat-cell *matCellDef="let source"> {{ source.type }} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+<mat-paginator [length]="totalSources" [pageSize]="pageSize" (page)="onPageChange($event)">
+</mat-paginator>
+
+
 <!-- Confirmation Dialog for Delete -->
 <mat-dialog-content *ngIf="confirmDelete">
   Are you sure you want to delete this source?
