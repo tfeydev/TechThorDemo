@@ -6,10 +6,10 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-yaml-dialog',
-  templateUrl: './edit-yaml-dialog.component.html',
+  templateUrl: './edit-yaml-dialog.compontent.html',
+  styleUrls: ['./edit-yaml-dialog.component.scss'],
   standalone: true,
   imports: [MatDialogModule, MatButtonModule, CommonModule, FormsModule],
-  styleUrls: ['./edit-yaml-dialog.component.scss'],
 })
 export class EditYamlDialogComponent {
   yamlData: string;
