@@ -43,9 +43,9 @@ export class DashboardComponent {
   displayedColumns: string[] = ['name', 'type', 'actions']; // Added displayedColumns for mat-table
 
   constructor(
-    private sourceService: SourceService, 
-    private dialog: MatDialog,
-    private router: Router
+    private readonly sourceService: SourceService, 
+    private readonly dialog: MatDialog,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {

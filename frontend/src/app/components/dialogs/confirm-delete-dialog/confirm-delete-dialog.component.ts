@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
@@ -7,15 +7,15 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './confirm-delete-dialog.component.html',
   styleUrls: ['./confirm-delete-dialog.component.scss'],
   standalone: true,
-  imports: [MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule], // Ensure MatDialogModule is imported here
 })
 export class ConfirmDeleteDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDeleteDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { name: string }
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  confirm(): void {
+  confirmDelete(): void {
     this.dialogRef.close(true);
   }
 
