@@ -12,6 +12,7 @@ import { EditSourceDialogComponent } from '../edit-source-dialog/edit-source-dia
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
 import { ViewYamlDialogComponent } from '../view-yaml-dialog/view-yaml-dialog.component';
 import { Router } from '@angular/router';
+import { EditYamlDialogComponent } from '../edit-yaml-dialog/edit-yaml-dialog.component';
 
 
 @Component({
@@ -79,6 +80,27 @@ export class DashboardComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.viewData) {
         this.router.navigate(['/data', source.name]); // Use Router to navigate
+      }
+    });
+  }
+
+  editYaml(source: any): void {
+    const dialogRef = this.dialog.open(EditYamlDialogComponent, {
+      width: '500px',
+      data: { yamlData: JSON.stringify(source, null, 2) }, // Convert the source to YAML-like JSON
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.updatedYaml) {
+        try {
+          const updatedSource = JSON.parse(result.updatedYaml); // Convert back to JSON
+          // Call a service to update the YAML file on the backend
+          this.sourceService.updateSource(updatedSource).subscribe(() => {
+            this.fetchSources(); // Refresh the list
+          });
+        } catch (e) {
+          console.error('Invalid YAML format', e);
+        }
       }
     });
   }
@@ -169,7 +191,6 @@ export class DashboardComponent {
       width: '300px',
       data: { name: sourceName },
     });
-
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

@@ -134,3 +134,22 @@ async def load_data(page: int = Query(1, ge=1, description="Page number (startin
     except Exception as e:
         logging.error(f"Error loading data: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to load data: {e}")
+
+
+@data_router.put("/update-source")
+async def update_source(updated_source: dict):
+    """
+    Update an existing source in the YAML configuration.
+    """
+    try:
+        sources = load_sources().get("sources", [])
+        for idx, source in enumerate(sources):
+            if source["name"] == updated_source["name"]:
+                sources[idx] = updated_source
+                save_source_to_yaml({"sources": sources}, overwrite=True)
+                return {"message": f"Source '{updated_source['name']}' updated successfully."}
+
+        raise HTTPException(status_code=404, detail=f"Source '{updated_source['name']}' not found.")
+    except Exception as e:
+        logging.error(f"Error updating source: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to update source: {e}")

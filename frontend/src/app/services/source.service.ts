@@ -29,6 +29,10 @@ export class SourceService {
   editSource(source: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/edit-source`, source);
   }
+
+  updateSource(updatedSource: any) {
+    return this.http.put(`${this.baseUrl}/update-source`, updatedSource);
+  }
   
   deleteSource(source: any): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-source/${source.name}`);
