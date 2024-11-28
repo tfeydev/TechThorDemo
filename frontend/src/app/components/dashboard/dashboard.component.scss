@@ -1,47 +1,34 @@
-.error {
-    color: red;
-    font-weight: bold;
-  }
-  .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-  }
-  
-  .error-message {
-    margin: 20px 0;
-  }
-  
-  .error-card {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-  
-  mat-card {
-    margin: 20px 0;
-  }
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 16px;
 
-  .summary {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-  
-    .summary-card {
-      width: 150px;
-      text-align: center;
-    }
+  mat-progress-spinner {
+    margin-bottom: 8px;
   }
-  
-  .table-container {
-    margin-top: 20px;
+}
+
+.error-message {
+  margin: 16px 0;
+  text-align: center;
+
+  .error-card {
+    background: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+    border-radius: 4px;
   }
-  
-  
+}
+
+.table-section {
+  margin-top: 16px;
+}
+
+.no-sources-message {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 16px;
+  color: #757575;
+}
