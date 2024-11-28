@@ -28,10 +28,12 @@ export class UpdateSourceDialogComponent {
     private fb: FormBuilder
   ) {
     this.updateForm = this.fb.group({
-      name: [data.source.name, Validators.required],
-      type: [data.source.type, Validators.required],
+      name: [data.source.name, [Validators.required]],
+      type: [data.source.type, [Validators.required]],
       file_path: [data.source.file_path || ''],
       url: [data.source.url || ''],
+      headers: [data.source.headers || {}],
+      params: [data.source.params || {}],
       connection: [data.source.connection || {}],
       tables: [data.source.tables || []],
     });
@@ -39,12 +41,13 @@ export class UpdateSourceDialogComponent {
 
   save(): void {
     if (this.updateForm.valid) {
-      console.log('Sending updated source:', this.updateForm.value); // Debugging
-      this.dialogRef.close(this.updateForm.value);
+      console.log('Form submitted:', this.updateForm.value); // Debug
+      this.dialogRef.close(this.updateForm.value); // Daten an Dashboard zurückgeben
     } else {
-      console.error('Update form is invalid'); // Form validation error
+      console.error('Form is invalid:', this.updateForm.errors); // Debugging
     }
   }
+  
   
 
   cancel(): void {

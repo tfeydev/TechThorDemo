@@ -71,11 +71,9 @@ export class DashboardComponent implements OnInit {
   } 
   
   updateSource(source: any): void {
-    console.log('Opening update dialog for source:', source); // Debugging
-  
     const dialogRef = this.dialog.open(UpdateSourceDialogComponent, {
       width: '400px',
-      data: { source },
+      data: { source }, // Pass the source object to the dialog
     });
   
     dialogRef.afterClosed().subscribe((result) => {
@@ -84,10 +82,10 @@ export class DashboardComponent implements OnInit {
         this.sourceService.updateSource(result).subscribe({
           next: () => {
             console.log('Source updated successfully.');
-            this.fetchSources();
+            this.fetchSources(); // Refresh the source list
           },
           error: (err) => {
-            console.error('Failed to update source:', err); // Fehler im Backend
+            console.error('Failed to update source:', err); // Handle error
           },
         });
       } else {
@@ -95,6 +93,8 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+  
+  
   
 
   deleteSource(source: any): void {

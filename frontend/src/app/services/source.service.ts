@@ -25,8 +25,11 @@ export class SourceService {
 
   // Update an existing source
   updateSource(source: any): Observable<any> {
+    console.log('Payload to be sent to backend:', source); // Debugging
     return this.http.put(`${this.baseUrl}/update-source`, source);
   }
+  
+  
 
   // Delete a source by name
   deleteSource(name: string): Observable<any> {

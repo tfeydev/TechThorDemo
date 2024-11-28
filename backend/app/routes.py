@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from app.services.data_service import get_all_sources, add_source, update_source, delete_source
 from app.models.source_models import Source
 from app.services.yaml_service import load_sources, save_sources
@@ -38,18 +38,25 @@ async def add_new_source(source: Source):
 
 
 @router.put("/update-source")
-async def update_source(source_data: Source):
-    logging.info(f"Received data for updating source: {source_data}")  # Debugging
-    sources = load_sources()
-    for i, existing_source in enumerate(sources["sources"]):
-        if existing_source["name"] == source_data.name:
-            sources["sources"][i] = source_data.dict()
-            save_sources(sources)
-            logging.info(f"Source '{source_data.name}' updated successfully.")  # Debugging
-            return {"message": f"Source '{source_data.name}' updated successfully"}
-    raise HTTPException(status_code=404, detail=f"Source '{source_data.name}' not found")
-
-
+async def update_source(source_data: Source, request: Request):
+    try:
+        logging.info(f"Received update data: {await request.json()}")
+        logging.info(f"Validated source data: {source_data}")
+        
+        sources = load_sources()
+        for i, existing_source in enumerate(sources["sources"]):
+            if existing_source["name"] == source_data.name:
+                sources["sources"][i] = source_data.dict()
+                save_sources(sources)
+                return {"message": f"Source '{source_data.name}' updated successfully"}
+        raise HTTPException(status_code=404, detail=f"Source '{source_data.name}' not found")
+    except ValidationError as e:
+        logging.error(f"Validation Error: {e}")
+        raise HTTPException(status_code=422, detail="Validation Error")
+    except Exception as e:
+        logging.error(f"Unexpected Error: {e}")
+        raise HTTPException(status_code=500, detail="Unexpected Error")
+    
 
 @router.delete("/delete-source/{source_name}")
 async def delete_source(source_name: str):
