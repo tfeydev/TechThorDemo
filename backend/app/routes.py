@@ -1,14 +1,19 @@
 from fastapi import APIRouter, HTTPException
 from app.services.data_service import get_all_sources, add_source, update_source, delete_source
 from app.models.source_models import Source
+from app.services.yaml_service import load_sources
 import logging
 
 router = APIRouter()
 
-@router.get("/source-data")
-async def get_source_data():
-    """Retrieve all source data."""
-    return get_all_sources()
+@router.get("/get-sources")
+async def get_sources():
+    """Retrieve all sources from the YAML file."""
+    try:
+        sources = load_sources()
+        return {"sources": sources.get("sources", [])}
+    except Exception as e:
+        return {"error": f"Failed to retrieve sources: {str(e)}"}
 
 @router.post("/add-source")
 async def add_new_source(source: Source):

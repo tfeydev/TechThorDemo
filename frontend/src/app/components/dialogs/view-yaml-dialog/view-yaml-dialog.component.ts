@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-view-yaml-dialog',
+  standalone: true,
   templateUrl: './view-yaml-dialog.component.html',
   styleUrls: ['./view-yaml-dialog.component.scss'],
   imports: [ CommonModule, MatDialogModule, MatButtonModule]

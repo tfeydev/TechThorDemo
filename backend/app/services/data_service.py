@@ -37,14 +37,15 @@ def add_source(source: Source):
 def update_source(updated_source: Source):
     """Update an existing source."""
     data = load_sources()
-
+    found = False
     for i, existing_source in enumerate(data["sources"]):
         if existing_source["name"] == updated_source.name:
             data["sources"][i] = updated_source.dict()
-            save_sources(data)
-            return  # Successfully updated
-
-    raise HTTPException(status_code=404, detail="Source not found.")  # No match found
+            found = True
+            break
+    if not found:
+        raise HTTPException(status_code=404, detail=f"Source {updated_source.name} not found.")
+    save_sources(data)
 
 
 def delete_source(source_name: str):
