@@ -1,5 +1,12 @@
 from fastapi import APIRouter, HTTPException, Request
-from app.services.data_service import get_sources, add_source, update_source, delete_source
+from app.services.data_service import (
+    get_sources, 
+    add_source, 
+    update_source,
+    get_source_by_sourcename,
+    delete_source_by_sourcename,
+    update_source_by_sourcename
+)
 from app.models.source_models import Source
 from app.services.yaml_service import load_sources, save_sources
 import logging
@@ -25,20 +32,17 @@ async def get_source(source_name: str):
     """
     Retrieve a single source by its name.
     """
-    sources = load_sources().get("sources", [])
-    for source in sources:
-        if source.get("name") == source_name:
-            return {"source": source}
-    raise HTTPException(status_code=404, detail="Source not found.")
+    source = get_source_by_sourcename(source_name)
+    return {"source": source}
    
-@router.put("/update-source")
-async def update_source_endpoint(source_data: Source):
+@router.put("/update-source/{source_name}")
+async def update_source(source_name: str, updated_source: Source):
     """Update an existing source."""
-    update_source(source_data)
+    update_source_by_sourcename(source_name, updated_source)
     return {"message": "Source updated successfully."}
 
 @router.delete("/delete-source/{source_name}")
-async def remove_source(source_name: str):
+async def delete_source(source_name: str):
     """Delete a source by name."""
-    delete_source(source_name)
+    delete_source_by_sourcename(source_name)
     return {"message": f"Source '{source_name}' deleted successfully."}

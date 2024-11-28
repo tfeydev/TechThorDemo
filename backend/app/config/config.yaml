@@ -1,22 +1,29 @@
 sources:
-  - name: test_csv
-    type: csv
-    file_path: data/sample.csv
-  - name: test_json
-    type: json
-    file_path: data/sample.json
-  - name: test_api
-    type: api
-    url: https://api.example.com/data
-    headers: {}
-    params: {}
-  - name: test_database
-    type: database
-    connection:
-      host: localhost
-      port: 5432
-      user: postgres
-      password: passwd
-      dbname: test_db
-    tables:
-      - customer
+- file_path: data/sample.csv
+  name: test_csv
+  type: csv
+- file_path: data/sample.json
+  name: test_json
+  type: json
+- connection:
+    host: localhost
+    port: 5432
+  file_path: /path/to/file
+  headers: {}
+  name: test2_api
+  params: {}
+  tables:
+  - table1
+  - table2
+  type: api
+  url: https://api.example.com/new_data
+- connection:
+    dbname: test_db
+    host: localhost
+    password: passwd
+    port: 5432
+    user: postgres
+  name: test_database
+  tables:
+  - customer
+  type: database
