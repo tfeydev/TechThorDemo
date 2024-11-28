@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table'; // Service for managing table data
 import { MatDialog } from '@angular/material/dialog'; // Service for dialog
 import { SourceService } from '../../services/source.service';
-import { EditSourceDialogComponent } from '../dialogs/edit-source-dialog/edit-source-dialog.component';
+import { UpdateSourceDialogComponent } from '../dialogs/update-source-dialog/update-source-dialog.component';
 import { ConfirmDeleteDialogComponent } from '../dialogs/confirm-delete-dialog/confirm-delete-dialog.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
@@ -50,34 +50,54 @@ export class DashboardComponent implements OnInit {
         this.dataSource.data = this.sources;
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
         this.error = 'Failed to load sources.';
+        console.error('Error fetching sources:', err);
         this.loading = false;
       },
     });
   }
-
-  editSource(source: any): void {
-    const dialogRef = this.dialog.open(EditSourceDialogComponent, {
+  
+  viewSource(name: string): void {
+    this.sourceService.getSource(name).subscribe({
+      next: (data) => {
+        console.log('Source details:', data.source);
+        // Optionally, display details in a dialog
+      },
+      error: (err) => {
+        console.error(`Failed to fetch source '${name}':`, err);
+      },
+    });
+  } 
+  
+  updateSource(source: any): void {
+    console.log('Opening update dialog for source:', source); // Debugging
+  
+    const dialogRef = this.dialog.open(UpdateSourceDialogComponent, {
       width: '400px',
       data: { source },
     });
   
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.sourceService.editSource(result).subscribe({
-          next: () => this.fetchSources(),
-          error: (err) => console.error('Error editing source:', err),
+        console.log('Updated source received from dialog:', result); // Debugging
+        this.sourceService.updateSource(result).subscribe({
+          next: () => {
+            console.log('Source updated successfully.');
+            this.fetchSources();
+          },
+          error: (err) => {
+            console.error('Failed to update source:', err); // Fehler im Backend
+          },
         });
+      } else {
+        console.log('Update dialog closed without changes.');
       }
     });
   }
+  
 
   deleteSource(source: any): void {
-    if (!source || !source.name) {
-      console.error('Source name is undefined. Cannot delete source.');
-      return;
-    }
     const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
       width: '300px',
       data: { source },
@@ -86,11 +106,17 @@ export class DashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
         this.sourceService.deleteSource(source.name).subscribe({
-          next: () => this.fetchSources(),
-          error: (err) => console.error('Error deleting source:', err),
+          next: () => {
+            console.log(`Source '${source.name}' deleted successfully.`);
+            this.fetchSources(); // Refresh the list
+          },
+          error: (err) => {
+            console.error(`Error deleting source '${source.name}':`, err);
+          },
         });
       }
     });
-  }
+  }  
+  
 }
  

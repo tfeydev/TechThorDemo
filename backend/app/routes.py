@@ -1,10 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from app.services.data_service import get_all_sources, add_source, update_source, delete_source
 from app.models.source_models import Source
-from app.services.yaml_service import load_sources
+from app.services.yaml_service import load_sources, save_sources
 import logging
 
+
 router = APIRouter()
+
 
 @router.get("/get-sources")
 async def get_sources():
@@ -15,17 +17,18 @@ async def get_sources():
     except Exception as e:
         return {"error": f"Failed to retrieve sources: {str(e)}"}
 
+
 @router.get("/get-source/{source_name}")
 async def get_source(source_name: str):
-    """Retrieve a specific source by name."""
-    try:
-        data = load_sources()
-        for source in data["sources"]:
-            if source["name"] == source_name:
-                return source
-        raise HTTPException(status_code=404, detail=f"Source '{source_name}' not found.")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving source: {str(e)}")    
+    """
+    Retrieve a single source by its name.
+    """
+    sources = load_sources().get("sources", [])
+    for source in sources:
+        if source.get("name") == source_name:
+            return {"source": source}
+    raise HTTPException(status_code=404, detail="Source not found.")
+   
 
 @router.post("/add-source")
 async def add_new_source(source: Source):
@@ -33,24 +36,36 @@ async def add_new_source(source: Source):
     add_source(source)
     return {"message": "Source added successfully"}
 
-@router.put("/edit-source")
-async def edit_source(updated_source: Source):
-    """Edit an existing source."""
-    try:
-        update_source(updated_source)
-        return {"message": "Source updated successfully"}
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to edit source: {str(e)}")
+
+@router.put("/update-source")
+async def update_source(source_data: Source):
+    logging.info(f"Received data for updating source: {source_data}")  # Debugging
+    sources = load_sources()
+    for i, existing_source in enumerate(sources["sources"]):
+        if existing_source["name"] == source_data.name:
+            sources["sources"][i] = source_data.dict()
+            save_sources(sources)
+            logging.info(f"Source '{source_data.name}' updated successfully.")  # Debugging
+            return {"message": f"Source '{source_data.name}' updated successfully"}
+    raise HTTPException(status_code=404, detail=f"Source '{source_data.name}' not found")
+
 
 
 @router.delete("/delete-source/{source_name}")
-async def remove_source(source_name: str):
-    """Delete a source by name."""
-    try:
-        delete_source(source_name)  # Make sure `delete_source` works properly in data_service.py
-        return {"message": f"Source {source_name} deleted successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=f"Failed to delete source: {str(e)}")
+async def delete_source(source_name: str):
+    """
+    Delete a source by name.
+    """
+    sources_data = load_sources()
+    sources = sources_data.get("sources", [])
+
+    # Filter out the source with the given name
+    filtered_sources = [source for source in sources if source.get("name") != source_name]
+    
+    if len(filtered_sources) == len(sources):
+        raise HTTPException(status_code=404, detail=f"Source '{source_name}' not found.")
+
+    sources_data["sources"] = filtered_sources
+    save_sources(sources_data)
+    return {"message": f"Source '{source_name}' deleted successfully."}
 

@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>Edit Source</h1>
+<div mat-dialog-content>
+  <form [formGroup]="updateForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Type</mat-label>
+      <input matInput formControlName="type" />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="updateForm.get('type')?.value === 'csv'" appearance="fill">
+      <mat-label>File Path</mat-label>
+      <input matInput formControlName="file_path" />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="updateForm.get('type')?.value === 'api'" appearance="fill">
+      <mat-label>URL</mat-label>
+      <input matInput formControlName="url" />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="updateForm.get('type')?.value === 'database'" appearance="fill">
+      <mat-label>Connection</mat-label>
+      <textarea matInput formControlName="connection"></textarea>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="updateForm.get('type')?.value === 'database'" appearance="fill">
+      <mat-label>Tables</mat-label>
+      <textarea matInput formControlName="tables"></textarea>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-button color="primary" [disabled]="!updateForm.valid" (click)="save()">Save</button>
+</div>
