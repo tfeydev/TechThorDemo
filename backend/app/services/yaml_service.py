@@ -6,18 +6,21 @@ logging.basicConfig(level=logging.INFO)
 
 def load_sources():
     """Load sources from the YAML file."""
-    logging.info("Loading sources from YAML...")
     try:
+        logging.info(f"Loading sources from {CONFIG_PATH}...")
         with open(CONFIG_PATH, "r") as file:
-            # Parse the YAML file and return its contents
-            return yaml.safe_load(file) or {"sources": []}
+            data = yaml.safe_load(file) or {"sources": []}
+            logging.info(f"Loaded sources: {data}")
+            return data
     except FileNotFoundError:
-        # If the file doesn't exist, return an empty structure
-        logging.warning("YAML file not found. Returning empty sources.")
+        logging.error(f"YAML file not found at {CONFIG_PATH}.")
         return {"sources": []}
+    except Exception as e:
+        logging.error(f"Error loading YAML: {e}")
+        raise
     
-
 def save_sources(data):
     """Save sources to the YAML file."""
     with open(CONFIG_PATH, "w") as file:
         yaml.dump(data, file)
+        print(f"Saved data: {data}")

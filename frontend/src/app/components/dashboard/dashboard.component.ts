@@ -73,50 +73,36 @@ export class DashboardComponent implements OnInit {
   updateSource(source: any): void {
     const dialogRef = this.dialog.open(UpdateSourceDialogComponent, {
       width: '400px',
-      data: { source }, // Pass the source object to the dialog
+      data: { source },
     });
   
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('Updated source received from dialog:', result); // Debugging
         this.sourceService.updateSource(result).subscribe({
           next: () => {
             console.log('Source updated successfully.');
-            this.fetchSources(); // Refresh the source list
+            this.fetchSources();
           },
           error: (err) => {
-            console.error('Failed to update source:', err); // Handle error
-          },
-        });
-      } else {
-        console.log('Update dialog closed without changes.');
-      }
-    });
-  }
-  
-  
-  
-
-  deleteSource(source: any): void {
-    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
-      width: '300px',
-      data: { source },
-    });
-  
-    dialogRef.afterClosed().subscribe((confirmed) => {
-      if (confirmed) {
-        this.sourceService.deleteSource(source.name).subscribe({
-          next: () => {
-            console.log(`Source '${source.name}' deleted successfully.`);
-            this.fetchSources(); // Refresh the list
-          },
-          error: (err) => {
-            console.error(`Error deleting source '${source.name}':`, err);
+            console.error('Failed to update source:', err);
           },
         });
       }
     });
   }  
+
+
+  deleteSource(sourceName: string): void {
+    this.sourceService.deleteSource(sourceName).subscribe({
+      next: () => {
+        console.log(`Source '${sourceName}' deleted successfully.`);
+        this.fetchSources();
+      },
+      error: (err) => {
+        console.error(`Failed to delete source '${sourceName}':`, err);
+      },
+    });
+  }
   
 }
  

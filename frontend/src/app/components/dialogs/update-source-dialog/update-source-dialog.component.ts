@@ -37,6 +37,7 @@ export class UpdateSourceDialogComponent {
       connection: [data.source.connection || {}],
       tables: [data.source.tables || []],
     });
+    
   }
 
   save(): void {

@@ -4,9 +4,10 @@ from fastapi import HTTPException
 import logging
 
 
-def get_all_sources():
-    """Retrieve all sources."""
-    return load_sources()
+def get_sources():
+    """Retrieve all sources from the YAML file."""
+    data = load_sources()  # Lädt die YAML-Datei
+    return data.get("sources", [])  # Gibt die Liste der Quellen zurück
 
 def add_source(source: Source):
     """Add a new source with validation."""
@@ -33,39 +34,28 @@ def add_source(source: Source):
     data["sources"].append(source.dict())
     save_sources(data)
 
-
 def update_source(updated_source: Source):
-    """Update an existing source."""
-    data = load_sources()
-    found = False
-    for i, existing_source in enumerate(data["sources"]):
-        if existing_source["name"] == updated_source.name:
-            data["sources"][i] = updated_source.dict()
-            found = True
-            break
-    if not found:
-        raise HTTPException(status_code=404, detail=f"Source {updated_source.name} not found.")
-    save_sources(data)
-
+    """Update an existing source in the YAML file."""
+    data = load_sources()  # Lädt die aktuelle Konfiguration
+    sources = data.get("sources", [])
+    
+    for idx, source in enumerate(sources):
+        if source["name"] == updated_source.name:  # Quelle finden
+            sources[idx] = updated_source.dict()  # Quelle aktualisieren
+            save_sources(data)  # Speichern der aktualisierten Daten
+            return
+    
+    # Fehler werfen, wenn die Quelle nicht existiert
+    raise HTTPException(status_code=404, detail="Source not found.")
 
 def delete_source(source_name: str):
-    """Delete a source by name."""
-    logging.info(f"Attempting to delete source: {source_name}")
+    """Delete a source by name from the YAML file."""
+    data = load_sources()  # Lädt die aktuelle Konfiguration
+    sources = data.get("sources", [])
+    updated_sources = [source for source in sources if source["name"] != source_name]
     
-    # Load current sources
-    data = load_sources()
-    logging.debug(f"Current sources: {data['sources']}")
-
-    # Filter out the source to delete
-    filtered_sources = [src for src in data["sources"] if src["name"] != source_name]
-    
-    # Check if any source was removed
-    if len(filtered_sources) == len(data["sources"]):
-        logging.error(f"Source {source_name} not found.")
+    if len(updated_sources) == len(sources):  # Wenn keine Quelle gelöscht wurde
         raise HTTPException(status_code=404, detail="Source not found.")
-
-    # Save the updated source list
-    data["sources"] = filtered_sources
-    save_sources(data)
-    logging.info(f"Source {source_name} successfully deleted.")
     
+    data["sources"] = updated_sources
+    save_sources(data)  # Speichern der aktualisierten Daten

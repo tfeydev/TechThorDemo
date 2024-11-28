@@ -30,7 +30,6 @@ export class SourceService {
   }
   
   
-
   // Delete a source by name
   deleteSource(name: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-source/${name}`);
