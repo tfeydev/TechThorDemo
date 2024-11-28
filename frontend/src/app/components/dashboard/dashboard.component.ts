@@ -62,24 +62,35 @@ export class DashboardComponent implements OnInit {
       width: '400px',
       data: { source },
     });
-
+  
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.sourceService.editSource(result).subscribe(() => this.fetchSources());
+        this.sourceService.editSource(result).subscribe({
+          next: () => this.fetchSources(),
+          error: (err) => console.error('Error editing source:', err),
+        });
       }
     });
   }
 
   deleteSource(source: any): void {
+    if (!source || !source.name) {
+      console.error('Source name is undefined. Cannot delete source.');
+      return;
+    }
     const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
       width: '300px',
       data: { source },
     });
-
+  
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this.sourceService.deleteSource(source.name).subscribe(() => this.fetchSources());
+        this.sourceService.deleteSource(source.name).subscribe({
+          next: () => this.fetchSources(),
+          error: (err) => console.error('Error deleting source:', err),
+        });
       }
     });
   }
 }
+ 

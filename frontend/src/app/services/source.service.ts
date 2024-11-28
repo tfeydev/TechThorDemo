@@ -17,10 +17,14 @@ export class SourceService {
     return this.http.post(`${this.baseUrl}/add-source`, source);
   }
 
-  updateSource(source: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/update-source`, source);
+  editSource(source: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/edit-source`, source);
   }
-  
+
+  deleteSource(source: any): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/delete-source/${source.name}`);
+  }
+
   loadData(): Observable<any> {
     return this.http.get(`${this.baseUrl}/load-data`);
   }
@@ -29,16 +33,9 @@ export class SourceService {
     return this.http.get<any>(`${this.baseUrl}/data/load/${name}`);
   }
 
-  editSource(source: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/edit-source`, source);
-  }
-
   updateYaml(source: any) {
     return this.http.put(`${this.baseUrl}/update-source`, source);
   }
   
-  deleteSource(source: any): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete-source/${source.name}`);
-  }
   
 }
