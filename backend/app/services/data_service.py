@@ -46,19 +46,33 @@ def add_source(source: Source):
     data["sources"].append(source.dict())
     save_sources(data)
 
-def update_source(updated_source: Source):
-    """Update an existing source in the YAML file."""
-    data = load_sources()  # Lädt die aktuelle Konfiguration
-    sources = data.get("sources", [])
-    
-    for idx, source in enumerate(sources):
-        if source["name"] == updated_source.name:  # Quelle finden
-            sources[idx] = updated_source.dict()  # Quelle aktualisieren
-            save_sources(data)  # Speichern der aktualisierten Daten
-            return
-    
-    # Fehler werfen, wenn die Quelle nicht existiert
-    raise HTTPException(status_code=404, detail="Source not found.")
+def update_source(source_name: str, updated_source: dict):
+    """Update an existing source in the config.yaml file."""
+    try:
+        # Load existing YAML data
+        if os.path.exists(CONFIG_PATH):
+            with open(CONFIG_PATH, "r") as file:
+                data = yaml.safe_load(file) or {"sources": []}
+        else:
+            raise HTTPException(status_code=404, detail="Configuration file not found.")
+
+        # Locate the source to update
+        for source in data["sources"]:
+            if source["name"] == source_name:
+                # Update only the provided fields
+                for key, value in updated_source.items():
+                    if value not in [None, "", [], {}]:  # Exclude null or empty fields
+                        source[key] = value
+
+                # Write the updated data back to YAML
+                with open(CONFIG_PATH, "w") as file:
+                    yaml.dump(data, file, default_flow_style=False, sort_keys=False)
+                return {"message": f"Source '{source_name}' updated successfully."}
+
+        # If the source is not found
+        raise HTTPException(status_code=404, detail=f"Source '{source_name}' not found.")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating source: {str(e)}")
 
 def delete_source_by_sourcename(source_name: str):
     """

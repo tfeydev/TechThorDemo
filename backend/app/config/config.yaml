@@ -1,29 +1,4 @@
 sources:
-- db_name: null
-  db_type: null
-  delimiter: null
-  file_path: ''
-  headers: {}
-  host: null
-  name: test08151
-  params: {}
-  password: null
-  port: null
-  tables: []
+- name: test4711
   type: csv
-  url: ''
-  username: null
-- db_name: null
-  db_type: null
-  delimiter: null
-  file_path: ''
-  headers: {}
-  host: null
-  name: test47112
-  params: {}
-  password: null
-  port: null
-  tables: []
-  type: csv
-  url: ''
-  username: null
+  delimiter: ','

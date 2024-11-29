@@ -26,9 +26,52 @@
   margin-top: 16px;
 }
 
+mat-card-actions {
+  display: flex;
+  margin-top: 10px;         // Add spacing from the content
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  display: flex; /* Align title and button horizontally */
+  align-items: center; /* Vertically center elements */
+  gap: 16px; /* Space between title and button */
+  margin-bottom: 16px; /* Space between header and table */
+  padding: 8px 0; /* Padding around the header */
+  border-bottom: 1px solid #e0e0e0; /* Subtle divider line */
+}
+
+/* Title Styling */
+mat-card-title {
+  font-size: 1.8rem; /* Larger, bold title */
+  font-weight: 700;
+  margin: 0;
+  color: #333333; /* Slightly softer black for the title */
+}
+
+/* Button Styling */
+button[mat-raised-button] {
+  background-color: #395dd1; /* Material Design "Deep Purple" */
+  color: white; /* White text for contrast */
+  font-weight: bold;
+  text-transform: none; /* Prevent all caps */
+  padding: 8px 16px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  border-radius: 8px; /* Rounded corners for a modern look */
+  transition: transform 0.2s, box-shadow 0.2s; /* Add hover animation */
+}
+
+/* Hover Effect for Button */
+button[mat-raised-button]:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+/* Empty State Text */
 .no-sources-message {
-  margin-top: 16px;
+  margin-top: 32px;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #757575; /* Gray for less emphasis */
   text-align: center;
-  font-size: 16px;
-  color: #757575;
 }
