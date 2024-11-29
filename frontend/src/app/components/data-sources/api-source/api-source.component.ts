@@ -9,14 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   template: `
-    <form [formGroup]="apiForm" (ngSubmit)="onSubmit()">
-      <label for="url">API URL</label>
-      <input id="url" formControlName="url" />
-      <div *ngIf="apiForm.get('url')?.errors?.['invalidUrl']">
-        {{ apiForm.get('url')?.errors?.['invalidUrl'] }}
-      </div>
-      <button type="submit" [disabled]="apiForm.invalid">Submit</button>
-    </form>
+    
   `,
 })
 export class ApiSourceComponent {

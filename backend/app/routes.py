@@ -10,7 +10,9 @@ from app.services.data_service import (
 from app.models.source_models import Source
 from app.services.yaml_service import load_sources, save_sources
 import logging
-
+import os
+from app.services.yaml_service import CONFIG_PATH
+import yaml
 
 router = APIRouter()
 
@@ -49,3 +51,26 @@ async def delete_source(source_name: str):
     data["sources"] = updated_sources
     save_sources(data)
     return {"message": f"Source '{source_name}' deleted successfully."}
+
+@router.post("/data/add-source")
+async def add_source(source: Source):
+    try:
+        # Load existing YAML data or initialize new
+        if os.path.exists(CONFIG_PATH):
+            with open(CONFIG_PATH, "r") as file:
+                data = yaml.safe_load(file) or {"sources": []}
+        else:
+            data = {"sources": []}
+
+        # Remove empty fields and append the cleaned source
+        cleaned_source = source.remove_empty_fields()
+        data["sources"].append(cleaned_source)
+
+        # Write the updated data back to YAML with order preserved
+        with open(CONFIG_PATH, "w") as file:
+            yaml.dump(data, file, default_flow_style=False, sort_keys=False)
+
+        return {"message": "Source added successfully", "source": cleaned_source}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error saving source: {str(e)}")
+    

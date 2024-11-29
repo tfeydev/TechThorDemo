@@ -2,6 +2,7 @@ import yaml
 import logging
 from pathlib import Path
 
+
 CONFIG_PATH = "app/config/config.yaml"
 
 # Ensure the directory exists

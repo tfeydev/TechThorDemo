@@ -20,9 +20,8 @@ export class SourceService {
 
   // Add a new source
   addSource(source: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/add-source`, source);
+    return this.http.post(`${this.baseUrl}/data/add-source`, source);
   }
-
   
   // Fetch a single source by name
   getSourceByName(sourceName: string): Observable<any> {
@@ -41,4 +40,6 @@ export class SourceService {
   deleteSource(name: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-source/${name}`);
   }
+
+  
 }

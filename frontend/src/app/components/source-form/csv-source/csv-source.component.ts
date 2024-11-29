@@ -1,38 +1,32 @@
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-csv-source',
   standalone: true,
   imports: [
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule,
-    NgIf,
+    ReactiveFormsModule
   ],
   templateUrl: './csv-source.component.html',
   styleUrls: ['./csv-source.component.scss'],
 })
 export class CsvSourceComponent {
-  csvForm; 
+  @Output() dataChange = new EventEmitter<any>();
 
-  constructor(private readonly fb: FormBuilder) {
-    this.csvForm = this.fb.group({
-      file_path: ['', Validators.required],
-    });
-  }
+  sourceData = {
+    type: 'csv',
+    filePath: '',
+    delimiter: ',',
+  };
 
-  onSubmit(): void {
-    if (this.csvForm.valid) {
-      console.log('CSV Source Data:', this.csvForm.value);
-      // Add logic to send data to backend
-    } else {
-      console.error('CSV Form is invalid.');
-    }
+  onDataChange(): void {
+    this.dataChange.emit(this.sourceData);
   }
 }

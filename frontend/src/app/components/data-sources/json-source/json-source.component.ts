@@ -9,21 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   template: `
-    <form [formGroup]="jsonForm" (ngSubmit)="onSubmit()">
-      <label for="filePath">JSON File Path</label>
-      <input id="filePath" formControlName="filePath" />
-      <div *ngIf="jsonForm.get('filePath')?.errors?.['invalidFilePath']">
-        {{ jsonForm.get('filePath')?.errors?.['invalidFilePath'] }}
-      </div>
-
-      <label for="keys">JSON Keys</label>
-      <input id="keys" formControlName="keys" />
-      <div *ngIf="jsonForm.get('keys')?.errors?.['invalidJson']">
-        {{ jsonForm.get('keys')?.errors?.['invalidJson'] }}
-      </div>
-
-      <button type="submit" [disabled]="jsonForm.invalid">Submit</button>
-    </form>
+    
   `,
 })
 export class JsonSourceComponent {

@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { AddSourceDialogComponent } from '../dialogs/add-source-dialog/add-source-dialog.component';
 
 
 @Component({
@@ -17,15 +19,28 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   standalone: true,
   imports: [
     MatPaginatorModule,
-    MatTableModule,
     MatCardModule,
     MatIconModule,
     MatListModule,
     CommonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTableModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  animations: [
+    trigger('transitionMessages', [
+      // Enter animation: when the element is added to the DOM
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-20px)' }), // Initial state
+        animate('300ms ease-in', style({ opacity: 1, transform: 'translateY(0)' })), // Final state
+      ]),
+      // Leave animation: when the element is removed from the DOM
+      transition(':leave', [
+        animate('300ms ease-out', style({ opacity: 0, transform: 'translateY(20px)' })), // Transition to this state
+      ]),
+    ]),
+  ],
 })
 export class DashboardComponent implements OnInit {
   loading = false;
@@ -69,6 +84,34 @@ export class DashboardComponent implements OnInit {
       },
     });
   } 
+
+  addSource(): void {
+    const dialogRef = this.dialog.open(AddSourceDialogComponent, {
+      width: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('New Source Added:', result);
+        this.saveSource(result); // Backend integration
+      }
+    });
+  }
+
+  saveSource(source: any): void {
+    console.log('Payload being sent to backend:', source); // Debugging the payload
+    this.sourceService.addSource(source).subscribe({
+      next: () => {
+        console.log('Source added successfully');
+        this.fetchSources(); // Refresh source list
+      },
+      error: (err) => {
+        console.error('Failed to add source:', err); // Debugging errors
+      },
+    });
+  }
+  
+
   
   updateSource(sourceName: string): void {
     // Fetch the source details
@@ -103,8 +146,6 @@ export class DashboardComponent implements OnInit {
       },
     });
   }
-  
-   
 
   deleteSource(sourceName: string): void {
     const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {

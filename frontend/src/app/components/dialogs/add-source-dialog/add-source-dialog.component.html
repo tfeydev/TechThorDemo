@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Add New Source</h2>
+
+<mat-form-field appearance="fill" class="full-width">
+  <mat-label>Source Type</mat-label>
+  <mat-select [(ngModel)]="selectedSourceType">
+    <mat-option value="" disabled>Select</mat-option>
+    <mat-option value="csv">CSV</mat-option>
+    <mat-option value="json">JSON</mat-option>
+    <mat-option value="api">API</mat-option>
+    <mat-option value="database">Database</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="source-forms">
+  <app-csv-source *ngIf="selectedSourceType === 'csv'" (dataChange)="onDataChange($event)"></app-csv-source>
+  <app-json-source *ngIf="selectedSourceType === 'json'" (dataChange)="onDataChange($event)"></app-json-source>
+  <app-api-source *ngIf="selectedSourceType === 'api'" (dataChange)="onDataChange($event)"></app-api-source>
+  <app-database-source *ngIf="selectedSourceType === 'database'" (dataChange)="onDataChange($event)"></app-database-source>
+</div>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="!isFormValid" (click)="save()">Save</button>
+</mat-dialog-actions>

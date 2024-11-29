@@ -1,0 +1,16 @@
+<h3>CSV Source Configuration</h3>
+
+<mat-form-field appearance="fill">
+  <mat-label>Name</mat-label>
+  <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>File Path</mat-label>
+  <input matInput [(ngModel)]="sourceData.filePath" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Delimiter</mat-label>
+  <input matInput [(ngModel)]="sourceData.delimiter" (ngModelChange)="onDataChange()" />
+</mat-form-field>

@@ -19,11 +19,7 @@ def validate_database(source):
         # Hier kann eine echte Validierung mit einer Datenbankbibliothek erfolgen
 
 
-def validate_csv(source):
-    """Validate CSV source details."""
-    if "file_path" not in source or not source["file_path"]:
-        raise HTTPException(status_code=400, detail="CSV source must include a valid 'file_path'.")
-    # Optionally check if the file exists on the server
-    # Example:
-    # if not os.path.exists(source["file_path"]):
-    #     raise HTTPException(status_code=400, detail="CSV file does not exist.")
+def validate_csv(source: dict):
+    if not source.get("file_path"):
+        raise HTTPException(status_code=400, detail="CSV source must include a file_path.")
+

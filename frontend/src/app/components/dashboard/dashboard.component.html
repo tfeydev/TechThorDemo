@@ -1,5 +1,5 @@
 <!-- Loading Indicator -->
-<div *ngIf="loading" class="loading-indicator">
+<div *ngIf="loading" @transitionMessages>
   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   <p>Loading...</p>
 </div>
@@ -14,6 +14,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Dashboard</mat-card-title>
+    <button mat-raised-button color="primary" (click)="addSource()">Add Source</button>
   </mat-card-header>
   <mat-card-content>
     <!-- Display List of Sources -->
