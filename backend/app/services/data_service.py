@@ -78,24 +78,71 @@ def delete_source_by_sourcename(source_name: str):
     data["sources"] = updated_sources
     save_sources(data)
 
+
 def update_source_by_sourcename(source_name: str, updated_source: Source):
     """Update an existing source by name."""
     data = load_sources()  # Load existing sources from YAML
     sources = data.get("sources", [])
 
-    # Locate the source to be updated
+    logging.info(f"Attempting to update source with original name: {source_name}")
+    logging.info(f"Updated data: {updated_source.dict()}")
+
     for idx, source in enumerate(sources):
+        # Use the source_name (from URL) to locate the source
         if source["name"] == source_name:
-            # If name is updated, ensure references are handled correctly
             updated_data = updated_source.dict()
+
+            # Apply the updated data, including a potential name change
             if source_name != updated_data["name"]:
-                print(f"Renaming source from {source_name} to {updated_data['name']}.")
+                logging.info(f"Renaming source from '{source_name}' to '{updated_data['name']}'.")
 
             sources[idx] = updated_data  # Update the source
-            save_sources(data)  # Save changes
+            save_sources({"sources": sources})  # Save changes
             return {"message": f"Source '{source_name}' updated successfully."}
-    
+
+    logging.error(f"Source '{source_name}' not found.")
+    raise HTTPException(status_code=404, detail=f"Source '{source_name}' not found.")
+
+
+def validate_unique_name(sources: list, current_name: str, new_name: str):
+    """
+    Validate that the new name doesn't conflict with other sources.
+    """
+    if new_name != current_name:
+        if any(source["name"] == new_name for source in sources):
+            raise HTTPException(
+                status_code=400,
+                detail=f"A source with the name '{new_name}' already exists."
+            )
+
+
+def replace_source(sources: list, source_name: str, updated_data: dict):
+    """
+    Replace the source in the list with updated data.
+    """
+    for idx, source in enumerate(sources):
+        if source["name"] == source_name:
+            print(f"Updating source '{source_name}'...")
+
+            # Log changes for debugging
+            log_field_changes(source, updated_data)
+
+            sources[idx] = updated_data  # Replace the source
+            return sources
+
     # Raise an error if the source is not found
     raise HTTPException(status_code=404, detail=f"Source '{source_name}' not found.")
+
+
+def log_field_changes(original: dict, updated: dict):
+    """
+    Log changes between the original and updated data for debugging.
+    """
+    for key, value in updated.items():
+        if original.get(key) != value:
+            print(f" - Field '{key}' changed from '{original.get(key)}' to '{value}'.")
+
+
+
 
     

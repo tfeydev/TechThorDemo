@@ -1,21 +1,15 @@
 sources:
-- file_path: data/sample.csv
-  name: test_csv
-  type: csv
-- file_path: data/sample.json
-  name: test_json
-  type: json
 - connection:
     host: localhost
     port: 5432
   file_path: /path/to/file
   headers: {}
-  name: test2_api
+  name: test_csv
   params: {}
   tables:
   - table1
   - table2
-  type: api
+  type: csv
   url: https://api.example.com/new_data
 - connection:
     dbname: test_db
@@ -23,7 +17,11 @@ sources:
     password: passwd
     port: 5432
     user: postgres
+  file_path: ''
+  headers: {}
   name: test_database
+  params: {}
   tables:
   - customer
   type: database
+  url: ''

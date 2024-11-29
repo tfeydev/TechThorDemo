@@ -23,13 +23,20 @@ export class SourceService {
     return this.http.post(`${this.baseUrl}/add-source`, source);
   }
 
+  
+  // Fetch a single source by name
+  getSourceByName(sourceName: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/get-source/${sourceName}`);
+  }
+
+
   // Update an existing source
-  updateSource(source: any): Observable<any> {
-    console.log('Payload to be sent to backend:', source); // Debugging
-    return this.http.put(`${this.baseUrl}/update-source`, source);
+  updateSource(source: any, originalName: string): Observable<any> {
+    console.log('Updating source:', originalName, 'Payload:', source); // Debugging
+    return this.http.put(`${this.baseUrl}/update-source/${originalName}`, source);
   }
   
-  
+
   // Delete a source by name
   deleteSource(name: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/delete-source/${name}`);

@@ -17,15 +17,11 @@ router = APIRouter()
 
 @router.get("/get-sources")
 async def get_sources():
-    """Retrieve all sources."""
-    logging.info("Received request to fetch sources.")
-    try:
-        sources = load_sources()
-        logging.info(f"Returning sources: {sources}")
-        return {"sources": sources.get("sources", [])}
-    except Exception as e:
-        logging.error(f"Failed to retrieve sources: {e}")
-        raise HTTPException(status_code=500, detail="Failed to retrieve sources.")
+    """
+    Fetch all sources from the YAML file.
+    """
+    data = load_sources()  # Assuming this reads from config.yaml
+    return {"sources": data.get("sources", [])}
 
 @router.get("/get-source/{source_name}")
 async def get_source(source_name: str):
@@ -38,11 +34,18 @@ async def get_source(source_name: str):
 @router.put("/update-source/{source_name}")
 async def update_source(source_name: str, updated_source: Source):
     """Update an existing source."""
-    update_source_by_sourcename(source_name, updated_source)
-    return {"message": "Source updated successfully."}
+    response = update_source_by_sourcename(source_name, updated_source)
+    return response
 
 @router.delete("/delete-source/{source_name}")
 async def delete_source(source_name: str):
-    """Delete a source by name."""
-    delete_source_by_sourcename(source_name)
+    data = load_sources()
+    sources = data.get("sources", [])
+    updated_sources = [source for source in sources if source["name"] != source_name]
+
+    if len(sources) == len(updated_sources):
+        raise HTTPException(status_code=404, detail=f"Source '{source_name}' not found.")
+
+    data["sources"] = updated_sources
+    save_sources(data)
     return {"message": f"Source '{source_name}' deleted successfully."}

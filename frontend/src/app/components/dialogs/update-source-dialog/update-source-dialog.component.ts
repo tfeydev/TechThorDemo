@@ -27,31 +27,31 @@ export class UpdateSourceDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder
   ) {
+    const source = data.source; // Get the source
     this.updateForm = this.fb.group({
-      name: [data.source.name, [Validators.required]],
-      type: [data.source.type, [Validators.required]],
-      file_path: [data.source.file_path || ''],
-      url: [data.source.url || ''],
-      headers: [data.source.headers || {}],
-      params: [data.source.params || {}],
-      connection: [data.source.connection || {}],
-      tables: [data.source.tables || []],
+      name: [source.name, [Validators.required]],
+      type: [source.type, [Validators.required]],
+      file_path: [source.file_path || ''],
+      url: [source.url || ''],
+      headers: [source.headers || {}],
+      params: [source.params || {}],
+      connection: [source.connection || {}],
+      tables: [source.tables || []],
     });
-    
-  }
+  }  
+  
 
   save(): void {
     if (this.updateForm.valid) {
-      console.log('Form submitted:', this.updateForm.value); // Debug
-      this.dialogRef.close(this.updateForm.value); // Daten an Dashboard zurückgeben
+      // Return both updated form values and the original name
+      this.dialogRef.close({ ...this.updateForm.value, originalName: this.data.originalName });
     } else {
-      console.error('Form is invalid:', this.updateForm.errors); // Debugging
+      console.error('Form is invalid:', this.updateForm.errors);
     }
-  }
-  
-  
+  } 
 
+  
   cancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(); // Close the dialog without saving
   }
-}
+}  
