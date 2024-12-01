@@ -1,29 +1,33 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { apiUrlValidator } from '../../../utils/validators';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-api-source',
+  templateUrl: './api-source.component.html',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  template: `
-    
-  `,
+  imports: [
+    CommonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    FormsModule
+  ],
 })
 export class ApiSourceComponent {
-  apiForm; 
+  @Output() dataChange = new EventEmitter<any>();
 
-  constructor(private readonly fb: FormBuilder) {
-    this.apiForm = this.fb.group({
-        url: ['', [Validators.required, apiUrlValidator]],
-      });
-  }
+  sourceData = {
+    name: '',
+    type: 'api',
+    url: '',
+    headers: '{}',
+    params: '{}',
+  };
 
-  onSubmit() {
-    if (this.apiForm.valid) {
-      console.log(this.apiForm.value);
-    }
+  onDataChange(): void {
+    this.dataChange.emit(this.sourceData);
   }
 }

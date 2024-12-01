@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit {
   sources: any[] = [];
   dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['name', 'type', 'actions'];
+  loadingSource: string | null = null;
 
   constructor(
     private readonly sourceService: SourceService, 
@@ -72,6 +73,20 @@ export class DashboardComponent implements OnInit {
       },
     });
   }
+
+  fetchSource(name: string): void {
+    this.loadingSource = name; // Start loading spinner for this source
+    this.sourceService.getSource(name).subscribe({
+      next: (data) => {
+        console.log(`Source details for ${name}:`, data.source);
+        this.loadingSource = null; // Stop loading spinner
+      },
+      error: (err) => {
+        console.error(`Failed to fetch source ${name}:`, err);
+        this.loadingSource = null; // Stop loading spinner
+      },
+    });
+  }
   
   viewSource(name: string): void {
     this.sourceService.getSource(name).subscribe({
@@ -83,6 +98,10 @@ export class DashboardComponent implements OnInit {
         console.error(`Failed to fetch source '${name}':`, err);
       },
     });
+  } 
+
+  viewSources(): void {
+    window.open('http://localhost:8000/data/get-sources', '_blank');
   } 
 
   addSource(): void {

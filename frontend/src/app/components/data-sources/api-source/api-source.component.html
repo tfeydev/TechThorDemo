@@ -1,0 +1,21 @@
+<h3>API Source Configuration</h3>
+
+<mat-form-field appearance="fill">
+  <mat-label>Name</mat-label>
+  <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>URL</mat-label>
+  <input matInput [(ngModel)]="sourceData.url" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Headers (JSON format)</mat-label>
+  <textarea matInput [(ngModel)]="sourceData.headers" (ngModelChange)="onDataChange()"></textarea>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Parameters (JSON format)</mat-label>
+  <textarea matInput [(ngModel)]="sourceData.params" (ngModelChange)="onDataChange()"></textarea>
+</mat-form-field>

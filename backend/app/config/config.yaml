@@ -1,4 +1,9 @@
 sources:
+- name: test-api
+  type: api
+  url: https://jsonplaceholder.typicode.com/todos/
 - name: test4711
   type: csv
   delimiter: ','
+- name: testjson1234567
+  type: json

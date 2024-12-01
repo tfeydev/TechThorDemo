@@ -1,3 +1,4 @@
+/* Loading Indicator */
 .loading-indicator {
   display: flex;
   align-items: center;
@@ -10,61 +11,86 @@
   }
 }
 
+/* Error Message */
 .error-message {
   margin: 16px 0;
   text-align: center;
 
   .error-card {
-    background: #f8d7da;
-    color: #842029;
+    background: #f8d7da; /* Light red for error background */
+    color: #842029; /* Darker red for error text */
     border: 1px solid #f5c2c7;
     border-radius: 4px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   }
 }
 
+/* Table Section */
 .table-section {
   margin-top: 16px;
 }
 
-mat-card-actions {
-  display: flex;
-  margin-top: 10px;         // Add spacing from the content
-}
-
 /* Dashboard Header */
 .dashboard-header {
-  display: flex; /* Align title and button horizontally */
-  align-items: center; /* Vertically center elements */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 16px; /* Space between title and button */
-  margin-bottom: 16px; /* Space between header and table */
-  padding: 8px 0; /* Padding around the header */
-  border-bottom: 1px solid #e0e0e0; /* Subtle divider line */
+  margin-bottom: 16px;
+  padding: 8px 0;
 }
 
 /* Title Styling */
 mat-card-title {
-  font-size: 1.8rem; /* Larger, bold title */
+  font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
-  color: #333333; /* Slightly softer black for the title */
+  color: #333; /* Neutral dark gray */
 }
 
 /* Button Styling */
-button[mat-raised-button] {
-  background-color: #395dd1; /* Material Design "Deep Purple" */
-  color: white; /* White text for contrast */
+button[mat-raised-button],
+a[mat-raised-button] {
+  background-color: #1976d2; /* Material Design Primary Blue */
+  color: white;
   font-weight: bold;
   text-transform: none; /* Prevent all caps */
   padding: 8px 16px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  border-radius: 8px; /* Rounded corners for a modern look */
-  transition: transform 0.2s, box-shadow 0.2s; /* Add hover animation */
+  height: 36px;
+  border-radius: 4px; /* Subtle rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth hover effect */
+
+  &.api-button {
+    background-color: #009688; /* Material Design Teal for API button */
+  }
 }
 
-/* Hover Effect for Button */
-button[mat-raised-button]:hover {
-  transform: translateY(-2px); /* Slight lift on hover */
-  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+button[mat-raised-button]:hover,
+a[mat-raised-button]:hover {
+  background-color: #1565c0; /* Darker shade of blue for hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* More prominent shadow */
+}
+
+button[mat-raised-button] {
+  background-color: #1976d2; /* Material Design Primary Blue */
+  color: white;
+  font-weight: bold;
+  text-transform: none; /* Prevent all caps */
+  padding: 8px 16px;
+  height: 36px;
+  border-radius: 4px; /* Subtle rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth hover effect */
+}
+
+button[mat-raised-button].api-button {
+  background-color: #009688; /* Material Design Teal for API button */
+}
+
+button[mat-raised-button].api-button:hover {
+  background-color: #00796b; /* Darker teal for API button hover */
 }
 
 /* Empty State Text */
@@ -72,6 +98,82 @@ button[mat-raised-button]:hover {
   margin-top: 32px;
   font-size: 1.2rem;
   font-style: italic;
-  color: #757575; /* Gray for less emphasis */
+  color: #757575; /* Subtle gray for text */
   text-align: center;
+}
+
+//* Available Sources Header */
+.available-sources-header {
+  display: flex;
+  justify-content: space-between; /* Align title and button on the same line */
+  margin-bottom: 16px;
+
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  button[mat-raised-button] {
+    font-size: 0.875rem; /* Match Add Source button */
+    font-weight: bold;
+    text-transform: none; /* Prevent uppercase text */
+    padding: 8px 16px;
+    height: 36px; /* Consistent height */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #1976d2; /* Material Design Accent Color */
+    color: white; /* White text for contrast */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Hover animation */
+  }
+
+  button[mat-raised-button]:hover {
+    background-color: #1565c0; /* Darker shade of blue on hover */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+  }
+}
+
+
+/* Action Buttons */
+mat-cell {
+  display: flex;
+  align-items: center;
+
+  a[mat-icon-button],
+  button[mat-icon-button] {
+    color: #555; /* Neutral color for icons */
+    margin-left: 8px; /* Space between icons */
+    transition: transform 0.2s, color 0.3s;
+
+    &:hover {
+      color: #1976d2; /* Blue on hover */
+      transform: scale(1.1); /* Slight zoom effect */
+    }
+  }
+
+  /* View (visibility) Icon */
+  a[mat-icon-button]view-icon {
+    color: #4caf50; /* Material Design Green for visibility icon */
+  }
+
+  a[mat-icon-button]view-icon:hover {
+    color: #388e3c; /* Darker green on hover */
+  }
+
+  /* Edit Icon */
+  button[mat-icon-button]edit-icon {
+    color: #ff9800; /* Material Design Orange for edit */
+  }
+
+  button[mat-icon-button]edit-icon:hover {
+    color: #f57c00; /* Darker orange on hover */
+  }
+
+  /* Delete Icon */
+  button[mat-icon-button]delete-icon {
+    color: #f44336; /* Material Design Red for delete */
+  }
+
+  button[mat-icon-button]delete-icon:hover {
+    color: #d32f2f; /* Darker red on hover */
+  }
 }

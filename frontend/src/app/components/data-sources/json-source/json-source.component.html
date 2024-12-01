@@ -1,15 +1,11 @@
-<form [formGroup]="jsonForm" (ngSubmit)="onSubmit()">
-    <label for="filePath">JSON File Path</label>
-    <input id="filePath" formControlName="filePath" />
-    <div *ngIf="jsonForm.get('filePath')?.errors?.['invalidFilePath']">
-      {{ jsonForm.get('filePath')?.errors?.['invalidFilePath'] }}
-    </div>
+<h3>JSON Source Configuration</h3>
 
-    <label for="keys">JSON Keys</label>
-    <input id="keys" formControlName="keys" />
-    <div *ngIf="jsonForm.get('keys')?.errors?.['invalidJson']">
-      {{ jsonForm.get('keys')?.errors?.['invalidJson'] }}
-    </div>
+<mat-form-field appearance="fill">
+  <mat-label>Name</mat-label>
+  <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+</mat-form-field>
 
-    <button type="submit" [disabled]="jsonForm.invalid">Submit</button>
-</form>
+<mat-form-field appearance="fill">
+  <mat-label>File Path</mat-label>
+  <input matInput [(ngModel)]="sourceData.filePath" (ngModelChange)="onDataChange()" />
+</mat-form-field>

@@ -12,25 +12,29 @@
 </div>
 
 <mat-card>
-<mat-card-header class="dashboard-header">
-  <mat-card-title>Dashboard</mat-card-title>
-  <mat-card-actions>
-    <!-- Add Source Button -->
-    <button mat-raised-button color="accent" (click)="addSource()">
-      + Add Source
-    </button>
-  </mat-card-actions>
-</mat-card-header>
+  <mat-card-header class="dashboard-header">
+    <mat-card-title>Dashboard</mat-card-title>
+    <mat-card-actions>
+      <!-- Add Source Button -->
+      <button mat-raised-button color="accent" (click)="addSource()">
+        + Add Source
+      </button>
+    </mat-card-actions>
+  </mat-card-header>
   <mat-card-content>
     <!-- Display List of Sources -->
     <div *ngIf="!loading && !error && sources.length > 0">
-      <mat-card>
+      <mat-card class="available-sources-header">
         <mat-card-title>Available Sources</mat-card-title>
-        <mat-card-content>
-        </mat-card-content>
+        <!-- API Endpoints Button -->
+        <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="viewSources()">
+          API Endpoints
+        </button>
+        </mat-card-actions>
       </mat-card>
     </div>
-
+    
     <!-- Fallback for No Sources -->
     <div *ngIf="!loading && !error && sources.length === 0" class="no-sources-message">
       <p>No sources available. Please add a source.</p>
@@ -55,10 +59,23 @@
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
           <mat-cell *matCellDef="let source">
-            <button mat-icon-button color="primary" (click)="updateSource(source.name)">
+            <!-- View Source Button -->
+            <a
+              mat-icon-button
+              class="view-icon"
+              color="accent"
+              [href]="'http://localhost:8000/data/get-source/' + source.name"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <mat-icon>visibility</mat-icon>
+            </a>
+            <!-- Edit Button -->
+            <button mat-icon-button class="edit-icon" color="primary" (click)="updateSource(source.name)">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteSource(source.name)">
+            <!-- Delete Button -->
+            <button mat-icon-button class="delete-icon" color="warn" (click)="deleteSource(source.name)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-cell>

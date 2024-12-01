@@ -1,47 +1,45 @@
-<!-- <form [formGroup]="dbForm" (ngSubmit)="onSubmit()">
-    <label for="host">Host</label>
-    <input id="host" formControlName="host" />
-    <label for="port">Port</label>
-    <input id="port" formControlName="port" />
-    <label for="user">User</label>
-    <input id="user" formControlName="user" />
-    <label for="password">Password</label>
-    <input id="password" type="password" formControlName="password" />
-    <label for="dbname">Database Name</label>
-    <input id="dbname" formControlName="dbname" />
-    <button type="submit" [disabled]="dbForm.invalid">Submit</button> -->
-<!-- </form> -->
-<mat-form-field>
-    <mat-label>Database Type</mat-label>
-    <mat-select [(ngModel)]="sourceData.dbType" (ngModelChange)="onDataChange()">
-      <mat-option value="postgresql">PostgreSQL</mat-option>
-      <mat-option value="mongodb">MongoDB</mat-option>
-      <mat-option value="mysql">MySQL</mat-option>
-    </mat-select>
-  </mat-form-field>
-  
-  <mat-form-field>
-    <mat-label>Host</mat-label>
-    <input matInput [(ngModel)]="sourceData.host" (ngModelChange)="onDataChange()" />
-  </mat-form-field>
-  
-  <mat-form-field>
-    <mat-label>Port</mat-label>
-    <input matInput type="number" [(ngModel)]="sourceData.port" (ngModelChange)="onDataChange()" />
-  </mat-form-field>
-  
-  <mat-form-field>
-    <mat-label>Database Name</mat-label>
-    <input matInput [(ngModel)]="sourceData.dbName" (ngModelChange)="onDataChange()" />
-  </mat-form-field>
-  
-  <mat-form-field>
-    <mat-label>Username</mat-label>
-    <input matInput [(ngModel)]="sourceData.username" (ngModelChange)="onDataChange()" />
-  </mat-form-field>
-  
-  <mat-form-field>
-    <mat-label>Password</mat-label>
-    <input matInput type="password" [(ngModel)]="sourceData.password" (ngModelChange)="onDataChange()" />
-  </mat-form-field>
-  
+<h3>Database Source Configuration</h3>
+
+<!-- <mat-form-field appearance="fill">
+  <mat-label>Name</mat-label>
+  <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Database Type</mat-label>
+  <mat-select [(ngModel)]="sourceData.db_type" (ngModelChange)="onDataChange()">
+    <mat-option *ngFor="let type of databaseTypes" [value]="type">
+      {{ type }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Host</mat-label>
+  <input matInput [(ngModel)]="sourceData.host" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Port</mat-label>
+  <input matInput [(ngModel)]="sourceData.port" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Database Name</mat-label>
+  <input matInput [(ngModel)]="sourceData.db_name" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Username</mat-label>
+  <input matInput [(ngModel)]="sourceData.username" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Password</mat-label>
+  <input matInput type="password" [(ngModel)]="sourceData.password" (ngModelChange)="onDataChange()" />
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Tables</mat-label>
+  <input matInput [(ngModel)]="sourceData.tables" (ngModelChange)="onDataChange()" />
+</mat-form-field> -->

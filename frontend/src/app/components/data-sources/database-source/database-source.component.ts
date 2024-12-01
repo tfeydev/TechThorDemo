@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-database-source',
   standalone: true,
+  template: ``,
   imports: [
     CommonModule,
     ReactiveFormsModule,
