@@ -23,9 +23,29 @@ export class ApiSourceComponent {
     name: '',
     type: 'api',
     url: '',
-    headers: '{}',
-    params: '{}',
+    headers: {},
+    params: {}
   };
+
+  onNameChange(value: string): void {
+    this.sourceData.name = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
+  onFilePathChange(value: string): void {
+    this.sourceData.url = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
+  onHeadersChange(value: string): void {
+    this.sourceData.headers = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
+  onParamsChange(value: string): void {
+    this.sourceData.params = value;
+    this.dataChange.emit(this.sourceData);
+  }
 
   onDataChange(): void {
     this.dataChange.emit(this.sourceData);

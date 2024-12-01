@@ -22,12 +22,30 @@ class Source(BaseModel):
         return {k: v for k, v in self.dict().items() if v not in [None, "", [], {}]}
 
     class Config:
-        schema_extra = {
+        schema_csv = {
             "example": {
                 "name": "test_csv",
                 "type": "csv",
                 "file_path": "data/example.csv",
                 "delimiter": ","
+            }
+        }
+
+        schema_json = {
+            "example": {
+                "name": "test_json",
+                "type": "json",
+                "file_path": "data/example.json"
+            }
+        }
+
+        schema_api = {
+            "example": {
+                "name": "test_csv",
+                "type": "json",
+                "url": "https://jsonplaceholder.typicode.com/todos",
+                "headers": '',
+                "params": ''
             }
         }
         

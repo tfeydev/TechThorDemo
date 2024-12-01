@@ -1,9 +1,8 @@
 sources:
-- name: test-api
-  type: api
-  url: https://jsonplaceholder.typicode.com/todos/
-- name: test4711
-  type: csv
-  delimiter: ','
-- name: testjson1234567
+- name: test-json
   type: json
+- name: jsontest
+  type: json
+- name: api-test
+  type: api
+  url: https://jsonplaceholder.typicode.com/todos
