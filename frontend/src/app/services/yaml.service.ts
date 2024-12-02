@@ -1,6 +1,8 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +14,21 @@ export class YamlService {
 
   // Fetch YAML data from backend
   getYaml(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/view-yaml`);
+    return this.http.get(`${this.apiUrl}/view-yaml`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Update YAML data
   updateYaml(updatedYaml: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update-yaml`, updatedYaml);
+    return this.http.put(`${this.apiUrl}/update-yaml`, updatedYaml).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Centralized error handling
+  private handleError(error: any): Observable<never> {
+    console.error('An error occurred:', error); // Debugging
+    return throwError(() => new Error('Something went wrong; please try again later.'));
   }
 }
