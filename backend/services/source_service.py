@@ -7,6 +7,16 @@ class SourceService:
         self.config_file = config_file
         self.sources = self.load_config()
 
+    def serialize_source(self, source_data):
+        """Remove empty fields from source data."""
+        return {k: v for k, v in source_data.items() if v not in [None, "", [], {}]}
+
+    def save_config(self):
+        """Save the sources to the YAML configuration file."""
+        clean_sources = [self.serialize_source(src) for src in self.sources]
+        with open(self.config_file, "w") as file:
+            yaml.dump({"sources": clean_sources}, file)
+
     def load_config(self):
         """Load the YAML configuration file."""
         try:
@@ -34,39 +44,37 @@ class SourceService:
                     source_data.get("delimiter", ","),
                     source_data.get("encoding", "utf-8"),
                 )
-                normalized_data = ValidationService.normalize_csv(df)
             elif source_type == "json":
-                data = ValidationService.validate_json(
+                df = ValidationService.validate_json(
                     source_data["file_path"], source_data.get("encoding", "utf-8")
                 )
-                normalized_data = ValidationService.normalize_json(data)
             elif source_type == "api":
-                data = ValidationService.validate_api(
+                df = ValidationService.validate_api(
                     source_data["url"],
                     source_data.get("headers", {}),
-                    source_data.get("params", {}),
+                    source_data.get("params", {})
                 )
-                normalized_data = ValidationService.normalize_api(data)
             elif source_type == "database":
                 if source_data["db_type"] in ["mysql", "postgresql"]:
-                    normalized_data = ValidationService.validate_sql(
-                        source_data["db_type"],
-                        source_data["host"],
-                        source_data["port"],
-                        source_data["username"],
-                        source_data["password"],
-                        source_data["db_name"],
-                        source_data["query"],
+                    df = ValidationService.validate_sql(
+                        db_type=source_data["db_type"],
+                        host=source_data["host"],
+                        port=source_data["port"],
+                        user=source_data["user"],
+                        password=source_data["password"],
+                        db_name=source_data["db_name"],
+                        query=source_data.get("query"),
+                        tables=source_data.get("tables"),
                     )
                 elif source_data["db_type"] == "mongodb":
-                    normalized_data = ValidationService.validate_mongo(
-                        source_data["host"],
-                        source_data["port"],
-                        source_data["username"],
-                        source_data["password"],
-                        source_data["db_name"],
-                        source_data["collection_name"],
-                        source_data.get("filter_query"),
+                    df = ValidationService.validate_mongo(
+                        host=source_data["host"],
+                        port=source_data["port"],
+                        username=source_data["user"],
+                        password=source_data["password"],
+                        db_name=source_data["db_name"],
+                        collection_name=source_data["collection_name"],
+                        filter_query=source_data.get("filter_query"),
                     )
                 else:
                     raise ValueError(f"Unsupported database type: {source_data['db_type']}")
@@ -75,6 +83,34 @@ class SourceService:
 
             self.sources.append(source_data)
             self.save_config()
-            return {"message": "Source added successfully", "data_preview": normalized_data.head().to_dict()}
+            return {"message": "Source added successfully"}
+        except Exception as e:
+            return {"error": str(e)}
+
+    def update_source(self, source_name, updated_data):
+        """Update an existing source."""
+        try:
+            source_index = next((i for i, s in enumerate(self.sources) if s["name"] == source_name), None)
+            if source_index is None:
+                raise ValueError(f"Source with name '{source_name}' not found.")
+
+            # Update the source
+            self.sources[source_index] = {**self.sources[source_index], **updated_data}
+            self.save_config()
+            return {"message": f"Source '{source_name}' updated successfully."}
+        except Exception as e:
+            return {"error": str(e)}
+
+    def delete_source(self, source_name):
+        """Delete an existing source."""
+        try:
+            source_index = next((i for i, s in enumerate(self.sources) if s["name"] == source_name), None)
+            if source_index is None:
+                raise ValueError(f"Source with name '{source_name}' not found.")
+
+            # Remove the source
+            deleted_source = self.sources.pop(source_index)
+            self.save_config()
+            return {"message": f"Source '{source_name}' deleted successfully.", "deleted_source": deleted_source}
         except Exception as e:
             return {"error": str(e)}

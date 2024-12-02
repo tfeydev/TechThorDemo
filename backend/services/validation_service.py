@@ -1,5 +1,4 @@
 import pandas as pd
-import json
 import requests
 import pymysql
 import psycopg2
@@ -18,67 +17,64 @@ class ValidationService:
         except Exception as e:
             raise ValueError(f"CSV validation failed: {e}")
 
-    @staticmethod
-    def normalize_csv(df):
-        # Example: Fill missing values with empty strings
-        return df.fillna("")
-
     # JSON Validation and Normalization
     @staticmethod
     def validate_json(file_path, encoding="utf-8"):
         try:
+            import json
             with open(file_path, "r", encoding=encoding) as f:
                 data = json.load(f)
-            if not isinstance(data, (list, dict)):
+            if isinstance(data, list):
+                return pd.DataFrame(data)
+            elif isinstance(data, dict):
+                return pd.DataFrame([data])  # Convert dict to single-row DataFrame
+            else:
                 raise ValueError("Invalid JSON structure: Must be a dictionary or a list.")
-            return data
         except Exception as e:
             raise ValueError(f"JSON validation failed: {e}")
-
-    @staticmethod
-    def normalize_json(data):
-        # Normalize JSON data into a DataFrame
-        if isinstance(data, list):
-            return pd.DataFrame(data)
-        elif isinstance(data, dict):
-            return pd.DataFrame([data])  # Wrap dict as a single-row DataFrame
 
     # API Validation and Normalization
     @staticmethod
     def validate_api(url, headers=None, params=None):
         try:
             response = requests.get(url, headers=headers, params=params)
-            response.raise_for_status()
+            response.raise_for_status()  # Raise an error for HTTP errors
             data = response.json()
-            if not isinstance(data, (list, dict)):
+            if isinstance(data, list):
+                return pd.DataFrame(data)
+            elif isinstance(data, dict):
+                return pd.DataFrame([data])  # Convert dict to single-row DataFrame
+            else:
                 raise ValueError("Invalid API response structure: Must be a dictionary or a list.")
-            return data
         except Exception as e:
             raise ValueError(f"API validation failed: {e}")
 
+    # SQL Validation and Normalization
     @staticmethod
-    def normalize_api(data):
-        # Normalize API data into a DataFrame
-        return ValidationService.normalize_json(data)
-
-    # SQL Database Validation and Normalization
-    @staticmethod
-    def validate_sql(db_type, host, port, username, password, db_name, query):
+    def validate_sql(db_type, host, port, user, password, db_name, query=None, tables=None):
         conn = None
         try:
             if db_type == "mysql":
                 conn = pymysql.connect(
-                    host=host, port=port, user=username, password=password, database=db_name
+                    host=host, port=port, user=user, password=password, database=db_name
                 )
             elif db_type == "postgresql":
                 conn = psycopg2.connect(
-                    host=host, port=port, user=username, password=password, dbname=db_name
+                    host=host, port=port, user=user, password=password, dbname=db_name
                 )
             else:
                 raise ValueError(f"Unsupported database type: {db_type}")
-            df = pd.read_sql(query, conn)
+
+            if query:
+                df = pd.read_sql(query, conn)
+            elif tables:
+                dfs = [pd.read_sql(f"SELECT * FROM {table}", conn) for table in tables]
+                df = pd.concat(dfs, ignore_index=True)
+            else:
+                raise ValueError("Either 'query' or 'tables' must be provided.")
+
             if df.empty:
-                raise ValueError("Query returned no results.")
+                raise ValueError("Query or tables returned no results.")
             return df
         except Exception as e:
             raise ValueError(f"SQL validation failed: {e}")

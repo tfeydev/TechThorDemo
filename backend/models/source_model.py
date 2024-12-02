@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, Dict, Any
+from pydantic import BaseModel, Field, Dict, Any, List
 from typing import Optional
 
 
@@ -32,9 +32,12 @@ class DatabaseSource(BaseModel):
     db_type: str = Field(..., description="Database type (e.g., mysql, postgresql, mongodb)")
     host: str = Field(..., description="Database host")
     port: int = Field(..., description="Database port")
-    username: str = Field(..., description="Database username")
+    user: str = Field(..., description="Database user (e.g., 'user' for PostgreSQL)")
     password: str = Field(..., description="Database password")
     db_name: str = Field(..., description="Database name")
-    query: str = Field(..., description="SQL query or MongoDB filter")
+    query: Optional[str] = Field(None, description="SQL query or MongoDB filter")
+    tables: Optional[List[str]] = Field(
+        default=None, description="List of tables to fetch if query is not provided"
+    )
 
 
