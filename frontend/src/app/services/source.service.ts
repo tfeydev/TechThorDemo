@@ -1,59 +1,33 @@
-
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
 export class SourceService {
-  private readonly baseUrl = 'http://127.0.0.1:8000/data';
+  private sourcesSubject = new BehaviorSubject<any[]>([]);
+  sources$ = this.sourcesSubject.asObservable();
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private apiService: ApiService) {}
 
-  // Fetch all sources
-  getSources(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/get-sources`).pipe(
-      catchError(this.handleError)
-    );
+  // Load sources and update BehaviorSubject
+  loadSources(): void {
+    this.apiService.getSources().subscribe((sources) => {
+      this.sourcesSubject.next(sources);
+    });
   }
-
-  // Fetch a single source by name
-  getSource(name: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/get-source/${name}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  getSourceByName(sourceName: string): Observable<any> {
-    return this.getSource(sourceName); // Reuse the existing `getSource` method
-  }
-  
 
   // Add a new source
-  addSource(source: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/data/add-source`, source).pipe(
-      catchError(this.handleError)
-    );
+  addSource(source: any): void {
+    this.apiService.addSource(source).subscribe(() => this.loadSources());
   }
 
   // Update an existing source
-  updateSource(source: any, originalName: string): Observable<any> {
-    console.log('Updating source:', originalName, 'Payload:', source); // Debugging
-    return this.http.put(`${this.baseUrl}/update-source/${originalName}`, source).pipe(
-      catchError(this.handleError)
-    );
+  updateSource(name: string, source: any): void {
+    this.apiService.updateSource(name, source).subscribe(() => this.loadSources());
   }
 
-  // Delete a source by name
-  deleteSource(name: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete-source/${name}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  // Centralized error handling
-  private handleError(error: any): Observable<never> {
-    console.error('An error occurred:', error); // Debugging
-    return throwError(() => new Error('Something went wrong; please try again later.'));
+  // Delete a source
+  deleteSource(name: string): void {
+    this.apiService.deleteSource(name).subscribe(() => this.loadSources());
   }
 }

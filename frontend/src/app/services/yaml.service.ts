@@ -1,34 +1,27 @@
-
 import { Injectable } from '@angular/core';
+import * as yaml from 'js-yaml';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class YamlService {
-  private apiUrl = 'http://127.0.0.1:8000/data'; // Base URL for backend
+  private apiUrl = 'http://localhost:8000/yaml'; // Adjust based on your backend configuration
 
   constructor(private http: HttpClient) {}
 
-  // Fetch YAML data from backend
-  getYaml(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/view-yaml`).pipe(
-      catchError(this.handleError)
-    );
+  // Parse YAML string into JavaScript object
+  parseYaml(yamlString: string): any {
+    return yaml.load(yamlString);
   }
 
-  // Update YAML data
-  updateYaml(updatedYaml: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update-yaml`, updatedYaml).pipe(
-      catchError(this.handleError)
-    );
+  // Convert JavaScript object into YAML string
+  toYamlString(config: any): string {
+    return yaml.dump(config);
   }
 
-  // Centralized error handling
-  private handleError(error: any): Observable<never> {
-    console.error('An error occurred:', error); // Debugging
-    return throwError(() => new Error('Something went wrong; please try again later.'));
+  // Update YAML on the backend
+  updateYaml(yamlData: any): Observable<any> {
+    const yamlString = this.toYamlString(yamlData); // Convert object to YAML string
+    return this.http.put(`${this.apiUrl}/update`, { yaml: yamlString });
   }
 }

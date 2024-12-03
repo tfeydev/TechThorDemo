@@ -1,5 +1,5 @@
 import yaml
-from validation_service import ValidationService
+from .validation_service import ValidationService
 
 
 class SourceService:

@@ -1,9 +1,14 @@
-<h2 mat-dialog-title>YAML Configuration</h2>
-<mat-dialog-content>
-  <!-- json pipe used here -->
-  <pre>{{ yamlData | json }}</pre>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="editYaml()">Edit</button>
-  <button mat-raised-button color="warn" (click)="close()">Close</button>
-</mat-dialog-actions>
+<h2>View and Update YAML</h2>
+
+<!-- YAML Viewer/Editor
+<textarea
+  [(ngModel)]="yamlData"
+  rows="15"
+  class="yaml-editor"
+></textarea>
+
+Action Buttons 
+<div class="actions">
+  <button mat-button color="warn" (click)="close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="updateYaml()">Save</button>
+</div> -->
