@@ -1,9 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { YamlService } from '../../../services/yaml.service';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { dump } from 'js-yaml';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-view-yaml-dialog',
@@ -13,27 +12,13 @@ import { Observable } from 'rxjs';
   imports: [CommonModule, MatDialogModule, MatButtonModule],
 })
 export class ViewYamlDialogComponent {
-  yamlData: any;
+  yamlContent: string;
 
   constructor(
     public dialogRef: MatDialogRef<ViewYamlDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { yamlData: any },
-    private readonly yamlService: YamlService,
-    private readonly dialog: MatDialog
+    @Inject(MAT_DIALOG_DATA) public data: { sources: any[] }
   ) {
-    this.yamlData = data.yamlData; // Initialize YAML data
-  }
-
-  updateYaml(): void {
-    // Directly update YAML using YamlService
-    this.yamlService.updateYaml(this.yamlData).subscribe({
-      next: () => {
-        alert('YAML updated successfully.');
-      },
-      error: () => {
-        alert('Error saving changes.');
-      },
-    });
+    this.yamlContent = dump(data.sources);
   }
 
   close(): void {

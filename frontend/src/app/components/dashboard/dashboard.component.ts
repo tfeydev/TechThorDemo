@@ -46,7 +46,6 @@ export class DashboardComponent implements OnInit {
     this.loadSources();
   }
 
-  // Load sources from the backend
   loadSources(): void {
     this.loading = true;
     this.error = null;
@@ -58,14 +57,13 @@ export class DashboardComponent implements OnInit {
         this.dataSource.data = sources;
         this.loading = false;
       },
-      error: (err) => {
+      error: () => {
         this.error = 'Failed to load sources. Please try again later.';
         this.loading = false;
       },
     });
   }
 
-  // Open the Add Source Dialog
   openAddSourceDialog(): void {
     const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '500px' });
 
@@ -76,10 +74,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // Open the Update Source Dialog
   openUpdateSourceDialog(name: string): void {
     const source = this.sources.find((s) => s.name === name);
-    const dialogRef = this.dialog.open(UpdateSourceDialogComponent, { width: '500px', data: source });
+
+    if (!source) {
+      console.error(`Source with name "${name}" not found`);
+      return;
+    }
+
+    const dialogRef = this.dialog.open(UpdateSourceDialogComponent, {
+      width: '500px',
+      data: { source },
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -88,9 +94,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // Open the Delete Confirmation Dialog
   openDeleteDialog(name: string): void {
-    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, { width: '400px', data: { name } });
+    const dialogRef = this.dialog.open(ConfirmDeleteDialogComponent, {
+      width: '400px',
+      data: { name },
+    });
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
@@ -99,7 +107,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // Open the View YAML Dialog
   viewYaml(): void {
     this.dialog.open(ViewYamlDialogComponent, { width: '800px', data: { sources: this.sources } });
   }

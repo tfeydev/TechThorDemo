@@ -27,10 +27,10 @@ export class UpdateSourceDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder
   ) {
-    const source = data.source; // Get the source
+    const source = data?.source || {};
     this.updateForm = this.fb.group({
-      name: [source.name, [Validators.required]],
-      type: [source.type, [Validators.required]],
+      name: [source.name || '', [Validators.required]],
+      type: [source.type || '', [Validators.required]],
       file_path: [source.file_path || ''],
       url: [source.url || ''],
       headers: [source.headers || {}],
@@ -38,20 +38,15 @@ export class UpdateSourceDialogComponent {
       connection: [source.connection || {}],
       tables: [source.tables || []],
     });
-  }  
-  
+  }
 
   save(): void {
     if (this.updateForm.valid) {
-      // Return both updated form values and the original name
-      this.dialogRef.close({ ...this.updateForm.value, originalName: this.data.originalName });
-    } else {
-      console.error('Form is invalid:', this.updateForm.errors);
+      this.dialogRef.close({ ...this.updateForm.value });
     }
-  } 
-
-  
-  cancel(): void {
-    this.dialogRef.close(); // Close the dialog without saving
   }
-}  
+
+  cancel(): void {
+    this.dialogRef.close();
+  }
+}

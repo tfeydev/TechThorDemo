@@ -1,4 +1,5 @@
 <h1 mat-dialog-title>Edit Source</h1>
+
 <div mat-dialog-content>
   <form [formGroup]="updateForm">
     <mat-form-field appearance="fill">
@@ -34,5 +35,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-button color="primary" [disabled]="!updateForm.valid" (click)="save()">Save</button>
+  <button mat-raised-button color="primary" [disabled]="!updateForm.valid" (click)="save()">Save</button>
 </div>

@@ -1,14 +1,10 @@
 <h2>View and Update YAML</h2>
 
-<!-- YAML Viewer/Editor
-<textarea
-  [(ngModel)]="yamlData"
-  rows="15"
-  class="yaml-editor"
-></textarea>
+<h1 mat-dialog-title>View YAML</h1>
+<div mat-dialog-content>
+  <pre>{{ yamlContent }}</pre>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">Close</button>
+</div>
 
-Action Buttons 
-<div class="actions">
-  <button mat-button color="warn" (click)="close()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="updateYaml()">Save</button>
-</div> -->

@@ -1,10 +1,44 @@
 mat-dialog-actions {
-    margin-top: 20px;
-  }
-  
-  mat-form-field {
-    width: 100%;
-    margin-bottom: 15px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the end (right side) */
+  padding: 16px 0; /* Add vertical spacing for breathing room */
+  border-top: 1px solid #ddd; /* Subtle separator for the actions area */
+  background-color: #f9f9f9; /* Light background to distinguish from content */
+
+  button {
+    margin-left: 10px; /* Space between buttons */
+    font-weight: bold; /* Consistent button emphasis */
+    text-transform: none; /* Prevent all-uppercase */
+    padding: 8px 16px; /* Uniform padding for buttons */
+    border-radius: 4px; /* Subtle rounded corners */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth hover effects */
   }
 
-  
+  button[mat-button] {
+    color: #757575; /* Neutral gray for Cancel button */
+    background: transparent; /* No background for Cancel */
+  }
+
+  button[mat-button]:hover {
+    background: rgba(0, 0, 0, 0.05); /* Light hover background for Cancel */
+  }
+
+  button[mat-button][color="primary"] {
+    color: white; /* White text for Save button */
+    background-color: #1976d2; /* Primary blue background for Save */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  }
+
+  button[mat-button][color="primary"]:hover {
+    background-color: #1565c0; /* Darker blue for hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* More prominent shadow */
+  }
+
+  button[mat-button][color="primary"][disabled] {
+    background-color: #ccc; /* Gray background for disabled state */
+    color: #888; /* Subtle text color for disabled state */
+    box-shadow: none; /* No shadow for disabled button */
+    cursor: not-allowed; /* Indicate disabled state */
+  }
+}

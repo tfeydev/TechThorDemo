@@ -1,27 +1,30 @@
 sources:
-- delimiter: ','
+- connection: {}
+  delimiter: ','
   encoding: utf-8
   file_path: data/example.csv
-  name: test1
-  type: csv
-- file_path: data/example.json
-  name: test2
-  type: json
-- headers: {}
-  method: GET
-  name: FX Rates
+  headers: {}
+  name: csv-test1
   params: {}
-  type: api
-  url: https://api.fxratesapi.com/latest
-- db_name: dvdrental
-  db_type: postgresql
-  host: localhost
-  name: testdb
-  options: {}
-  password: passwd
-  port: '5432'
-  queries: []
-  tables:
-  - customer
-  type: database
-  user: postgres
+  tables: []
+  type: csv
+  url: ''
+- connection: {}
+  encoding: utf-8
+  file_path: data/example.json
+  headers: {}
+  name: json-test1
+  params: {}
+  tables: []
+  type: json
+  url: ''
+- connection: {}
+  delimiter: ','
+  encoding: utf-8
+  file_path: data/example.csv
+  headers: {}
+  name: csv-test12
+  params: {}
+  tables: []
+  type: csv
+  url: ''
