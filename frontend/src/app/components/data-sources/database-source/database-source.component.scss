@@ -1,0 +1,56 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh; // Ensure the modal doesn't exceed viewport height
+  overflow: hidden;
+}
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  gap: 1rem; // Add spacing between sections
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.tables-section,
+.queries-section {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dynamic-list {
+  max-height: 150px; // Limit the height for scrollable content
+  overflow-y: auto; // Enable scrolling for dynamic content
+  padding-right: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem;
+  background-color: #f9f9f9;
+}
+
+.dynamic-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.add-buttons {
+  display: flex;
+  gap: 1rem;
+}
+

@@ -9,3 +9,8 @@
   <mat-label>File Path</mat-label>
   <input matInput [(ngModel)]="sourceData.filePath" (ngModelChange)="onDataChange()" />
 </mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Encoding</mat-label>
+  <input matInput [(ngModel)]="sourceData.encoding" (ngModelChange)="onDataChange()" />
+</mat-form-field>

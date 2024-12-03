@@ -25,6 +25,7 @@ export class CsvSourceComponent {
     type: 'csv',
     filePath: '',
     delimiter: ',',
+    encoding: 'utf-8'
   };
 
   onNameChange(value: string): void {
@@ -39,6 +40,11 @@ export class CsvSourceComponent {
 
   onDelimiterChange(value: string): void {
     this.sourceData.delimiter = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
+  onEncodingChange(value: string): void {
+    this.sourceData.encoding = value;
     this.dataChange.emit(this.sourceData);
   }
 

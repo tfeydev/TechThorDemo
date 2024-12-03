@@ -1,45 +1,96 @@
-<h3>Database Source Configuration</h3>
+<div class="dialog-container">
+  <h3>Database Source Configuration</h3>
 
-<!-- <mat-form-field appearance="fill">
-  <mat-label>Name</mat-label>
-  <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
-</mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Database Type</mat-label>
-  <mat-select [(ngModel)]="sourceData.db_type" (ngModelChange)="onDataChange()">
-    <mat-option *ngFor="let type of databaseTypes" [value]="type">
-      {{ type }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Database Type</mat-label>
+    <mat-select [(value)]="sourceData.db_type" (selectionChange)="onDataChange()">
+      <mat-option value="mysql">MySQL</mat-option>
+      <mat-option value="postgresql">PostgreSQL</mat-option>
+      <mat-option value="sqlite">SQLite</mat-option>
+      <mat-option value="mssql">MS SQL</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Host</mat-label>
-  <input matInput [(ngModel)]="sourceData.host" (ngModelChange)="onDataChange()" />
-</mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Host</mat-label>
+    <input matInput [(ngModel)]="sourceData.host" (ngModelChange)="onDataChange()" />
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Port</mat-label>
-  <input matInput [(ngModel)]="sourceData.port" (ngModelChange)="onDataChange()" />
-</mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Port</mat-label>
+    <input matInput [(ngModel)]="sourceData.port" (ngModelChange)="onDataChange()" />
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Database Name</mat-label>
-  <input matInput [(ngModel)]="sourceData.db_name" (ngModelChange)="onDataChange()" />
-</mat-form-field>
+  <div class="credentials">
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput [(ngModel)]="sourceData.user" (ngModelChange)="onDataChange()" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [(ngModel)]="sourceData.password"
+        (ngModelChange)="onDataChange()"
+        type="password"
+      />
+    </mat-form-field>
+  </div>
 
-<mat-form-field appearance="fill">
-  <mat-label>Username</mat-label>
-  <input matInput [(ngModel)]="sourceData.username" (ngModelChange)="onDataChange()" />
-</mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Database Name</mat-label>
+    <input matInput [(ngModel)]="sourceData.db_name" (ngModelChange)="onDataChange()" />
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Password</mat-label>
-  <input matInput type="password" [(ngModel)]="sourceData.password" (ngModelChange)="onDataChange()" />
-</mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Options (JSON format)</mat-label>
+    <textarea matInput [(ngModel)]="sourceData.options" (ngModelChange)="onDataChange()"></textarea>
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Tables</mat-label>
-  <input matInput [(ngModel)]="sourceData.tables" (ngModelChange)="onDataChange()" />
-</mat-form-field> -->
+  <div class="tables-section">
+    <h4>Tables</h4>
+    <div class="add-buttons">
+      <mat-form-field appearance="fill">
+        <mat-label>Add Table</mat-label>
+        <input matInput [(ngModel)]="newTable" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="addTable()">Add Table</button>
+    </div>
+    <div class="table-list">
+      <div *ngFor="let table of sourceData.tables">
+        {{ table }}
+        <button mat-icon-button color="warn" (click)="removeTable(table)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="queries-section">
+    <h4>Queries</h4>
+    <div class="add-buttons">
+      <mat-form-field appearance="fill">
+        <mat-label>Query Name</mat-label>
+        <input matInput [(ngModel)]="newQuery.name" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Query</mat-label>
+        <textarea matInput [(ngModel)]="newQuery.query"></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="addQuery()">Add Query</button>
+    </div>
+    <div class="query-list">
+      <div *ngFor="let query of sourceData.queries">
+        <strong>{{ query.name }}</strong>: {{ query.query }}
+        <button mat-icon-button color="warn" (click)="removeQuery(query)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+

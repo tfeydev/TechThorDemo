@@ -23,10 +23,25 @@ export class JsonSourceComponent {
   sourceData = {
     name: '',
     type: 'json',
-    filePath: ''
+    filePath: '',
+    encoding: 'utf-8'
   };
 
-  
+  onNameChange(value: string): void {
+    this.sourceData.name = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
+  onFilePathChange(value: string): void {
+    this.sourceData.filePath = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
+  onEncodingChange(value: string): void {
+    this.sourceData.encoding = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
   onDataChange(): void {
     this.dataChange.emit(this.sourceData);
   }

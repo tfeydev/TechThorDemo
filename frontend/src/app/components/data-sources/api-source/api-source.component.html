@@ -11,11 +11,31 @@
 </mat-form-field>
 
 <mat-form-field appearance="fill">
+  <mat-label>Method</mat-label>
+  <mat-select [(ngModel)]="sourceData.method" (ngModelChange)="onDataChange()">
+    <mat-option value="GET">GET</mat-option>
+    <mat-option value="POST">POST</mat-option>
+    <mat-option value="PUT">PUT</mat-option>
+    <mat-option value="DELETE">DELETE</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
   <mat-label>Headers (JSON format)</mat-label>
-  <textarea matInput [(ngModel)]="sourceData.headers" (ngModelChange)="onDataChange()"></textarea>
+  <textarea
+    matInput
+    [(ngModel)]="sourceData.headers"
+    (ngModelChange)="onDataChange()"
+    placeholder='e.g., {"Content-Type": "application/json"}'>
+  </textarea>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
   <mat-label>Parameters (JSON format)</mat-label>
-  <textarea matInput [(ngModel)]="sourceData.params" (ngModelChange)="onDataChange()"></textarea>
+  <textarea
+    matInput
+    [(ngModel)]="sourceData.params"
+    (ngModelChange)="onDataChange()"
+    placeholder='e.g., {"key": "value"}'>
+  </textarea>
 </mat-form-field>

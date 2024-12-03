@@ -38,9 +38,11 @@ export class AddSourceDialogComponent {
   constructor(public dialogRef: MatDialogRef<AddSourceDialogComponent>) {}
 
   onDataChange(data: any): void {
-    this.sourceData = data;
-    this.isFormValid = this.validateForm(data);
+    this.sourceData = { ...data, file_path: data.filePath }; // Adjust key as needed
+    delete this.sourceData.filePath; // Remove old key if necessary
+    this.isFormValid = this.validateForm(this.sourceData);
   }
+
 
   validateForm(data: any): boolean {
     return !!data && Object.keys(data).length > 0; // Basic validation
@@ -53,8 +55,11 @@ export class AddSourceDialogComponent {
       ...this.sourceData,
     };
   
-    console.log('Payload:', payload); // Debugging
-    this.dialogRef.close(payload); // Pass payload to the parent
+    // Clean the payload to ensure it aligns with backend requirements
+    const cleanedPayload = this.cleanPayload(payload);
+
+    console.log('Cleaned Payload:', cleanedPayload); // Debugging
+    this.dialogRef.close(cleanedPayload); // Pass payload to the parent
   }
   
   cleanPayload(payload: any): any {

@@ -1,8 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-api-source',
@@ -12,7 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     CommonModule,
     MatInputModule,
     MatFormFieldModule,
-    ReactiveFormsModule,
+    MatSelectModule,
     FormsModule
   ],
 })
@@ -23,31 +24,30 @@ export class ApiSourceComponent {
     name: '',
     type: 'api',
     url: '',
-    headers: {},
-    params: {}
+    method: 'GET',
+    headers: '{}', // Default empty JSON string
+    params: '{}' // Default empty JSON string
   };
 
-  onNameChange(value: string): void {
-    this.sourceData.name = value;
-    this.dataChange.emit(this.sourceData);
-  }
-
-  onFilePathChange(value: string): void {
-    this.sourceData.url = value;
-    this.dataChange.emit(this.sourceData);
-  }
-
-  onHeadersChange(value: string): void {
-    this.sourceData.headers = value;
-    this.dataChange.emit(this.sourceData);
-  }
-
-  onParamsChange(value: string): void {
-    this.sourceData.params = value;
-    this.dataChange.emit(this.sourceData);
-  }
-
   onDataChange(): void {
-    this.dataChange.emit(this.sourceData);
+    try {
+      // Validate and parse headers and params
+      const parsedHeaders = this.sourceData.headers ? JSON.parse(this.sourceData.headers) : {};
+      const parsedParams = this.sourceData.params ? JSON.parse(this.sourceData.params) : {};
+
+      // Ensure headers and params are valid objects
+      if (typeof parsedHeaders !== 'object' || typeof parsedParams !== 'object') {
+        throw new Error('Headers and Parameters must be valid JSON objects.');
+      }
+
+      // Emit valid data
+      this.dataChange.emit({
+        ...this.sourceData,
+        headers: parsedHeaders,
+        params: parsedParams
+      });
+    } catch (error) {
+      console.error('Invalid JSON format for headers or parameters:', error);
+    }
   }
 }
