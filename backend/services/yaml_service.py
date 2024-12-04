@@ -27,15 +27,14 @@ class BaseYamlService:
             return {}
 
     def save_yaml(self, data):
-        """Save data to YAML file with ordered keys."""
+        """Save data to YAML with proper handling for empty objects."""
         def clean_data(obj):
             if isinstance(obj, dict):
-                return OrderedDict((k, clean_data(v)) for k, v in obj.items() if v not in [None, "", [], {}])
+                return OrderedDict((k, clean_data(v)) for k, v in obj.items())
             if isinstance(obj, list):
-                return [clean_data(item) for item in obj if item not in [None, "", [], {}]]
+                return [clean_data(item) for item in obj]
             return obj
 
         cleaned_data = clean_data(data)
-        print("DEBUG: Cleaned data before saving:", cleaned_data)  # Debugging
         with open(self.config_file, "w") as file:
-            yaml.safe_dump(cleaned_data, file, default_flow_style=False, sort_keys=False)
+            yaml.safe_dump(cleaned_data, file, default_flow_style=False, sort_keys=False, allow_unicode=True)

@@ -31,21 +31,23 @@ import { FormsModule } from '@angular/forms';
   ]
 })
 export class AddSourceDialogComponent {
-  selectedSourceType: string = ''; // Default no selection
+  selectedSourceType: string = ''; // Selected source type
   sourceData: any = {}; // Data collected from child components
   isFormValid: boolean = false;
 
   constructor(public dialogRef: MatDialogRef<AddSourceDialogComponent>) {}
 
   onDataChange(data: any): void {
-    this.sourceData = { ...data, file_path: data.filePath }; // Adjust key as needed
-    delete this.sourceData.filePath; // Remove old key if necessary
+    // Ensure the sourceData reflects updates from the child components
+    this.sourceData = { ...data };
+
+    // Validate the form based on source type and required fields
     this.isFormValid = this.validateForm(this.sourceData);
   }
 
-
   validateForm(data: any): boolean {
-    return !!data && Object.keys(data).length > 0; // Basic validation
+    // Add specific validation for source types if needed
+    return !!data && Object.keys(data).length > 0; // Basic validation: Non-empty data
   }
 
   save(): void {
@@ -54,21 +56,37 @@ export class AddSourceDialogComponent {
       ...this.sourceData,
     };
   
-    // Remove empty fields
+    // Handle specific processing for API sources
+    if (this.selectedSourceType === 'api') {
+      // Ensure headers and params are correctly parsed as JSON objects
+      try {
+        payload.headers = payload.headers ? JSON.parse(payload.headers) : {};
+      } catch (e) {
+        console.error('Invalid headers JSON:', e);
+        payload.headers = {};
+      }
+  
+      try {
+        payload.params = payload.params ? JSON.parse(payload.params) : {};
+      } catch (e) {
+        console.error('Invalid params JSON:', e);
+        payload.params = {};
+      }
+    }
+  
+    // Remove empty fields (including empty objects and arrays)
     const cleanedPayload = Object.fromEntries(
-      Object.entries(payload).filter(([_, value]) => value !== null && value !== '')
+      Object.entries(payload).filter(([_, value]) => 
+        value !== null && 
+        value !== undefined && 
+        (typeof value === 'object' ? Object.keys(value).length > 0 : value !== '')
+      )
     );
   
     console.log('Payload sent to backend:', cleanedPayload); // Debugging
-    this.dialogRef.close(cleanedPayload);
-  }
+    this.dialogRef.close(cleanedPayload); // Close dialog with the payload
+  }  
   
-  cleanPayload(payload: any): any {
-    return Object.fromEntries(
-      Object.entries(payload).filter(([_, v]) => v !== null && v !== undefined)
-    );
-  }
-
   cancel(): void {
     this.dialogRef.close(null); // Close dialog without saving
   }

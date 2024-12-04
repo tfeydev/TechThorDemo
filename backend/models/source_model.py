@@ -25,7 +25,6 @@ class APISource(BaseModel):
     params: Optional[Dict[str, Any]] = Field(default={}, description="Query parameters")
 
 
-
 class DatabaseSource(BaseModel):
     name: str = Field(..., description="Unique name for the source")
     type: str = Field("database", description="Type of the source")

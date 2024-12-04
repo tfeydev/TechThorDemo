@@ -1,21 +1,56 @@
 from services.yaml_service import BaseYamlService
 from collections import OrderedDict
+import yaml
 
 class SourceService(BaseYamlService):
     def __init__(self, config_file="config.yaml"):
         super().__init__(config_file)
         self.sources = self.load_yaml().get("sources", [])
 
+    def load_config(self):
+        """Load the YAML configuration file."""
+        try:
+            with open(self.config_file, "r") as file:
+                config = yaml.safe_load(file) or {}
+                return config.get("sources", [])
+        except FileNotFoundError:
+            return []
+
+
     def serialize_source(self, source_data):
-        """Reorder keys and remove empty fields from source data."""
+        """Serialize and clean the source data."""
+        source_type_defaults = {
+            "api": {
+                "url": "",
+                "headers": {},
+                "params": {},
+            },
+            "csv": {
+                "delimiter": ",",
+                "encoding": "utf-8",
+            },
+            "json": {
+                "encoding": "utf-8",
+            },
+            "database": {
+                "tables": [],
+                "queries": [],
+            },
+        }
+
+        # Get defaults for the source type
+        defaults = source_type_defaults.get(source_data.get("type"), {})
+
+        # Merge with provided data
+        cleaned_source = {**defaults, **source_data}
+
+        # Reorder keys based on key order
         key_order = [
-            "name", "type", "db_type", "host", "port", "user", "password",
-            "db_name", "tables", "queries", "url", "method", "headers",
-            "params", "file_path", "delimiter", "encoding", "options"
+            "name", "type", "url", "headers", "params", "file_path",
+            "delimiter", "encoding", "db_type", "host", "port", "user",
+            "password", "db_name", "tables", "queries"
         ]
-        cleaned_source = {k: v for k, v in source_data.items() if v not in [None, "", [], {}]}
-        ordered_source = OrderedDict((key, cleaned_source[key]) for key in key_order if key in cleaned_source)
-        print("DEBUG: Serialized source:", ordered_source)  # Debugging
+        ordered_source = OrderedDict((k, cleaned_source[k]) for k in key_order if k in cleaned_source)
         return ordered_source
 
     def save_config(self):
@@ -44,15 +79,37 @@ class SourceService(BaseYamlService):
 
     def update_source(self, source_name, updated_data):
         """Update an existing source."""
-        source_index = next((i for i, s in enumerate(self.sources) if s["name"] == source_name), None)
-        if source_index is None:
-            return {"error": f"Source with name '{source_name}' not found."}
+        try:
+            source_index = next((i for i, s in enumerate(self.sources) if s["name"] == source_name), None)
+            if source_index is None:
+                raise ValueError(f"Source with name '{source_name}' not found.")
 
-        # Update the source
-        self.sources[source_index] = self.serialize_source({**self.sources[source_index], **updated_data})
-        print("DEBUG: Source updated:", self.sources[source_index])  # Debugging
-        self.save_config()
-        return {"message": f"Source '{source_name}' updated successfully."}
+            # Merge the existing source data with the updates
+            source_type = self.sources[source_index].get("type")
+            relevant_fields = {
+                "api": ["name", "type", "url", "headers", "params"],
+                "csv": ["name", "type", "file_path", "delimiter", "encoding"],
+                "json": ["name", "type", "file_path", "encoding"],
+                "database": [
+                    "name", "type", "db_type", "host", "port", "user",
+                    "password", "db_name", "query", "tables"
+                ]
+            }.get(source_type, [])
+
+            # Filter the updated data to only include relevant fields
+            filtered_updates = {key: updated_data[key] for key in relevant_fields if key in updated_data}
+
+            # Update the source
+            self.sources[source_index] = {**self.sources[source_index], **filtered_updates}
+            print(f"DEBUG: Source updated: {self.sources[source_index]}")
+
+            # Save the updated sources to the config file
+            self.save_config()
+            return {"message": f"Source '{source_name}' updated successfully"}
+        except Exception as e:
+            print(f"ERROR: {e}")
+            return {"error": str(e)}
+
 
 
     def save_config(self):

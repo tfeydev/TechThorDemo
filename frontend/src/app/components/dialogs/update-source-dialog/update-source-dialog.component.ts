@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-source-dialog',
+  selector: 'app-update-source-dialog',
   templateUrl: './update-source-dialog.component.html',
   styleUrls: ['./update-source-dialog.component.scss'],
   standalone: true,
@@ -28,29 +28,67 @@ export class UpdateSourceDialogComponent {
     private fb: FormBuilder
   ) {
     const source = data?.source || {};
+
+    // Ensure `tables` is always an array
+    const tables = Array.isArray(source.tables) ? source.tables : (source.tables ? [source.tables] : []);
+
     this.updateForm = this.fb.group({
+      // General Fields
       name: [source.name || '', [Validators.required]],
       type: [source.type || '', [Validators.required]],
-      file_path: [source.file_path || ''],
+  
+      // API Fields
       url: [source.url || ''],
-      headers: [source.headers || {}],
-      params: [source.params || {}],
-      connection: [source.connection || {}],
-      tables: [source.tables || []],
+      headers: [JSON.stringify(source.headers || {}, null, 2)],
+      params: [JSON.stringify(source.params || {}, null, 2)],
+  
+      // CSV Fields
+      file_path: [source.file_path || ''],
+      delimiter: [source.delimiter || ','],
+      encoding: [source.encoding || 'utf-8'],
+  
+      // Database Fields
+      db_type: [source.db_type || ''],
+      host: [source.host || ''],
+      port: [source.port || null],
+      user: [source.user || ''],
+      password: [source.password || ''],
+      db_name: [source.db_name || ''],
+      query: [source.queries?.[0]?.query || ''], // Extract first query for display
+      tables: [tables.join(', ')], // Join tables array into comma-separated string
     });
   }
-
+  
   save(): void {
     if (this.updateForm.valid) {
-      const payload = { ...this.updateForm.value };
+      const formValue = { ...this.updateForm.value };
   
-      // Remove empty fields
-      const cleanedPayload = Object.fromEntries(
-        Object.entries(payload).filter(([_, value]) => value !== null && value !== '')
-      );
+      // Convert tables back to an array
+      formValue.tables = formValue.tables ? formValue.tables.split(',').map((t: string) => t.trim()) : [];
   
-      console.log('Updated Payload sent to backend:', cleanedPayload); // Debugging
-      this.dialogRef.close(cleanedPayload);
+      // Handle queries (wrap in an array if present)
+      if (formValue.query) {
+        formValue.queries = [{ name: 'default-query', query: formValue.query }];
+        delete formValue.query;
+      }
+  
+      // Parse JSON fields (headers and params)
+      try {
+        formValue.headers = formValue.headers ? JSON.parse(formValue.headers) : {};
+      } catch (e) {
+        console.error('Invalid headers JSON:', e);
+        formValue.headers = {};
+      }
+  
+      try {
+        formValue.params = formValue.params ? JSON.parse(formValue.params) : {};
+      } catch (e) {
+        console.error('Invalid params JSON:', e);
+        formValue.params = {};
+      }
+  
+      console.log('Payload sent to backend:', formValue);
+      this.dialogRef.close(formValue); // Send the payload to the backend
     }
   }  
   
