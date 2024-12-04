@@ -6,18 +6,16 @@ from pymongo import MongoClient
 
 
 class ValidationService:
-    # CSV Validation and Normalization
     @staticmethod
     def validate_csv(file_path, delimiter=",", encoding="utf-8"):
         try:
             df = pd.read_csv(file_path, delimiter=delimiter, encoding=encoding)
             if df.empty:
-                raise ValueError("The file is empty.")
+                raise ValueError("The CSV file is empty.")
             return df
         except Exception as e:
             raise ValueError(f"CSV validation failed: {e}")
 
-    # JSON Validation and Normalization
     @staticmethod
     def validate_json(file_path, encoding="utf-8"):
         try:
@@ -27,41 +25,35 @@ class ValidationService:
             if isinstance(data, list):
                 return pd.DataFrame(data)
             elif isinstance(data, dict):
-                return pd.DataFrame([data])  # Convert dict to single-row DataFrame
+                return pd.DataFrame([data])
             else:
-                raise ValueError("Invalid JSON structure: Must be a dictionary or a list.")
+                raise ValueError("Invalid JSON structure.")
         except Exception as e:
             raise ValueError(f"JSON validation failed: {e}")
 
-    # API Validation and Normalization
     @staticmethod
     def validate_api(url, headers=None, params=None):
         try:
             response = requests.get(url, headers=headers, params=params)
-            response.raise_for_status()  # Raise an error for HTTP errors
+            response.raise_for_status()
             data = response.json()
             if isinstance(data, list):
                 return pd.DataFrame(data)
             elif isinstance(data, dict):
-                return pd.DataFrame([data])  # Convert dict to single-row DataFrame
+                return pd.DataFrame([data])
             else:
-                raise ValueError("Invalid API response structure: Must be a dictionary or a list.")
+                raise ValueError("Invalid API response structure.")
         except Exception as e:
             raise ValueError(f"API validation failed: {e}")
 
-    # SQL Validation and Normalization
     @staticmethod
     def validate_sql(db_type, host, port, user, password, db_name, query=None, tables=None):
         conn = None
         try:
             if db_type == "mysql":
-                conn = pymysql.connect(
-                    host=host, port=port, user=user, password=password, database=db_name
-                )
+                conn = pymysql.connect(host=host, port=port, user=user, password=password, database=db_name)
             elif db_type == "postgresql":
-                conn = psycopg2.connect(
-                    host=host, port=port, user=user, password=password, dbname=db_name
-                )
+                conn = psycopg2.connect(host=host, port=port, user=user, password=password, dbname=db_name)
             else:
                 raise ValueError(f"Unsupported database type: {db_type}")
 
@@ -72,7 +64,6 @@ class ValidationService:
                 df = pd.concat(dfs, ignore_index=True)
             else:
                 raise ValueError("Either 'query' or 'tables' must be provided.")
-
             if df.empty:
                 raise ValueError("Query or tables returned no results.")
             return df
@@ -82,7 +73,6 @@ class ValidationService:
             if conn:
                 conn.close()
 
-    # MongoDB Validation and Normalization
     @staticmethod
     def validate_mongo(host, port, username, password, db_name, collection_name, filter_query=None):
         try:

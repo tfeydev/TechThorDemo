@@ -13,15 +13,16 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/sources`);
   }
 
-  // Add a new source
   addSource(source: any): Observable<any> {
+    console.log('DEBUG: Sending payload to POST /sources:', source);
     return this.http.post(`${this.baseUrl}/sources`, source);
   }
-
-  // Update an existing source
+  
   updateSource(name: string, source: any): Observable<any> {
+    console.log(`DEBUG: Sending payload to PUT /sources/${name}:`, source);
     return this.http.put(`${this.baseUrl}/sources/${name}`, source);
   }
+  
 
   // Delete a source
   deleteSource(name: string): Observable<any> {

@@ -49,17 +49,18 @@ export class AddSourceDialogComponent {
   }
 
   save(): void {
-    // Construct payload based on selected type
     const payload = {
       type: this.selectedSourceType,
       ...this.sourceData,
     };
   
-    // Clean the payload to ensure it aligns with backend requirements
-    const cleanedPayload = this.cleanPayload(payload);
-
-    console.log('Cleaned Payload:', cleanedPayload); // Debugging
-    this.dialogRef.close(cleanedPayload); // Pass payload to the parent
+    // Remove empty fields
+    const cleanedPayload = Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value !== null && value !== '')
+    );
+  
+    console.log('Payload sent to backend:', cleanedPayload); // Debugging
+    this.dialogRef.close(cleanedPayload);
   }
   
   cleanPayload(payload: any): any {

@@ -1,17 +1,13 @@
-from services.yaml_service import YamlService
+from services.source_service import SourceService
 
-# Initialize the YamlService
-service = YamlService("config.yaml")
+service = SourceService()
 
-# Load and print the YAML data
-data = service.load_yaml()
-print("Before Reordering:")
-print(data)
+service.add_source({
+    "name": "test3",
+    "type": "csv",
+    "file_path": "data/example.csv",
+    "delimiter": ",",
+    "encoding": "utf-8"
+})
 
-# Save to enforce reordering
-service.save_yaml(data)
-
-# Reload and print the reordered YAML data
-reordered_data = service.load_yaml()
-print("After Reordering:")
-print(reordered_data)
+print("DEBUG: Sources in memory:", service.get_sources())

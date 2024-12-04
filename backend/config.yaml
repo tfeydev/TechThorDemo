@@ -1,30 +1,10 @@
 sources:
-- connection: {}
+- name: test1
+  type: csv
+  file_path: data/example.csv
   delimiter: ','
   encoding: utf-8
-  file_path: data/example.csv
-  headers: {}
-  name: csv-test1
-  params: {}
-  tables: []
-  type: csv
-  url: ''
-- connection: {}
-  encoding: utf-8
-  file_path: data/example.json
-  headers: {}
-  name: json-test1
-  params: {}
-  tables: []
+- name: test2
   type: json
-  url: ''
-- connection: {}
-  delimiter: ','
+  file_path: dataj/example.json
   encoding: utf-8
-  file_path: data/example.csv
-  headers: {}
-  name: csv-test12
-  params: {}
-  tables: []
-  type: csv
-  url: ''

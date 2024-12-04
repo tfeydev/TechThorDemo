@@ -16,18 +16,19 @@ export class SourceService {
     });
   }
 
-  // Add a new source
   addSource(source: any): void {
+    console.log('Sending payload to backend for addition:', source);
     this.apiService.addSource(source).subscribe(() => this.loadSources());
   }
-
-  // Update an existing source
+  
   updateSource(name: string, source: any): void {
+    console.log('Sending payload to backend for update:', source);
     this.apiService.updateSource(name, source).subscribe(() => this.loadSources());
-  }
+  } 
 
   // Delete a source
   deleteSource(name: string): void {
     this.apiService.deleteSource(name).subscribe(() => this.loadSources());
   }
+  
 }

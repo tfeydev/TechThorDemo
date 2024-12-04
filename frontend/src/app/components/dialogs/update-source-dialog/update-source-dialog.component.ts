@@ -42,10 +42,18 @@ export class UpdateSourceDialogComponent {
 
   save(): void {
     if (this.updateForm.valid) {
-      this.dialogRef.close({ ...this.updateForm.value });
+      const payload = { ...this.updateForm.value };
+  
+      // Remove empty fields
+      const cleanedPayload = Object.fromEntries(
+        Object.entries(payload).filter(([_, value]) => value !== null && value !== '')
+      );
+  
+      console.log('Updated Payload sent to backend:', cleanedPayload); // Debugging
+      this.dialogRef.close(cleanedPayload);
     }
-  }
-
+  }  
+  
   cancel(): void {
     this.dialogRef.close();
   }
