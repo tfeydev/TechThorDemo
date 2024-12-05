@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private baseUrl = 'http://localhost:8000'; // Backend base URL
+  private baseUrl = 'http://localhost:8000/api'; // Backend base URL
 
   constructor(private http: HttpClient) {}
 
@@ -23,7 +23,6 @@ export class ApiService {
     return this.http.put(`${this.baseUrl}/sources/${name}`, source);
   }
   
-
   // Delete a source
   deleteSource(name: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/sources/${name}`);

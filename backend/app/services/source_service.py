@@ -15,7 +15,15 @@ class SourceService(BaseYamlService):
                 return config.get("sources", [])
         except FileNotFoundError:
             return []
-
+        
+    def get_source_by_name(self, name: str):
+        """Retrieve a source by its name."""
+        config = self.load_config()  # Load the config dynamically
+        sources = config.get("sources", [])
+        for source in sources:
+            if source.get("name") == name:
+                return source
+        return None  # Return None if no match is found
 
     def serialize_source(self, source_data):
         """Serialize and clean the source data."""
@@ -110,8 +118,6 @@ class SourceService(BaseYamlService):
             print(f"ERROR: {e}")
             return {"error": str(e)}
 
-
-
     def save_config(self):
         """Save all sources to the YAML configuration file."""
         # Remove duplicates by converting to a dictionary and back to a list
@@ -134,7 +140,8 @@ class SourceService(BaseYamlService):
         self.save_config()
         return {"message": f"Source '{source_name}' deleted successfully."}
 
-
     def get_sources(self):
         """Retrieve all sources."""
         return self.sources
+
+            

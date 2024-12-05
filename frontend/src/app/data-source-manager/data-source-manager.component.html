@@ -55,7 +55,7 @@
           <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
           <mat-cell *matCellDef="let source">
             <!-- View Source Button -->
-            <a mat-icon-button color="accent" [href]="'http://localhost:8000/sources/' + source.name" target="_blank" rel="noopener noreferrer">
+            <a mat-icon-button color="accent" [href]="'http://localhost:8000/api/preview/' + source.name" target="_blank" rel="noopener noreferrer">
               <mat-icon>visibility</mat-icon>
             </a>
             <!-- Edit Button -->

@@ -1,9 +1,4 @@
 sources:
-- name: csv-test
-  type: csv
-  file_path: data/example.csv
-  delimiter: ','
-  encoding: utf-8
 - name: json-test
   type: json
   file_path: data/example.json
@@ -16,7 +11,8 @@ sources:
   user: postgres
   password: passwd
   db_name: dvdrental
-  tables: customer
+  tables:
+  - customer
   queries:
   - name: test-query
     query: SELECT * FROM customer LIMIT 5;
@@ -24,6 +20,9 @@ sources:
   type: api
   url: https://api.fxratesapi.com/latest
   headers: {}
-  params:
-    base: USD
-    currencies: BRL,EUR
+  params: {}
+- name: csv-test
+  type: csv
+  file_path: data/example.csv
+  delimiter: ','
+  encoding: utf-8
