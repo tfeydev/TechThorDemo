@@ -138,42 +138,42 @@ mat-cell {
   display: flex;
   align-items: center;
 
-  a[mat-icon-button],
-  button[mat-icon-button] {
-    color: #555; /* Neutral color for icons */
-    margin-left: 8px; /* Space between icons */
-    transition: transform 0.2s, color 0.3s;
+  /* Mat Icon Buttons */
+a[mat-icon-button],
+button[mat-icon-button] {
+  background-color: transparent !important; /* Remove background */
+  box-shadow: none !important; /* Remove shadows */
+  border: none; /* Remove borders */
+  color: #555; /* Default neutral color */
 
-    &:hover {
-      color: #1976d2; /* Blue on hover */
-      transform: scale(1.1); /* Slight zoom effect */
-    }
+  &:hover {
+    color: #1e90ff; /* Blue color on hover */
   }
+}
 
-  /* View (visibility) Icon */
-  a[mat-icon-button]view-icon {
-    color: #4caf50; /* Material Design Green for visibility icon */
-  }
+/* Custom Colors for Specific Icons */
+a[mat-icon-button].view-icon {
+  color: #4caf50; /* Green for visibility icon */
+}
 
-  a[mat-icon-button]view-icon:hover {
-    color: #388e3c; /* Darker green on hover */
-  }
+a[mat-icon-button].view-icon:hover {
+  color: #388e3c; /* Darker green on hover */
+}
 
-  /* Edit Icon */
-  button[mat-icon-button]edit-icon {
-    color: #ff9800; /* Material Design Orange for edit */
-  }
+button[mat-icon-button].edit-icon {
+  color: #ff9800; /* Orange for edit icon */
+}
 
-  button[mat-icon-button]edit-icon:hover {
-    color: #f57c00; /* Darker orange on hover */
-  }
+button[mat-icon-button].edit-icon:hover {
+  color: #f57c00; /* Darker orange on hover */
+}
 
-  /* Delete Icon */
-  button[mat-icon-button]delete-icon {
-    color: #f44336; /* Material Design Red for delete */
-  }
+button[mat-icon-button].delete-icon {
+  color: #f44336; /* Red for delete icon */
+}
 
-  button[mat-icon-button]delete-icon:hover {
-    color: #d32f2f; /* Darker red on hover */
-  }
+button[mat-icon-button].delete-icon:hover {
+  color: #d32f2f; /* Darker red on hover */
+}
+
 }

@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
 
 @Component({
@@ -11,8 +14,12 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   imports: [
-    MatButtonModule,
+    CommonModule,
+    RouterModule,
     MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTableModule,
     MatCardModule
   ]
 }) 

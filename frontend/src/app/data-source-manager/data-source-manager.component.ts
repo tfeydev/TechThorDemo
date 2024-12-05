@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,7 +31,8 @@ import { CommonModule } from '@angular/common';
     MatDialogModule,
     MatIconModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
 export class DataSourceManagerComponent implements OnInit {

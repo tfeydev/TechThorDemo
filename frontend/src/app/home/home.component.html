@@ -5,23 +5,18 @@
         <h1>Welcome to TechThor's Dashboard</h1>
       </mat-card-title>
       <mat-card-subtitle>
-        <p>Choose a section to get started:</p>
+        <p>Your one-stop solution for data configuration and analytics.</p>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="button-container">
-        <button mat-raised-button color="primary" 
-          routerLink="/data-source-manager" 
-          (click)="onNavigate('data-source-manager')">
+        <button mat-raised-button color="primary" [routerLink]="'/data-source-manager'">
           Data Source Manager
         </button>
-        <button mat-raised-button style="background-color: #008080; color: #fff;" 
-          routerLink="/analytics-hub" 
-          (click)="onNavigate('analytics-hub')"> 
+        <button mat-raised-button style="background-color: #008080; color: #fff;" [routerLink]="'/analytics-hub'">
           Analytics Hub
         </button>
       </div>
     </mat-card-content>
-    
   </mat-card>
 </div>

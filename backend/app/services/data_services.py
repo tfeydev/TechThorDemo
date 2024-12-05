@@ -5,6 +5,20 @@ import requests
 import sqlalchemy as sa
 
 
+def flatten_json(data, parent_key='', sep='_'):
+    """Flatten a nested JSON object into a flat dictionary."""
+    items = []
+    for k, v in data.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):  # Recursively flatten dictionaries
+            items.extend(flatten_json(v, new_key, sep=sep).items())
+        elif isinstance(v, list):  # Handle lists as comma-separated strings
+            items.append((new_key, ', '.join(map(str, v))))
+        else:  # Keep scalar values as they are
+            items.append((new_key, v))
+    return dict(items)
+
+
 class DataService:
     def __init__(self, config_path="config.yaml"):
         self.config_path = config_path
@@ -84,17 +98,19 @@ class DataService:
         # Parse the API response dynamically
         data = response.json()
 
-        # Generate a generic preview
+        # Flatten the response dynamically
+        flattened_data = []
         if isinstance(data, dict):  # Handle JSON objects
-            preview_data = [data]  # Wrap the entire object in a list
+            flattened_data.append(flatten_json(data))  # Flatten the single object
         elif isinstance(data, list):  # Handle JSON arrays
-            preview_data = data[:10]  # Limit to the first 10 items
+            for item in data[:10]:  # Limit to the first 10 items
+                flattened_data.append(flatten_json(item))
         else:
             raise ValueError(f"Unsupported API response format for source '{source_name}'.")
 
         return {
             "source_name": source_name,
-            "preview": preview_data
+            "preview": flattened_data
         }
 
     def get_database_preview(self, source_name: str):

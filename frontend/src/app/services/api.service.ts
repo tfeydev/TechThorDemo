@@ -27,4 +27,8 @@ export class ApiService {
   deleteSource(name: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/sources/${name}`);
   }
+
+  getDataPreview(sourceName: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/preview/${sourceName}`);
+  }
 }
