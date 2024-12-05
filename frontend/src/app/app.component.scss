@@ -1,11 +1,161 @@
-header {
-    text-align: center;
+/* Toolbar styling */
+.custom-toolbar {
+  background-color: #fff; /* White background */
+  color: #1e90ff; /* Blue text */
+  display: flex;
+  align-items: center; /* Vertically align items */
+  justify-content: space-between; /* Space between logo and menu */
+  height: 80px; /* Taller toolbar for spacing */
+  padding: 0 16px;
+  border-bottom: 2px solid #1e90ff; /* Blue underline */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Toolbar logo styling */
+.toolbar-logo {
+  height: 70px; /* Equal width and height for quadratic appearance */
+  width: 70px;
+  object-fit: cover; /* Ensure the image scales correctly */
+  cursor: pointer;
+  margin-right: 16px;
+}
+
+/* Toolbar title styling */
+.toolbar-title {
+  font-size: 20px; /* Adjust font size */
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 8px; /* Add spacing between logo and title */
+}
+
+/* Menu button (hamburger) */
+.menu-button {
+  display: block;
+  color: #1e90ff; /* Blue color */
+}
+
+mat-icon {
+  font-size: 28px; /* Larger icon size */
+}
+
+@media (max-width: 768px) {
+  .toolbar-title {
+    display: none; /* Hide the title on smaller screens */
   }
-  nav a {
-    margin-right: 15px;
-    text-decoration: none;
+
+  .menu-button {
+    display: block; /* Show hamburger button */
   }
-  .active {
-    font-weight: bold;
-    text-decoration: underline;
+}
+
+
+  .toolbar-menu {
+    display: none; /* Hide menu it<mat-toolbar class="custom-toolbar">
+    <div class="toolbar-left">
+      <img
+        src="assets/thors-hammer-logo.jpg"
+        alt="Logo"
+        class="toolbar-logo"
+        routerLink="/"
+      />
+      <span class="toolbar-title" routerLink="/">TechThor</span>
+    </div>
+    <div class="toolbar-right">
+      <!-- Links for larger screens -->
+      <!-- <button mat-button routerLink="/data-source-manager">Data Source Manager</button>
+      <button mat-button routerLink="/analytics-hub">Analytics Hub</button> -->
+  
+      <!-- Hamburger menu for smaller screens -->
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        class="menu-button"
+        aria-label="Open navigation menu"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+  
+  <!-- Menu content -->
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/">Home</button>
+    <button mat-menu-item routerLink="/data-source-manager">Data Source Manager</button>
+    <button mat-menu-item routerLink="/analytics-hub">Analytics Hub</button>
+  </mat-menu>
+  ems on smaller screens */
   }
+
+  .menu-button {
+    display: block; /* Show hamburger button */
+  }
+
+/* Styling for navigation links */
+mat-menu {
+  .mat-menu-item {
+    font-size: 18px;
+    color: #1e90ff;
+    font-weight: 500;
+  }
+}
+
+/* Home page container styling */
+.home-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.home-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.home-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1e90ff;
+  margin-bottom: 10px;
+}
+
+.home-description {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Buttons in the home page */
+.home-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.home-button {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.home-button:first-child {
+  background-color: #1e90ff;
+  color: #ffffff;
+}
+
+.home-button:last-child {
+  background-color: #008080;
+  color: #ffffff;
+}
+
+.home-button:hover {
+  transform: scale(1.05);
+}
+

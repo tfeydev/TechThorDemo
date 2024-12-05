@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { SourceFormComponent } from './components/source-form/source-form.component';
+import { HomeComponent } from './home/home.component';
+import { DataSourceManagerComponent } from './data-source-manager/data-source-manager.component';
+import { AnalyticsHubComponent } from './analytics-hub/analytics-hub.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'source-form', component: SourceFormComponent },
+  { path: '', component: HomeComponent },
+  { path: 'data-source-manager', component: DataSourceManagerComponent },
+  { path: 'analytics-hub', component: AnalyticsHubComponent },
+  { path: '**', redirectTo: '' }
 ];

@@ -2,15 +2,13 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { SourceFormComponent } from './components/source-form/source-form.component';
+import { DataSourceManagerComponent } from './data-source-manager/data-source-manager.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter([
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'source-form', component: SourceFormComponent },
+      { path: 'data-source-manager', component: DataSourceManagerComponent },
     ]),
     provideHttpClient(),
   ],

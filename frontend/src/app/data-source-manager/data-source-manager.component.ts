@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { SourceService } from '../../services/source.service';
-import { AddSourceDialogComponent } from '../dialogs/add-source-dialog/add-source-dialog.component';
-import { UpdateSourceDialogComponent } from '../dialogs/update-source-dialog/update-source-dialog.component';
-import { ConfirmDeleteDialogComponent } from '../dialogs/confirm-delete-dialog/confirm-delete-dialog.component';
-import { ViewYamlDialogComponent } from '../dialogs/view-yaml-dialog/view-yaml-dialog.component';
+import { SourceService } from '../services/source.service';
+import { AddSourceDialogComponent } from '../components/dialogs/add-source-dialog/add-source-dialog.component';
+import { UpdateSourceDialogComponent } from '../components/dialogs/update-source-dialog/update-source-dialog.component';
+import { ConfirmDeleteDialogComponent } from '../components/dialogs/confirm-delete-dialog/confirm-delete-dialog.component';
+import { ViewYamlDialogComponent } from '../components/dialogs/view-yaml-dialog/view-yaml-dialog.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -18,8 +18,8 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  templateUrl: './data-source-manager.component.html',
+  styleUrls: ['./data-source-manager.component.scss'],
   imports: [
     MatProgressSpinnerModule,
     MatCardModule,
@@ -33,7 +33,7 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ]
 })
-export class DashboardComponent implements OnInit {
+export class DataSourceManagerComponent implements OnInit {
   sources: any[] = [];
   displayedColumns: string[] = ['name', 'type', 'actions'];
   dataSource = new MatTableDataSource<any>();

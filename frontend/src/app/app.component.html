@@ -1,7 +1,13 @@
-<header>
-  <h1>TechThor Demo</h1>
-  <nav>
+<mat-toolbar class="custom-toolbar">
+  <img src="assets/thors-hammer-logo.jpg" alt="Logo" class="toolbar-logo" routerLink="/" />
+  <span class="toolbar-title" routerLink="/">TechThor</span>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/data-source-manager">Data Source Manager</button>
+    <button mat-menu-item routerLink="/analytics-hub">Analytics Hub</button>
+  </mat-menu>
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
 
-  </nav>
-</header>
 <router-outlet></router-outlet>
