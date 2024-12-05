@@ -20,7 +20,9 @@ sources:
   type: api
   url: https://api.fxratesapi.com/latest
   headers: {}
-  params: {}
+  params:
+    base: USD
+    symbols: BRL,EUR
 - name: csv-test
   type: csv
   file_path: data/example.csv

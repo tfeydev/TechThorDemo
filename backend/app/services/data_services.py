@@ -64,7 +64,7 @@ class DataService:
         }
 
     def get_api_preview(self, source_name: str):
-        """Fetch a preview from an API source."""
+        """Fetch a preview of the API source dynamically."""
         source = self.get_source_by_name(source_name)
         if source["type"] != "api":
             raise ValueError(f"Source '{source_name}' is not an API source.")
@@ -74,17 +74,27 @@ class DataService:
         headers = source.get("headers", {})
 
         if not url:
-            raise ValueError(f"API URL for source '{source_name}' is missing.")
+            raise ValueError(f"Source '{source_name}' does not have a URL.")
 
+        # Make the API request
         response = requests.get(url, params=params, headers=headers)
         if response.status_code != 200:
-            raise ValueError(f"Failed to fetch data from API: {response.status_code}")
+            raise ValueError(f"Failed to fetch data from API. Status code: {response.status_code}")
 
+        # Parse the API response dynamically
         data = response.json()
-        df = pd.DataFrame(data)
+
+        # Generate a generic preview
+        if isinstance(data, dict):  # Handle JSON objects
+            preview_data = [data]  # Wrap the entire object in a list
+        elif isinstance(data, list):  # Handle JSON arrays
+            preview_data = data[:10]  # Limit to the first 10 items
+        else:
+            raise ValueError(f"Unsupported API response format for source '{source_name}'.")
+
         return {
             "source_name": source_name,
-            "preview": df.head(10).to_dict(orient="records"),
+            "preview": preview_data
         }
 
     def get_database_preview(self, source_name: str):
