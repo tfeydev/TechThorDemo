@@ -27,11 +27,29 @@
       <mat-form-field appearance="fill">
         <mat-label>Params (JSON)</mat-label>
         <textarea matInput formControlName="params"></textarea>
-      </mat-form-field>
+      </mat-form-field>JSON
     </ng-container>
 
     <!-- CSV-Specific Fields -->
     <ng-container *ngIf="updateForm.get('type')?.value === 'csv'">
+      <mat-form-field appearance="fill">
+        <mat-label>File Path</mat-label>
+        <input matInput formControlName="file_path" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Delimiter</mat-label>
+        <input matInput formControlName="delimiter" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Encoding</mat-label>
+        <input matInput formControlName="encoding" />
+      </mat-form-field>
+    </ng-container>
+
+    <!-- JSON-Specific Fields -->
+    <ng-container *ngIf="updateForm.get('type')?.value === 'json'">
       <mat-form-field appearance="fill">
         <mat-label>File Path</mat-label>
         <input matInput formControlName="file_path" />
