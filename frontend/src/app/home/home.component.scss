@@ -18,14 +18,25 @@
   border-radius: 8px; /* Rounded corners */
 }
 
+/* Card content styling for centering */
+mat-card-header, mat-card-content {
+  display: flex;
+  flex-direction: column; /* Align items vertically */
+  justify-content: center; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center; /* Ensure text aligns to the center */
+}
+
 /* Title and subtitle */
-mat-card-title h1 {
+mat-card-title h1, h2 {
+  text-align: center;
   font-size: 28px;
   color: #1e90ff; /* Bluish color */
   margin-bottom: 10px;
 }
 
 mat-card-subtitle p {
+  text-align: center;
   font-size: 16px;
   color: #555; /* Gray text */
   margin-bottom: 20px;
