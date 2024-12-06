@@ -56,7 +56,7 @@ class DataService:
         df = pd.read_csv(file_path, delimiter=delimiter, encoding=encoding)
         return {
             "source_name": source_name,
-            "preview": df.head(10).to_dict(orient="records"),
+            "preview": df.head(5).to_dict(orient="records"),
         }
 
     def get_json_preview(self, source_name: str):
@@ -74,7 +74,7 @@ class DataService:
         df = pd.read_json(file_path)
         return {
             "source_name": source_name,
-            "preview": df.head(10).to_dict(orient="records"),
+            "preview": df.head(5).to_dict(orient="records"),
         }
 
     def get_api_preview(self, source_name: str):
@@ -103,7 +103,7 @@ class DataService:
         if isinstance(data, dict):  # Handle JSON objects
             flattened_data.append(flatten_json(data))  # Flatten the single object
         elif isinstance(data, list):  # Handle JSON arrays
-            for item in data[:10]:  # Limit to the first 10 items
+            for item in data[:5]:  # Limit to the first 10 items
                 flattened_data.append(flatten_json(item))
         else:
             raise ValueError(f"Unsupported API response format for source '{source_name}'.")
@@ -138,7 +138,7 @@ class DataService:
 
         return {
             "source_name": source_name,
-            "preview": df.head(10).to_dict(orient="records"),
+            "preview": df.head(5).to_dict(orient="records"),
         }
 
     def reload_config(self):
