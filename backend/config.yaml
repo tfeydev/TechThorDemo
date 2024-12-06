@@ -1,5 +1,5 @@
 sources:
-- name: json-test
+- name: json-test1
   type: json
   file_path: data/example.json
   encoding: utf-8
@@ -22,9 +22,14 @@ sources:
   headers: {}
   params:
     base: USD
-    symbols: BRL,EUR
+    symbols: BRL
 - name: csv-test
   type: csv
   file_path: data/example.csv
+  delimiter: ','
+  encoding: utf-8
+- name: csv-test2
+  type: csv
+  file_path: ''
   delimiter: ','
   encoding: utf-8
