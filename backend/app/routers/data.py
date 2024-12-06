@@ -10,6 +10,7 @@ def preview_data(source_name: str):
     """
     Preview the first 10 rows of a source by name.
     """
+    data_service.reload_config()
     try:
         source = data_service.get_source_by_name(source_name)
         source_type = source["type"]

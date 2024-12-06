@@ -141,3 +141,8 @@ class DataService:
             "preview": df.head(10).to_dict(orient="records"),
         }
 
+    def reload_config(self):
+        """Reload sources from the updated config.yaml."""
+        self.sources = self._load_config()
+        print("DEBUG: Sources reloaded:", self.sources)
+        

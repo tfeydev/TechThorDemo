@@ -1,5 +1,5 @@
 sources:
-- name: json-test1
+- name: json-test2
   type: json
   file_path: data/example.json
   encoding: utf-8
@@ -14,8 +14,8 @@ sources:
   tables:
   - customer
   queries:
-  - name: test-query
-    query: SELECT * FROM customer LIMIT 5;
+  - name: default-query
+    query: SELECT * FROM customer LIMIT 15;
 - name: api-test
   type: api
   url: https://api.fxratesapi.com/latest

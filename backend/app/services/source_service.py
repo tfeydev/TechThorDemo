@@ -88,11 +88,12 @@ class SourceService(BaseYamlService):
     def update_source(self, source_name, updated_data):
         """Update an existing source."""
         try:
+            # Locate the source to update
             source_index = next((i for i, s in enumerate(self.sources) if s["name"] == source_name), None)
             if source_index is None:
                 raise ValueError(f"Source with name '{source_name}' not found.")
 
-            # Merge the existing source data with the updates
+            # Retrieve the source type and relevant fields
             source_type = self.sources[source_index].get("type")
             relevant_fields = {
                 "api": ["name", "type", "url", "headers", "params"],
@@ -100,14 +101,14 @@ class SourceService(BaseYamlService):
                 "json": ["name", "type", "file_path", "encoding"],
                 "database": [
                     "name", "type", "db_type", "host", "port", "user",
-                    "password", "db_name", "query", "tables"
+                    "password", "db_name", "tables", "queries"
                 ]
             }.get(source_type, [])
 
             # Filter the updated data to only include relevant fields
             filtered_updates = {key: updated_data[key] for key in relevant_fields if key in updated_data}
 
-            # Update the source
+            # Merge the updates into the source
             self.sources[source_index] = {**self.sources[source_index], **filtered_updates}
             print(f"DEBUG: Source updated: {self.sources[source_index]}")
 
@@ -117,6 +118,7 @@ class SourceService(BaseYamlService):
         except Exception as e:
             print(f"ERROR: {e}")
             return {"error": str(e)}
+
 
     def save_config(self):
         """Save all sources to the YAML configuration file."""
@@ -144,4 +146,4 @@ class SourceService(BaseYamlService):
         """Retrieve all sources."""
         return self.sources
 
-            
+    
