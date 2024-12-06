@@ -23,7 +23,7 @@ export class JsonSourceComponent {
   sourceData = {
     name: '',
     type: 'json',
-    filePath: '',
+    file_path: '',
     encoding: 'utf-8'
   };
 
@@ -33,7 +33,7 @@ export class JsonSourceComponent {
   }
 
   onFilePathChange(value: string): void {
-    this.sourceData.filePath = value;
+    this.sourceData.file_path = value;
     this.dataChange.emit(this.sourceData);
   }
 

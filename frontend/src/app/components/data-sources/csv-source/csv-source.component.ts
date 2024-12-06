@@ -23,7 +23,7 @@ export class CsvSourceComponent {
   sourceData = {
     name: '',
     type: 'csv',
-    filePath: '',
+    file_path: '',
     delimiter: ',',
     encoding: 'utf-8'
   };
@@ -34,7 +34,7 @@ export class CsvSourceComponent {
   }
 
   onFilePathChange(value: string): void {
-    this.sourceData.filePath = value;
+    this.sourceData.file_path = value;
     this.dataChange.emit(this.sourceData);
   }
 
