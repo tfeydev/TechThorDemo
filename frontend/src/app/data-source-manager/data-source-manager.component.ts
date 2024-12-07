@@ -67,7 +67,7 @@ export class DataSourceManagerComponent implements OnInit {
   }
 
   openAddSourceDialog(): void {
-    const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '500px' });
+    const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '600px' });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -85,7 +85,8 @@ export class DataSourceManagerComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(UpdateSourceDialogComponent, {
-      width: '500px',
+      width: '600px',
+      height: '600px',
       data: { source },
     });
 
