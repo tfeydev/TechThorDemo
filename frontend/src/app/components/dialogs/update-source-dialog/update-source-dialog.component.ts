@@ -1,10 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-update-source-dialog',
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -29,69 +31,72 @@ export class UpdateSourceDialogComponent {
   ) {
     const source = data?.source || {};
 
-    // Ensure `tables` is always an array
     const tables = Array.isArray(source.tables) ? source.tables : (source.tables ? [source.tables] : []);
 
     this.updateForm = this.fb.group({
-      // General Fields
       name: [source.name || '', [Validators.required]],
       type: [source.type || '', [Validators.required]],
-  
-      // API Fields
       url: [source.url || ''],
       headers: [JSON.stringify(source.headers || {}, null, 2)],
       params: [JSON.stringify(source.params || {}, null, 2)],
-  
-      // CSV Fields
       file_path: [source.file_path || ''],
       delimiter: [source.delimiter || ','],
       encoding: [source.encoding || 'utf-8'],
-  
-      // Database Fields
       db_type: [source.db_type || ''],
       host: [source.host || ''],
       port: [source.port || null],
       user: [source.user || ''],
       password: [source.password || ''],
       db_name: [source.db_name || ''],
-      query: [source.queries?.[0]?.query || ''], // Extract first query for display
-      tables: [tables.join(', ')], // Join tables array into comma-separated string
+      tables: [tables.join(', ')],
+      queries: this.fb.array(
+        (source.queries || []).map((query: { name: string; query: string }) =>
+          this.fb.group({
+            name: [query.name || '', [Validators.required]],
+            query: [query.query || '', [Validators.required]],
+          })
+        )
+      ),
     });
   }
-  
+
+  get queries(): FormArray {
+    return this.updateForm.get('queries') as FormArray;
+  }
+
+  asFormGroup(control: AbstractControl): FormGroup {
+    return control as FormGroup;
+  }
+
   save(): void {
     if (this.updateForm.valid) {
       const formValue = { ...this.updateForm.value };
-  
-      // Convert tables back to an array
-      formValue.tables = formValue.tables ? formValue.tables.split(',').map((t: string) => t.trim()) : [];
-  
-      // Handle queries (wrap in an array if present)
-      if (formValue.query) {
-        formValue.queries = [{ name: 'default-query', query: formValue.query }];
-        delete formValue.query;
-      }
-  
-      // Parse JSON fields (headers and params)
+
+      formValue.tables = formValue.tables
+        ? formValue.tables.split(',').map((t: string) => t.trim())
+        : [];
+
+      formValue.queries = this.queries.value || [];
+
       try {
         formValue.headers = formValue.headers ? JSON.parse(formValue.headers) : {};
       } catch (e) {
         console.error('Invalid headers JSON:', e);
         formValue.headers = {};
       }
-  
+
       try {
         formValue.params = formValue.params ? JSON.parse(formValue.params) : {};
       } catch (e) {
         console.error('Invalid params JSON:', e);
         formValue.params = {};
       }
-  
+
       console.log('Payload sent to backend:', formValue);
-      this.dialogRef.close(formValue); // Send the payload to the backend
+      this.dialogRef.close(formValue);
     }
-  }  
-  
+  }
+
   cancel(): void {
     this.dialogRef.close();
   }

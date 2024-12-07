@@ -98,10 +98,24 @@
         <input matInput formControlName="db_name" />
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Query</mat-label>
-        <textarea matInput formControlName="query"></textarea>
-      </mat-form-field>
+      <div class="queries-section">
+        <h4>Queries</h4>
+        <div
+          *ngFor="let queryGroup of queries.controls; let i = index"
+          [formGroup]="asFormGroup(queryGroup)"
+          class="query-item"
+        >
+          <mat-form-field appearance="fill" class="query-name">
+            <mat-label>Query Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter query name" />
+          </mat-form-field>
+      
+          <mat-form-field appearance="fill" class="query-text">
+            <mat-label>Query</mat-label>
+            <textarea matInput formControlName="query" placeholder="Enter query"></textarea>
+          </mat-form-field>
+        </div>
+      </div>  
 
       <mat-form-field appearance="fill">
         <mat-label>Tables</mat-label>

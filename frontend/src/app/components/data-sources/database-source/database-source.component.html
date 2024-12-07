@@ -52,25 +52,6 @@
     <textarea matInput [(ngModel)]="sourceData.options" (ngModelChange)="onDataChange()"></textarea>
   </mat-form-field>
 
-  <div class="tables-section">
-    <h4>Tables</h4>
-    <div class="add-buttons">
-      <mat-form-field appearance="fill">
-        <mat-label>Add Table</mat-label>
-        <input matInput [(ngModel)]="newTable" />
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="addTable()">Add Table</button>
-    </div>
-    <div class="table-list">
-      <div *ngFor="let table of sourceData.tables">
-        {{ table }}
-        <button mat-icon-button color="warn" (click)="removeTable(table)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-  </div>
-
   <div class="queries-section">
     <h4>Queries</h4>
     <div class="add-buttons">
@@ -92,5 +73,25 @@
         </button>
       </div>
     </div>
+
+  <div class="tables-section">
+    <h4>Tables</h4>
+    <div class="add-buttons">
+      <mat-form-field appearance="fill">
+        <mat-label>Add Table</mat-label>
+        <input matInput [(ngModel)]="newTable" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="addTable()">Add Table</button>
+    </div>
+    <div class="table-list">
+      <div *ngFor="let table of sourceData.tables">
+        {{ table }}
+        <button mat-icon-button color="warn" (click)="removeTable(table)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
+
+</div>
 

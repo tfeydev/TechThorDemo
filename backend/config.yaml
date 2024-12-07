@@ -1,4 +1,18 @@
 sources:
+- name: csv-test
+  type: csv
+  file_path: data/example.csv
+  delimiter: ','
+  encoding: utf-8
+- name: csv-test2
+  type: csv
+  file_path: data/example2.csv
+  delimiter: ','
+  encoding: utf-8
+- name: json-test
+  type: json
+  file_path: data/example.json
+  encoding: utf-8
 - name: db-test
   type: database
   db_type: postgresql
@@ -9,5 +23,7 @@ sources:
   db_name: dvdrental
   tables: []
   queries:
-  - name: default-query
+  - name: default1
     query: SELECT * FROM customer;
+  - name: default2
+    query: SELECT * FROM actor;
