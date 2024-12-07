@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class ApiSourceComponent {
   @Output() dataChange = new EventEmitter<any>();
+  showValidationErrors = false;
 
   sourceData = {
     name: '',
@@ -40,14 +41,57 @@ export class ApiSourceComponent {
         throw new Error('Headers and Parameters must be valid JSON objects.');
       }
 
+      const isValid =
+        !!this.sourceData.name &&
+        this.sourceData.name.length >= 3 &&
+        !!this.sourceData.url &&
+        this.isValidURL(this.sourceData.url);
+
+      this.showValidationErrors = !isValid;
+
       // Emit valid data
-      this.dataChange.emit({
-        ...this.sourceData,
-        headers: parsedHeaders,
-        params: parsedParams
-      });
+      if (isValid) {
+        this.dataChange.emit({
+          ...this.sourceData,
+          headers: parsedHeaders,
+          params: parsedParams,
+          isValid, // Inform the parent about validity
+        });
+      }
     } catch (error) {
-      console.error('Invalid JSON format for headers or parameters:', error);
+      console.error('Invalid JSON in headers or parameters:', error);
+      this.showValidationErrors = true; // Trigger validation errors
+    }
+  }
+
+  validateFields(): boolean {
+    const isValid =
+      !!this.sourceData.name &&
+      this.sourceData.name.length >= 3 &&
+      !!this.sourceData.url &&
+      this.isValidURL(this.sourceData.url) &&
+      (!this.sourceData.headers || this.isValidJSON(this.sourceData.headers)) &&
+      (!this.sourceData.params || this.isValidJSON(this.sourceData.params));
+
+    this.showValidationErrors = !isValid;
+    return isValid;
+  }
+
+  isValidURL(url: string): boolean {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  isValidJSON(json: string): boolean {
+    try {
+      JSON.parse(json);
+      return true;
+    } catch {
+      return false;
     }
   }
 }

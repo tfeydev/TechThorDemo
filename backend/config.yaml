@@ -22,7 +22,6 @@ sources:
   password: passwd
   db_name: dvdrental
   tables:
-  - customer
   - actor
   queries:
   - name: default1

@@ -3,11 +3,19 @@
 <mat-form-field appearance="fill">
   <mat-label>Name</mat-label>
   <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+  <mat-error *ngIf="!sourceData.name && showValidationErrors">Name is required.</mat-error>
+  <mat-error *ngIf="sourceData.name && sourceData.name.length < 3 && showValidationErrors">
+    Name must be at least 3 characters long.
+  </mat-error>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
   <mat-label>URL</mat-label>
   <input matInput [(ngModel)]="sourceData.url" (ngModelChange)="onDataChange()" />
+  <mat-error *ngIf="!sourceData.url && showValidationErrors">URL is required.</mat-error>
+  <mat-error *ngIf="sourceData.url && !isValidURL(sourceData.url) && showValidationErrors">
+    Enter a valid URL.
+  </mat-error>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
@@ -28,6 +36,9 @@
     (ngModelChange)="onDataChange()"
     placeholder='e.g., {"Content-Type": "application/json"}'>
   </textarea>
+  <mat-error *ngIf="sourceData.headers && !isValidJSON(sourceData.headers) && showValidationErrors">
+    Headers must be valid JSON.
+  </mat-error>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
@@ -38,4 +49,7 @@
     (ngModelChange)="onDataChange()"
     placeholder='e.g., {"key": "value"}'>
   </textarea>
+  <mat-error *ngIf="sourceData.params && !isValidJSON(sourceData.params) && showValidationErrors">
+    Params must be valid JSON.
+  </mat-error>
 </mat-form-field>

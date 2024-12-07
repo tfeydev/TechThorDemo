@@ -3,14 +3,30 @@
 <mat-form-field appearance="fill">
   <mat-label>Name</mat-label>
   <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+  <mat-error *ngIf="!sourceData.name && showValidationErrors">Name is required.</mat-error>
+  <mat-error *ngIf="sourceData.name && sourceData.name.length < 3 && showValidationErrors"></mat-error>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
   <mat-label>File Path</mat-label>
   <input matInput [(ngModel)]="sourceData.file_path" (ngModelChange)="onDataChange()" />
+  <mat-error *ngIf="!sourceData.file_path && showValidationErrors">File path is required.</mat-error>
+  <mat-error
+    *ngIf="
+      sourceData.file_path &&
+      !isValidJSONPath(sourceData.file_path) &&
+      showValidationErrors
+    "
+  >
+    File path must end with ".json".
+</mat-error>
 </mat-form-field>
 
 <mat-form-field appearance="fill">
   <mat-label>Encoding</mat-label>
   <input matInput [(ngModel)]="sourceData.encoding" (ngModelChange)="onDataChange()" />
+  <mat-error *ngIf="!sourceData.encoding && showValidationErrors">Encoding is required. Default is "utf-8".</mat-error>
+  <mat-error *ngIf="sourceData.encoding && !isValidEncoding(sourceData.encoding) && showValidationErrors">
+    Encoding must be a valid format (e.g., "utf-8", "ascii").
+  </mat-error>
 </mat-form-field>

@@ -4,6 +4,10 @@
   <mat-form-field appearance="fill">
     <mat-label>Name</mat-label>
     <input matInput [(ngModel)]="sourceData.name" (ngModelChange)="onDataChange()" />
+    <mat-error *ngIf="!sourceData.name && showValidationErrors">Name is required.</mat-error>
+    <mat-error *ngIf="sourceData.name && sourceData.name.length < 3 && showValidationErrors">
+      Name must be at least 3 characters long.
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
@@ -19,11 +23,16 @@
   <mat-form-field appearance="fill">
     <mat-label>Host</mat-label>
     <input matInput [(ngModel)]="sourceData.host" (ngModelChange)="onDataChange()" />
+    <mat-error *ngIf="!sourceData.host && showValidationErrors">Host is required.</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Port</mat-label>
     <input matInput [(ngModel)]="sourceData.port" (ngModelChange)="onDataChange()" />
+    <mat-error *ngIf="!sourceData.port && showValidationErrors">Port is required.</mat-error>
+    <mat-error *ngIf="sourceData.port && isValidPort(this.sourceData.port) && showValidationErrors">
+      Port must be a valid number.
+    </mat-error>
   </mat-form-field>
 
   <div class="credentials">
@@ -31,6 +40,7 @@
       <mat-label>Username</mat-label>
       <input matInput [(ngModel)]="sourceData.user" (ngModelChange)="onDataChange()" />
     </mat-form-field>
+    <mat-error *ngIf="!sourceData.user && showValidationErrors">User is required.</mat-error>
     <mat-form-field appearance="fill">
       <mat-label>Password</mat-label>
       <input
@@ -40,11 +50,13 @@
         type="password"
       />
     </mat-form-field>
+    <mat-error *ngIf="!sourceData.password && showValidationErrors">Password is required.</mat-error>
   </div>
 
   <mat-form-field appearance="fill">
     <mat-label>Database Name</mat-label>
     <input matInput [(ngModel)]="sourceData.db_name" (ngModelChange)="onDataChange()" />
+    <mat-error *ngIf="!sourceData.db_name && showValidationErrors">Database name is required.</mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill">

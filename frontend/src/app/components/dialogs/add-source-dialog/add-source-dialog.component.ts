@@ -42,7 +42,7 @@ export class AddSourceDialogComponent {
     this.sourceData = { ...data };
 
     // Validate the form based on source type and required fields
-    this.isFormValid = this.validateForm(this.sourceData);
+    this.isFormValid = data.isValid;
   }
 
   validateForm(data: any): boolean {

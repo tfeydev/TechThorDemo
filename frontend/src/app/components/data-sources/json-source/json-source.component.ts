@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 })
 export class JsonSourceComponent {
   @Output() dataChange = new EventEmitter<any>();
+  showValidationErrors = false;
 
   sourceData = {
     name: '',
@@ -43,7 +44,30 @@ export class JsonSourceComponent {
   }
 
   onDataChange(): void {
-    this.dataChange.emit(this.sourceData);
+    const isValid = this.validateFields();
+    this.dataChange.emit({ ...this.sourceData, isValid });
   }
 
+  validateFields(): boolean {
+    const isValid =
+      !!this.sourceData.name && // Convert name to boolean
+      this.sourceData.name.length >= 3 &&
+      !!this.sourceData.file_path && // Convert file_path to boolean
+      this.isValidJSONPath(this.sourceData.file_path) &&
+      !!this.sourceData.encoding && // Convert encoding to boolean
+      this.isValidEncoding(this.sourceData.encoding);
+  
+    this.showValidationErrors = !isValid; // Show errors if validation fails
+    return isValid;
+  }  
+  
+  isValidJSONPath(filePath: string): boolean {
+    return filePath.endsWith('.json');
+  }
+  
+  isValidEncoding(encoding: string): boolean {
+    const validEncodings = ['utf-8', 'ascii', 'latin1'];
+    return validEncodings.includes(encoding.toLowerCase());
+  }
+  
 }

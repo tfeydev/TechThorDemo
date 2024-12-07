@@ -24,6 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class DatabaseSourceComponent {
   @Output() dataChange = new EventEmitter<any>();
+  showValidationErrors = false;
 
   sourceData = {
     name: '',
@@ -41,8 +42,29 @@ export class DatabaseSourceComponent {
     queries: [] as { name: string; query: string }[], // Optional: Additional queries
   };
 
+  validateFields(): boolean {
+    const isValid =
+      !!this.sourceData.name &&
+      this.sourceData.name.length >= 3 &&
+      !!this.sourceData.host &&
+      !!this.sourceData.port &&
+      this.isValidPort(this.sourceData.port) &&
+      !!this.sourceData.user &&
+      !!this.sourceData.password &&
+      !!this.sourceData.db_name;
+  
+    this.showValidationErrors = !isValid;
+    return isValid;
+  }
+
+  isValidPort(port: string): boolean {
+    const portNumber = Number(port);
+    return !isNaN(portNumber) && portNumber > 0 && portNumber <= 65535; // Valid port range
+  }
+
   onDataChange(): void {
-    this.dataChange.emit(this.sourceData);
+    const isValid = this.validateFields();
+    this.dataChange.emit({ ...this.sourceData, isValid });
   }
 
   addTable(): void {

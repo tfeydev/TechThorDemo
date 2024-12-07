@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 export class CsvSourceComponent {
   @Output() dataChange = new EventEmitter<any>();
+  showValidationErrors = false; 
 
   sourceData = {
     name: '',
@@ -49,7 +50,38 @@ export class CsvSourceComponent {
   }
 
   onDataChange(): void {
-    this.dataChange.emit(this.sourceData);
+    const isValid = this.validateFields();
+    this.dataChange.emit({ ...this.sourceData, isValid });
   }
   
+  validateFields(): boolean {
+    const isValid =
+      !!this.sourceData.name && // Convert name to boolean
+      this.sourceData.name.length >= 3 &&
+      !!this.sourceData.file_path && // Convert file_path to boolean
+      this.isValidCSVPath(this.sourceData.file_path) &&
+      !!this.sourceData.delimiter && // Convert delimiter to boolean
+      this.isValidCSVDelimiter(this.sourceData.delimiter) &&
+      !!this.sourceData.encoding && // Convert encoding to boolean
+      this.isValidEncoding(this.sourceData.encoding);
+  
+    this.showValidationErrors = !isValid; // Show errors if validation fails
+    return isValid;
+  }
+
+  // Check if file path ends with .csv
+  isValidCSVPath(filePath: string): boolean {
+    return filePath.endsWith('.csv');
+  }
+
+  // Check if encoding is valid
+  isValidEncoding(encoding: string): boolean {
+    const validEncodings = ['utf-8', 'ascii', 'latin1'];
+    return validEncodings.includes(encoding.toLowerCase());
+  }
+
+  isValidCSVDelimiter(delimiter: string): boolean {
+    // Check for single character delimiters (common: ',', ';', '\t', '|')
+    return delimiter.length === 1 && /^[,;\t|]$/.test(delimiter);
+  }
 }
