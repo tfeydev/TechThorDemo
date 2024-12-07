@@ -35,63 +35,43 @@ export class DatabaseSourceComponent {
     password: '',
     db_name: '',
     options: '{}', // Additional connection options
-    tables: [] as string[], // Explicitly declare as an array of strings
-    queries: [] as { name: string; query: string }[], // Explicitly declare as an array of objects
+    table: '', // Single table
+    query: { name: '', query: '' }, // Single query
+    tables: [] as string[], // Optional: Additional tables
+    queries: [] as { name: string; query: string }[], // Optional: Additional queries
   };
 
-  newTable = ''; // Temporary field for adding tables
-  newQuery = { name: '', query: '' }; // Temporary object for adding queries
-
   onDataChange(): void {
-    try {
-      // Validate and parse options
-      const parsedOptions = this.sourceData.options ? JSON.parse(this.sourceData.options) : {};
-
-      if (typeof parsedOptions !== 'object') {
-        throw new Error('Options must be a valid JSON object.');
-      }
-
-      this.dataChange.emit({
-        ...this.sourceData,
-        options: parsedOptions,
-      });
-    } catch (error) {
-      console.error('Invalid JSON format for options:', error);
-    }
+    this.dataChange.emit(this.sourceData);
   }
 
   addTable(): void {
-    if (this.newTable && !this.sourceData.tables.includes(this.newTable)) {
-      this.sourceData.tables.push(this.newTable);
-      this.newTable = ''; // Clear input field
+    if (this.sourceData.table) {
+      this.sourceData.tables.push(this.sourceData.table);
+      this.sourceData.table = ''; // Clear input field
       this.onDataChange();
     }
   }
 
-  removeTable(table: string): void {
-    this.sourceData.tables = this.sourceData.tables.filter((t) => t !== table);
+  removeTable(index: number): void {
+    this.sourceData.tables.splice(index, 1); // Remove by index
     this.onDataChange();
   }
 
   addQuery(): void {
-    if (this.newQuery.name && this.newQuery.query) {
-      this.sourceData.queries.push({ ...this.newQuery });
-      this.newQuery = { name: '', query: '' }; // Clear input fields
+    if (this.sourceData.query?.name && this.sourceData.query?.query) {
+      this.sourceData.queries.push({ ...this.sourceData.query });
+      this.sourceData.query = { name: '', query: '' }; // Reset input fields
       this.onDataChange();
     }
   }
 
-  removeQuery(query: { name: string; query: string }): void {
-    this.sourceData.queries = this.sourceData.queries.filter((q) => q !== query);
+  removeQuery(index: number): void {
+    this.sourceData.queries.splice(index, 1); // Remove by index
     this.onDataChange();
   }
 
   save(): void {
     console.log('Final Source Data:', this.sourceData);
   }
-
-  cancel(): void {
-    console.log('Cancelled');
-  }
-  
-}
+}  

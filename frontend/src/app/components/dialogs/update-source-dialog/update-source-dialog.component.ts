@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-update-source-dialog',
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     MatButtonModule,
     CommonModule,
+    MatIconModule
   ],
 })
 export class UpdateSourceDialogComponent {
@@ -66,6 +68,19 @@ export class UpdateSourceDialogComponent {
 
   asFormGroup(control: AbstractControl): FormGroup {
     return control as FormGroup;
+  }
+
+  addQuery(): void {
+    this.queries.push(
+      this.fb.group({
+        name: ['', [Validators.required]],
+        query: ['', [Validators.required]],
+      })
+    );
+  }
+
+  removeQuery(index: number): void {
+    this.queries.removeAt(index);
   }
 
   save(): void {

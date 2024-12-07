@@ -53,45 +53,56 @@
   </mat-form-field>
 
   <div class="queries-section">
-    <h4>Queries</h4>
-    <div class="add-buttons">
-      <mat-form-field appearance="fill">
-        <mat-label>Query Name</mat-label>
-        <input matInput [(ngModel)]="newQuery.name" />
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Query</mat-label>
-        <textarea matInput [(ngModel)]="newQuery.query"></textarea>
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="addQuery()">Add Query</button>
-    </div>
+    <h4>Query</h4>
+    <mat-form-field appearance="fill">
+      <mat-label>Query Name</mat-label>
+      <input matInput [(ngModel)]="sourceData.query.name" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Query</mat-label>
+      <textarea matInput [(ngModel)]="sourceData.query.query"></textarea>
+    </mat-form-field>
+  
+    <button
+      mat-raised-button
+      (click)="addQuery()"
+      [disabled]="!sourceData.query.name || !sourceData.query.query"
+    >
+      Add Query
+    </button>
     <div class="query-list">
-      <div *ngFor="let query of sourceData.queries">
+      <div *ngFor="let query of sourceData.queries; let i = index">
         <strong>{{ query.name }}</strong>: {{ query.query }}
-        <button mat-icon-button color="warn" (click)="removeQuery(query)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-
-  <div class="tables-section">
-    <h4>Tables</h4>
-    <div class="add-buttons">
-      <mat-form-field appearance="fill">
-        <mat-label>Add Table</mat-label>
-        <input matInput [(ngModel)]="newTable" />
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="addTable()">Add Table</button>
-    </div>
-    <div class="table-list">
-      <div *ngFor="let table of sourceData.tables">
-        {{ table }}
-        <button mat-icon-button color="warn" (click)="removeTable(table)">
+        <button mat-icon-button (click)="removeQuery(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
     </div>
   </div>
-
+  
+  <div class="tables-section">
+    <h4>Table</h4>
+    <mat-form-field appearance="fill">
+      <mat-label>Table Name</mat-label>
+      <input matInput [(ngModel)]="sourceData.table" />
+    </mat-form-field>
+  
+    <button
+      mat-raised-button
+      (click)="addTable()"
+      [disabled]="!sourceData.table"
+    >
+      Add Table
+    </button>
+    <div class="table-list">
+      <div *ngFor="let table of sourceData.tables; let i = index">
+        {{ table }}
+        <button mat-icon-button (click)="removeTable(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  
 </div>
 

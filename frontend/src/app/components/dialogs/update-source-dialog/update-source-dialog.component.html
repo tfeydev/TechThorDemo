@@ -109,18 +109,32 @@
             <mat-label>Query Name</mat-label>
             <input matInput formControlName="name" placeholder="Enter query name" />
           </mat-form-field>
-      
+  
           <mat-form-field appearance="fill" class="query-text">
             <mat-label>Query</mat-label>
             <textarea matInput formControlName="query" placeholder="Enter query"></textarea>
           </mat-form-field>
+  
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeQuery(i)"
+            title="Remove Query"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
-      </div>  
+  
+        <button mat-raised-button (click)="addQuery()">Add Query</button>
+      </div> 
 
-      <mat-form-field appearance="fill">
-        <mat-label>Tables</mat-label>
-        <textarea matInput formControlName="tables"></textarea>
-      </mat-form-field>
+      <div class="tables-section">
+        <h4>Tables</h4>
+        <mat-form-field appearance="fill" class="table-input">
+          <mat-label>Tables (comma-separated)</mat-label>
+          <textarea matInput formControlName="tables"></textarea>
+        </mat-form-field>
+      </div>
     </ng-container>
   </form>
 </div>
