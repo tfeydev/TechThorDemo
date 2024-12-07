@@ -1,3 +1,41 @@
+1. DataSourceManager
+Purpose: Configuration of config.yaml.
+Responsibilities:
+Add, edit, delete sources.
+Validate and save the configuration.
+Provide a preview of the data for verification purposes.
+
+
+2. Analytics Hub
+Purpose: Analytics, monitoring, and data interaction.
+Responsibilities:
+Monitoring: Source status (availability, live data health).
+Data Interaction: Allow users to:
+Perform analysis (e.g., filter, aggregate, visualize).
+Merge data from multiple sources.
+Normalize or transform data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Complete Summary: Steps to Enable the Analytics Hub
 Immediate Priorities
 Real-Time Preview Updates

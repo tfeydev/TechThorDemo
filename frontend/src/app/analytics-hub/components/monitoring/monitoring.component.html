@@ -1,0 +1,64 @@
+<div class="source-status-container">
+  <h2>Source and Data Monitoring</h2>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="error-message">
+    <mat-card>
+      <mat-card-content>{{ error }}</mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Status Table -->
+  <mat-card *ngIf="!loading && !error && sources.length">
+    <mat-card-title>Source Status Overview</mat-card-title>
+    <table class="mat-elevation-z8">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Source Status</th>
+          <th>Data Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let source of sources">
+          <td>{{ source.name }}</td>
+          <td>{{ source.type }}</td>
+          <td>
+            <span
+              [ngClass]="{
+                'status-green': source.source_status === 'available',
+                'status-red': source.source_status === 'not_available',
+                'status-orange': source.source_status === 'updating'
+              }"
+            >
+              {{ source.source_status }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'status-green': source.data_status === 'available',
+                'status-red': source.data_status === 'not_available',
+                'status-orange': source.data_status === 'updating'
+              }"
+            >
+              {{ source.data_status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-card>
+
+  <!-- Fallback for No Sources -->
+  <mat-card *ngIf="!loading && !error && !sources.length">
+    <mat-card-content>No sources found.</mat-card-content>
+  </mat-card>
+</div>

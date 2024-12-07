@@ -31,6 +31,20 @@ class DataService:
         with open(self.config_path, "r") as file:
             config = yaml.safe_load(file)
         return config.get("sources", [])
+    
+    def get_all_sources(self):
+        """Get all sources from the config file."""
+        return self._load_config()
+    
+    def check_source_availability(self, source):
+        """Placeholder to check if a source is available."""
+        # Example logic - replace this with actual checks for source availability
+        return "available" if source.get("type") else "not_available"
+
+    def check_data_availability(self, source):
+        """Placeholder to check if data is available for the source."""
+        # Example logic - replace this with actual checks for data availability
+        return "available" if source.get("type") else "not_available"
 
     def get_source_by_name(self, name: str):
         """Retrieve a source from config.yaml by its name."""

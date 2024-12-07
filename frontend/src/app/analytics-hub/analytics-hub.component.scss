@@ -1,0 +1,16 @@
+nav.mat-tab-nav-bar {
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+a.mat-tab-link {
+  color: #555;
+  padding: 0 16px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+a.mat-tab-link.active {
+  color: #1976d2;
+  border-bottom: 2px solid #1976d2;
+}

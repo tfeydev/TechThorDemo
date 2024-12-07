@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from services.data_services import DataService
 
+
 router = APIRouter()
 data_service = DataService()
 
@@ -29,5 +30,31 @@ def preview_data(source_name: str):
         raise HTTPException(status_code=404, detail=str(e))
     except FileNotFoundError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/status")
+def get_status():
+    """
+    Fetch source statuses dynamically from the config.yaml file.
+    """
+    try:
+        # Reload configuration to get the latest sources
+        data_service.reload_config()
+        sources = data_service.get_all_sources()  # Assume this returns a list of sources from config.yaml
+
+        # Check availability and return statuses
+        statuses = []
+        for source in sources:
+            source_status = data_service.check_source_availability(source)
+            data_status = data_service.check_data_availability(source)
+            statuses.append({
+                "name": source["name"],
+                "type": source["type"],
+                "source_status": source_status,
+                "data_status": data_status,
+            })
+
+        return statuses
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
