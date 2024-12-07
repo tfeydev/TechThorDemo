@@ -21,9 +21,9 @@ sources:
   user: postgres
   password: passwd
   db_name: dvdrental
-  tables: []
+  tables:
+  - customer
+  - actor
   queries:
   - name: default1
     query: SELECT * FROM customer;
-  - name: default2
-    query: SELECT * FROM actor;
