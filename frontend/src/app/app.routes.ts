@@ -11,9 +11,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'data-source-manager', component: DataSourceManagerComponent },
   { path: 'data-preview/:sourceName', component: DataPreviewComponent },
-  { 
-    path: 'analytics-hub', 
-    component: AnalyticsHubComponent,
+  { path: 'analytics-hub', component: AnalyticsHubComponent,
     children: [
       { path: 'monitoring', component: MonitoringComponent },
       { path: 'analysis', component: AnalysisComponent },
