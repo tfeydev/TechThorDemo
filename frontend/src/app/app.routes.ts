@@ -13,8 +13,7 @@ export const routes: Routes = [
   { path: 'data-preview/:sourceName', component: DataPreviewComponent },
   { path: 'analytics-hub', component: AnalyticsHubComponent,
     children: [
-      { path: '', redirectTo: 'analytics-hub/monitoring', pathMatch: 'full' },
-      { path: 'analytics-hub/monitoring', component: MonitoringComponent },
+      { path: 'monitoring', component: MonitoringComponent },
       { path: 'analysis', component: AnalysisComponent },
       { path: 'reports', component: ReportsComponent },
     ] 
