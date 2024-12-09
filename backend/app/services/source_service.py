@@ -1,6 +1,16 @@
 from services.yaml_service import BaseYamlService
 from collections import OrderedDict
 import yaml
+from pydrive2.auth import GoogleAuth
+from pydrive2.drive import GoogleDrive
+from onedrivesdk import get_default_client
+from smbprotocol.connection import Connection
+from smbprotocol.session import Session
+from smbprotocol.tree import TreeConnect
+from smbprotocol import Open, FileAttributes
+from io import StringIO
+from smb.SMBConnection import SMBConnection
+
 
 class SourceService(BaseYamlService):
     def __init__(self, config_file="config.yaml"):
@@ -86,7 +96,7 @@ class SourceService(BaseYamlService):
 
 
     def update_source(self, source_name, updated_data):
-        """Update an existing source."""
+        """Upfrom io import StringIOdate an existing source."""
         try:
             # Locate the source to update
             source_index = next((i for i, s in enumerate(self.sources) if s["name"] == source_name), None)
@@ -146,4 +156,104 @@ class SourceService(BaseYamlService):
         """Retrieve all sources."""
         return self.sources
 
-    
+    def read_csv_from_gdrive(file_path, delimiter=",", encoding="utf-8"):
+        try:
+            gauth = GoogleAuth()
+            gauth.LocalWebserverAuth()  # Authenticate locally
+            drive = GoogleDrive(gauth)
+
+            file_id = file_path.split("gdrive://")[-1]  # Extract file ID
+            file = drive.CreateFile({'id': file_id})
+            content = file.GetContentString(encoding=encoding)  # Read file content as a string
+
+            # Load directly into a Pandas DataFrame
+            from io import StringIO
+            df = pd.read_csv(StringIO(content), delimiter=delimiter)
+            if df.empty:
+                raise ValueError("The CSV file is empty.")
+            return df
+        except Exception as e:
+            raise ValueError(f"Error accessing Google Drive file: {e}")
+        
+    def read_csv_from_smb(server, share, file_path, username, password, delimiter=",", encoding="utf-8"):
+        """
+        Reads a CSV file directly from an SMB server without downloading it.
+
+        :param server: The SMB server address (e.g., "smb://your-server.com").
+        :param share: The shared folder on the SMB server (e.g., "shared-folder").
+        :param file_path: Path to the file within the shared folder.
+        :param username: SMB username.
+        :param password: SMB password.
+        :param delimiter: CSV delimiter (default is ",").
+        :param encoding: File encoding (default is "utf-8").
+        :return: Pandas DataFrame with the file content.
+        """
+        try:
+            # Establish connection to the SMB server
+            connection = Connection(uuid.uuid4().hex, server, 445)  # Port 445 for SMB
+            connection.connect()
+
+            # Authenticate with the SMB server
+            session = Session(connection, username, password)
+            session.connect()
+
+            # Access the shared folder
+            tree = TreeConnect(session, share)
+            tree.connect()
+
+            # Open the file
+            smb_file = Open(tree, file_path, access=FileAttributes.FILE_READ_DATA)
+            smb_file.open()
+
+            # Read the file content
+            content = smb_file.read(0, smb_file.file_size).decode(encoding)
+
+            # Convert the file content into a DataFrame
+            df = pd.read_csv(StringIO(content), delimiter=delimiter)
+            return df
+        except Exception as e:
+            raise ValueError(f"Error reading file from SMB server: {e}")
+        finally:
+            # Ensure the connection is closed
+            if connection:
+                connection.disconnect()
+
+    def read_csv_from_onedrive(file_path, client_id, client_secret, redirect_uri, delimiter=",", encoding="utf-8"):
+        """
+        Reads a CSV file directly from OneDrive without downloading it.
+
+        :param file_path: OneDrive file path (e.g., "onedrive://item-id").
+        :param client_id: Your OneDrive app client ID.
+        :param client_secret: Your OneDrive app client secret.
+        :param redirect_uri: Redirect URI set in your OneDrive app configuration.
+        :param delimiter: CSV delimiter (default is ",").
+        :param encoding: File encoding (default is "utf-8").
+        :return: Pandas DataFrame with the file content.
+        """
+        try:
+            # Initialize the OneDrive client
+            client = get_default_client(
+                client_id=client_id,
+                client_secret=client_secret,
+                scopes=['Files.ReadWrite']
+            )
+            
+            # Authenticate
+            auth_url = client.auth_provider.get_auth_url(redirect_uri)
+            print(f"Please go to this URL and authenticate: {auth_url}")
+            code = input("Enter the authentication code here: ")
+            client.auth_provider.authenticate(code, redirect_uri, client_secret)
+
+            # Extract the file ID from the OneDrive path
+            file_id = file_path.split("onedrive://")[-1]  # Assuming OneDrive paths are prefixed with "onedrive://"
+
+            # Fetch the file content from OneDrive
+            file_item = client.item(drive="me", id=file_id).get()
+            content = client.item(drive="me", id=file_id).download().read().decode(encoding)
+
+            # Load the content into a Pandas DataFrame
+            df = pd.read_csv(StringIO(content), delimiter=delimiter)
+            return df
+        except Exception as e:
+            raise ValueError(f"Error reading CSV file from OneDrive: {e}")
+        

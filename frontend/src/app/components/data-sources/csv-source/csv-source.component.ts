@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-csv-source',
@@ -13,7 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatInputModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatOptionModule
   ],
 })
 
@@ -24,6 +26,7 @@ export class CsvSourceComponent {
   sourceData = {
     name: '',
     type: 'csv',
+    source_type: 'local',
     file_path: '',
     delimiter: ',',
     encoding: 'utf-8'
@@ -56,22 +59,32 @@ export class CsvSourceComponent {
   
   validateFields(): boolean {
     const isValid =
-      !!this.sourceData.name && // Convert name to boolean
+      !!this.sourceData.name && // Name must not be empty
       this.sourceData.name.length >= 3 &&
-      !!this.sourceData.file_path && // Convert file_path to boolean
-      this.isValidCSVPath(this.sourceData.file_path) &&
-      !!this.sourceData.delimiter && // Convert delimiter to boolean
+      !!this.sourceData.file_path && // File path must not be empty
+      this.isValidFilePath(this.sourceData.file_path, this.sourceData.source_type) &&
+      !!this.sourceData.delimiter && // Delimiter must not be empty
       this.isValidCSVDelimiter(this.sourceData.delimiter) &&
-      !!this.sourceData.encoding && // Convert encoding to boolean
+      !!this.sourceData.encoding && // Encoding must not be empty
       this.isValidEncoding(this.sourceData.encoding);
-  
+
     this.showValidationErrors = !isValid; // Show errors if validation fails
     return isValid;
   }
 
-  // Check if file path ends with .csv
-  isValidCSVPath(filePath: string): boolean {
-    return filePath.endsWith('.csv');
+  isValidFilePath(filePath: string, sourceType: string): boolean {
+    switch (sourceType) {
+      case 'local':
+        return filePath.endsWith('.csv');
+      case 'gdrive':
+        return filePath.startsWith('gdrive://');
+      case 'onedrive':
+        return filePath.startsWith('onedrive://');
+      case 'smb':
+        return filePath.startsWith('smb://');
+      default:
+        return false;
+    }
   }
 
   // Check if encoding is valid
