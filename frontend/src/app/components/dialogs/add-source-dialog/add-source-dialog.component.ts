@@ -33,6 +33,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class AddSourceDialogComponent {
   selectedSourceType: string = ''; // Selected source type
+  selectedFileSourceType: string = '';
   sourceData: any = {}; // Data collected from child components
   isFormValid: boolean = false;
 
@@ -41,6 +42,8 @@ export class AddSourceDialogComponent {
   onDataChange(data: any): void {
     // Ensure the sourceData reflects updates from the child components
     this.sourceData = { ...data };
+
+    this.selectedFileSourceType = data.file_source_type || 'local';
 
     // Validate the form based on source type and required fields
     this.isFormValid = data.isValid;
@@ -54,6 +57,7 @@ export class AddSourceDialogComponent {
   save(): void {
     const payload = {
       type: this.selectedSourceType,
+      file_source_type: this.selectedFileSourceType,
       ...this.sourceData,
     };
   

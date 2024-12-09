@@ -33,6 +33,17 @@
     <!-- CSV-Specific Fields -->
     <ng-container *ngIf="updateForm.get('type')?.value === 'csv'">
       <mat-form-field appearance="fill">
+        <mat-label>File Source Type</mat-label>
+        <mat-select formControlName="file_source_type">
+          <mat-option value="local">Local</mat-option>
+          <mat-option value="gdrive">Google Drive</mat-option>
+          <mat-option value="onedrive">OneDrive</mat-option>
+          <mat-option value="smb">SMB (Network File)</mat-option>
+          <mat-option value="html">HTML (Network File)</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
         <mat-label>File Path</mat-label>
         <input matInput formControlName="file_path" />
       </mat-form-field>
@@ -50,6 +61,17 @@
 
     <!-- JSON-Specific Fields -->
     <ng-container *ngIf="updateForm.get('type')?.value === 'json'">
+      <mat-form-field appearance="fill">
+        <mat-label>File Source Type</mat-label>
+        <mat-select formControlName="file_source_type">
+          <mat-option value="local">Local</mat-option>
+          <mat-option value="gdrive">Google Drive</mat-option>
+          <mat-option value="onedrive">OneDrive</mat-option>
+          <mat-option value="smb">SMB (Network File)</mat-option>
+          <mat-option value="html">HTML (Network File)</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
       <mat-form-field appearance="fill">
         <mat-label>File Path</mat-label>
         <input matInput formControlName="file_path" />

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from flask import jsonify
 from services.data_services import DataService
 
 
@@ -11,19 +12,21 @@ def preview_data(source_name: str):
     """
     Preview the first 10 rows of a source by name.
     """
-    data_service.reload_config()
     try:
         source = data_service.get_source_by_name(source_name)
-        source_type = source["type"]
+        source_type = source.get("type")
+        file_source_type = source.get("file_source_type")
 
         if source_type == "csv":
-            return data_service.get_csv_preview(source_name)
+            if file_source_type in ["local", "http", "html"]:
+                return data_service.get_csv_preview(source_name)
+            else:
+                raise ValueError(f"Unsupported file_source_type for CSV: {file_source_type}")
         elif source_type == "json":
-            return data_service.get_json_preview(source_name)
-        elif source_type == "api":
-            return data_service.get_api_preview(source_name)
-        elif source_type == "database":
-            return data_service.get_database_preview(source_name)
+            if file_source_type in ["local", "http", "html"]:
+                return data_service.get_json_preview(source_name)
+            else:
+                raise ValueError(f"Unsupported file_source_type for JSON: {file_source_type}")
         else:
             raise ValueError(f"Unsupported source type: {source_type}")
     except ValueError as e:

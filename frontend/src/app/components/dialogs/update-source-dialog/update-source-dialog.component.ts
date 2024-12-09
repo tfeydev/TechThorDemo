@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-update-source-dialog',
@@ -20,7 +22,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatOptionModule,
+    MatSelectModule
   ],
 })
 export class UpdateSourceDialogComponent {
@@ -41,6 +45,7 @@ export class UpdateSourceDialogComponent {
       url: [source.url || ''],
       headers: [JSON.stringify(source.headers || {}, null, 2)],
       params: [JSON.stringify(source.params || {}, null, 2)],
+      file_source_type: [source.file_source_type || 'local', [Validators.required]],
       file_path: [source.file_path || ''],
       delimiter: [source.delimiter || ','],
       encoding: [source.encoding || 'utf-8'],

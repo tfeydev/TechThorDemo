@@ -6,7 +6,7 @@ class CSVSource(BaseModel):
     name: str = Field(..., description="Unique name for the source")
     type: str = Field("csv", description="Type of the source")
     file_path: str = Field(..., description="Path to the CSV file")
-    source_type: str = Field("local", description="Source type: 'local', 'gdrive', 'onedrive', 'smb'")
+    file_source_type: str = Field("local", description="Source type: 'local', 'gdrive', 'onedrive', 'smb'")
     delimiter: Optional[str] = Field(",", description="Delimiter used in the CSV file")
     encoding: Optional[str] = Field("utf-8", description="File encoding")
 
@@ -15,7 +15,7 @@ class JSONSource(BaseModel):
     name: str = Field(..., description="Unique name for the source")
     type: str = Field("json", description="Type of the source")
     file_path: str = Field(..., description="Path to the JSON file")
-    source_type: str = Field("local", description="Source type: 'local', 'gdrive', 'onedrive', 'smb'")
+    file_source_type: str = Field("local", description="Source type: 'local', 'gdrive', 'onedrive', 'smb'")
     encoding: Optional[str] = Field("utf-8", description="File encoding")
 
 

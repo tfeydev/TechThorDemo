@@ -3,6 +3,7 @@ import yaml
 import pandas as pd
 import requests
 import sqlalchemy as sa
+from io import StringIO
 
 
 def flatten_json(data, parent_key='', sep='_'):
@@ -32,6 +33,11 @@ class DataService:
             config = yaml.safe_load(file)
         return config.get("sources", [])
     
+    def reload_config(self):
+        """Reload sources from the updated config.yaml."""
+        self.sources = self._load_config()
+        print("DEBUG: Sources reloaded:", self.sources)
+    
     def get_all_sources(self):
         """Get all sources from the config file."""
         return self._load_config()
@@ -56,39 +62,53 @@ class DataService:
     def get_csv_preview(self, source_name: str):
         """Fetch a preview of the CSV source."""
         source = self.get_source_by_name(source_name)
-        if source["type"] != "csv":
-            raise ValueError(f"Source '{source_name}' is not a CSV source.")
-
         file_path = source.get("file_path")
+        file_source_type = source.get("file_source_type")
         delimiter = source.get("delimiter", ",")
         encoding = source.get("encoding", "utf-8")
 
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"File '{file_path}' does not exist.")
+        if file_source_type == "local":
+            # Local file
+            if not os.path.exists(file_path):
+                raise FileNotFoundError(f"File '{file_path}' does not exist.")
+            df = pd.read_csv(file_path, delimiter=delimiter, encoding=encoding)
+        elif file_source_type in ["http", "html"]:
+            # HTTP/HTML file
+            response = requests.get(file_path)
+            if response.status_code != 200:
+                raise ValueError(f"Failed to fetch data from {file_path}. Status: {response.status_code}")
+            df = pd.read_csv(StringIO(response.text), delimiter=delimiter, encoding=encoding)
+        else:
+            raise ValueError(f"Unsupported file_source_type: {file_source_type}")
 
-        # Load CSV into Pandas DataFrame
-        df = pd.read_csv(file_path, delimiter=delimiter, encoding=encoding)
         return {
             "source_name": source_name,
-            "preview": df.head(5).to_dict(orient="records"),
+            "preview": df.head(10).to_dict(orient="records"),
         }
 
     def get_json_preview(self, source_name: str):
         """Fetch a preview of the JSON source."""
         source = self.get_source_by_name(source_name)
-        if source["type"] != "json":
-            raise ValueError(f"Source '{source_name}' is not a JSON source.")
-
         file_path = source.get("file_path")
+        file_source_type = source.get("file_source_type")
 
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"File '{file_path}' does not exist.")
+        if file_source_type == "local":
+            # Local file
+            if not os.path.exists(file_path):
+                raise FileNotFoundError(f"File '{file_path}' does not exist.")
+            df = pd.read_json(file_path)
+        elif file_source_type in ["http", "html"]:
+            # HTTP/HTML file
+            response = requests.get(file_path)
+            if response.status_code != 200:
+                raise ValueError(f"Failed to fetch data from {file_path}. Status: {response.status_code}")
+            df = pd.read_json(StringIO(response.text))
+        else:
+            raise ValueError(f"Unsupported file_source_type: {file_source_type}")
 
-        # Load JSON into Pandas DataFrame
-        df = pd.read_json(file_path)
         return {
             "source_name": source_name,
-            "preview": df.head(5).to_dict(orient="records"),
+            "preview": df.head(10).to_dict(orient="records"),
         }
 
     def get_api_preview(self, source_name: str):
@@ -154,9 +174,69 @@ class DataService:
             "source_name": source_name,
             "preview": df.head(5).to_dict(orient="records"),
         }
+    
+    def get_http_preview(source_name: str):
+        """Fetch a preview for HTTP/HTML-based sources."""
+        source = config_service.get_source_by_name(source_name)
 
-    def reload_config(self):
-        """Reload sources from the updated config.yaml."""
-        self.sources = self._load_config()
-        print("DEBUG: Sources reloaded:", self.sources)
+        # Validate file_source_type
+        if source.get("file_source_type") not in ["http", "html"]:
+            raise ValueError(f"Source '{source_name}' is not an HTTP or HTML source.")
+
+        # Fetch data from the URL
+        url = source.get("file_path")
+        if not url:
+            raise ValueError(f"Source '{source_name}' does not have a valid URL.")
+
+        response = requests.get(url)
+        if response.status_code != 200:
+            raise ValueError(f"Failed to fetch data from {url}. Status code: {response.status_code}")
+
+        # Parse the content
+        content_type = response.headers.get("Content-Type", "")
+        if "text/csv" in content_type or url.endswith(".csv"):
+            df = pd.read_csv(StringIO(response.text))
+        elif "application/json" in content_type or url.endswith(".json"):
+            df = pd.read_json(StringIO(response.text))
+        else:
+            raise ValueError(f"Unsupported content type: {content_type}")
+
+        # Return the preview as a dictionary
+        return {
+            "source_name": source_name,
+            "preview": df.head(5).to_dict(orient="records"),
+        }
+
+    
+    def download_remote_file(self, file_url: str) -> str:
+        """Download a file from a remote URL to a temporary file."""
+        response = requests.get(file_url)
+        response.raise_for_status()
+        temp_file = "/tmp/temp_downloaded_file"
+        with open(temp_file, "wb") as f:
+            f.write(response.content)
+        return temp_file
+
+    def fetch_smb_file(self, smb_path: str) -> str:
+        """Fetch a file from an SMB share."""
+        # Assuming SMB credentials are pre-configured
+        server = "192.168.1.142"  # SMB server
+        share = "shared"          # SMB share name
+        username = "your_username"
+        password = "your_password"
+
+        smb_url = smb_path.replace("\\", "/").lstrip("smb://")
+        temp_file = "/tmp/temp_smb_file"
+
+        try:
+            # Establish an SMB connection
+            session = requests.Session(server, username, password)
+            connection = session.create_connection()
+            with connection.open(smb_url, "rb") as remote_file, open(temp_file, "wb") as local_file:
+                local_file.write(remote_file.read())
+            return temp_file
+        except Exception as e:
+            raise ValueError(f"Error fetching SMB file: {e}")
+
+    
         

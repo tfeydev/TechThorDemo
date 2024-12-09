@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
@@ -15,7 +16,8 @@ import { MatOptionModule } from '@angular/material/core';
     MatFormFieldModule,
     ReactiveFormsModule,
     FormsModule,
-    MatOptionModule
+    MatOptionModule,
+    MatSelectModule
   ],
   templateUrl: './json-source.component.html'
 })
@@ -26,13 +28,18 @@ export class JsonSourceComponent {
   sourceData = {
     name: '',
     type: 'json',
-    source_type: 'local',
+    file_source_type: 'local',
     file_path: '',
     encoding: 'utf-8'
   };
 
   onNameChange(value: string): void {
     this.sourceData.name = value;
+    this.dataChange.emit(this.sourceData);
+  }
+
+  onFileSourceTypeChange(value: string): void {
+    this.sourceData.file_source_type = value;
     this.dataChange.emit(this.sourceData);
   }
 
@@ -56,7 +63,7 @@ export class JsonSourceComponent {
       !!this.sourceData.name && // Name must not be empty
       this.sourceData.name.length >= 3 &&
       !!this.sourceData.file_path && // File path must not be empty
-      this.isValidFilePath(this.sourceData.file_path, this.sourceData.source_type) &&
+      this.isValidFilePath(this.sourceData.file_path, this.sourceData.file_source_type) &&
       !!this.sourceData.encoding && // Encoding must not be empty
       this.isValidEncoding(this.sourceData.encoding);
 
@@ -64,19 +71,25 @@ export class JsonSourceComponent {
     return isValid;
   } 
   
-  isValidFilePath(filePath: string, sourceType: string): boolean {
-    switch (sourceType) {
-      case 'local':
-        return filePath.endsWith('.json');
-      case 'gdrive':
-        return filePath.startsWith('gdrive://');
-      case 'onedrive':
-        return filePath.startsWith('onedrive://');
-      case 'smb':
-        return filePath.startsWith('smb://');
-      default:
-        return false;
+  isValidFilePath(file_path: string, file_source_type: string): boolean {
+    if (!file_path) {
+      return false; // File path must not be empty
     }
+  
+    // Define valid starts for each source type
+    const validStarts: Record<string, (file_path: string) => boolean> = {
+      local: () => true, // Local files don't need a specific prefix
+      gdrive: (file_path) => file_path.startsWith('gdrive://'),
+      onedrive: (file_path) => file_path.startsWith('onedrive://'),
+      smb: (file_path) => file_path.startsWith('smb://') || file_path.startsWith('\\'),
+      html: (file_path) => file_path.startsWith('http://') || file_path.startsWith('https://'),
+    };
+  
+    // Check if file path starts correctly and ends with `.csv`
+    const startsValid = validStarts[file_source_type]?.(file_path) ?? false;
+    const endsWithCSV = file_path.endsWith('.json');
+  
+    return startsValid && endsWithCSV;
   }
   
   isValidEncoding(encoding: string): boolean {
