@@ -46,6 +46,8 @@ export class DataSourceManagerComponent implements OnInit, AfterViewInit {
   loading = false;
   error: string | null = null;
 
+  private currentPageIndex: number = 0; // Store the current page index
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -56,28 +58,39 @@ export class DataSourceManagerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log('Paginator initialized:', this.paginator);
-    console.log('Sort initialized:', this.sort);
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
   
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  
-    this.dataSource._updateChangeSubscription();
+      // Restore the saved page index
+      if (this.paginator) {
+        this.paginator.pageIndex = this.currentPageIndex;
+      }
+    }
   }  
 
   loadSources(): void {
+    // Save the current page index
+    this.currentPageIndex = this.dataSource?.paginator?.pageIndex || 0;
+  
     this.loading = true;
     this.sourceService.loadSources();
     this.sourceService.sources$.subscribe({
       next: (sources) => {
         this.sources = sources;
+  
+        // Re-initialize the dataSource with the new data
         this.dataSource = new MatTableDataSource(sources);
+  
+        // Reattach paginator and sort
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+  
+        // Restore the saved page index
         if (this.paginator) {
-          this.dataSource.paginator = this.paginator;
+          this.paginator.pageIndex = this.currentPageIndex;
         }
-        if (this.sort) {
-          this.dataSource.sort = this.sort;
-        }
+  
         this.loading = false;
       },
       error: () => {
@@ -86,15 +99,17 @@ export class DataSourceManagerComponent implements OnInit, AfterViewInit {
       },
     });
   }  
-
+  
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
+  
+    // Optionally, reset paginator if needed
     if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+      this.dataSource.paginator.pageIndex = this.currentPageIndex; // Keep the same page
     }
-  }
-
+  }  
+  
   openAddSourceDialog(): void {
     const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '600px' });
     dialogRef.afterClosed().subscribe((result) => {
