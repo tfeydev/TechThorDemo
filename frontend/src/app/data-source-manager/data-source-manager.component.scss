@@ -37,7 +37,8 @@
   justify-content: center;
   align-items: center;
   gap: 16px; /* Space between title and button */
-  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-bottom: 32px;
   padding: 8px 0;
 }
 
@@ -49,88 +50,42 @@ mat-card-title {
   color: #333; /* Neutral dark gray */
 }
 
-/* Button Styling */
-button[mat-raised-button],
-a[mat-raised-button] {
-  background-color: #1976d2; /* Material Design Primary Blue */
-  color: white;
-  font-weight: bold;
-  text-transform: none; /* Prevent all caps */
-  padding: 8px 16px;
-  height: 36px;
-  border-radius: 4px; /* Subtle rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth hover effect */
-
-  &.api-button {
-    background-color: #009688; /* Material Design Teal for API button */
-  }
-}
-
-button[mat-raised-button]:hover,
-a[mat-raised-button]:hover {
-  background-color: #1565c0; /* Darker shade of blue for hover */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* More prominent shadow */
-}
-
-button[mat-raised-button] {
-  background-color: #1976d2; /* Material Design Primary Blue */
-  color: white;
-  font-weight: bold;
-  text-transform: none; /* Prevent all caps */
-  padding: 8px 16px;
-  height: 36px;
-  border-radius: 4px; /* Subtle rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth hover effect */
-}
-
-button[mat-raised-button].api-button {
-  background-color: #009688; /* Material Design Teal for API button */
-}
-
-button[mat-raised-button].api-button:hover {
-  background-color: #00796b; /* Darker teal for API button hover */
-}
-
-/* Empty State Text */
-.no-sources-message {
-  margin-top: 32px;
-  font-size: 1.2rem;
-  font-style: italic;
-  color: #757575; /* Subtle gray for text */
-  text-align: center;
-}
-
-//* Available Sources Header */
+/* Available Sources Header */
 .available-sources-header {
   display: flex;
-  justify-content: space-between; /* Align title and button on the same line */
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 16px;
 
   mat-card-title {
     font-size: 1.5rem;
     font-weight: bold;
+    margin: 0;
   }
 
-  button[mat-raised-button] {
-    font-size: 0.875rem; /* Match Add Source button */
-    font-weight: bold;
-    text-transform: none; /* Prevent uppercase text */
-    padding: 8px 16px;
-    height: 36px; /* Consistent height */
-    border-radius: 4px; /* Rounded corners */
-    background-color: #1976d2; /* Material Design Accent Color */
-    color: white; /* White text for contrast */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    transition: background-color 0.3s, box-shadow 0.3s; /* Hover animation */
+  .header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  
+    .search-bar {
+      flex-grow: 1;
+      max-width: 400px; /* Adjust width for larger search bar */
+    }
+  
+    button[mat-raised-button] {
+      font-size: 1rem; /* Larger text size */
+      padding: 10px 20px; /* Adjust padding for consistency */
+      height: 40px; /* Slightly taller button */
+    }
   }
 
-  button[mat-raised-button]:hover {
-    background-color: #1565c0; /* Darker shade of blue on hover */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    button[mat-raised-button]:hover {
+      background-color: #1565c0; /* Darker shade of blue */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+    }
   }
-}
 
 
 /* Action Buttons */
@@ -138,42 +93,56 @@ mat-cell {
   display: flex;
   align-items: center;
 
-  /* Mat Icon Buttons */
-a[mat-icon-button],
-button[mat-icon-button] {
-  background-color: transparent !important; /* Remove background */
-  box-shadow: none !important; /* Remove shadows */
-  border: none; /* Remove borders */
-  color: #555; /* Default neutral color */
+  a[mat-icon-button],
+  button[mat-icon-button] {
+    background-color: transparent !important; /* Remove background */
+    box-shadow: none !important; /* Remove shadows */
+    border: none; /* Remove borders */
+    color: #555; /* Default neutral color */
 
-  &:hover {
-    color: #1e90ff; /* Blue color on hover */
+    &:hover {
+      color: #1e90ff; /* Blue color on hover */
+    }
+  }
+
+  /* Custom Colors for Specific Icons */
+  a[mat-icon-button].view-icon {
+    color: #4caf50; /* Green for visibility icon */
+  }
+
+  a[mat-icon-button].view-icon:hover {
+    color: #388e3c; /* Darker green on hover */
+  }
+
+  button[mat-icon-button].edit-icon {
+    color: #ff9800; /* Orange for edit icon */
+  }
+
+  button[mat-icon-button].edit-icon:hover {
+    color: #f57c00; /* Darker orange on hover */
+  }
+
+  button[mat-icon-button].delete-icon {
+    color: #f44336; /* Red for delete icon */
+  }
+
+  button[mat-icon-button].delete-icon:hover {
+    color: #d32f2f; /* Darker red on hover */
   }
 }
 
-/* Custom Colors for Specific Icons */
-a[mat-icon-button].view-icon {
-  color: #4caf50; /* Green for visibility icon */
+/* Search Bar */
+.search-bar {
+  width: 100%;
+  max-width: 250px;
+  max-height: 50px;
+  margin-right: 20px;
+  display: flex;
 }
 
-a[mat-icon-button].view-icon:hover {
-  color: #388e3c; /* Darker green on hover */
-}
-
-button[mat-icon-button].edit-icon {
-  color: #ff9800; /* Orange for edit icon */
-}
-
-button[mat-icon-button].edit-icon:hover {
-  color: #f57c00; /* Darker orange on hover */
-}
-
-button[mat-icon-button].delete-icon {
-  color: #f44336; /* Red for delete icon */
-}
-
-button[mat-icon-button].delete-icon:hover {
-  color: #d32f2f; /* Darker red on hover */
-}
-
+/* Pagination Styling */
+.mat-paginator {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
 }

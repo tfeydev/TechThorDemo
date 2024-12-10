@@ -1,79 +1,67 @@
-<!-- Loading Indicator -->
-<div *ngIf="loading">
-  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-  <p>Loading...</p>
-</div>
-
-<!-- Error Messages -->
-<div *ngIf="error" class="error-message">
-  <mat-card class="error-card">
-    <mat-card-content>{{ error }}</mat-card-content>
-  </mat-card>
-</div>
-
-<!-- Dashboard Header -->
 <mat-card>
   <mat-card-header class="dashboard-header">
     <mat-card-title>Source Management Dashboard</mat-card-title>
     <mat-card-actions>
-      <button mat-raised-button color="accent" (click)="openAddSourceDialog()">+ Add Source</button>
+      <button mat-raised-button color="primary" (click)="openAddSourceDialog()">+ Add Source</button>
     </mat-card-actions>
   </mat-card-header>
+
   <mat-card-content>
-    <!-- Display Available Sources -->
-    <div *ngIf="!loading && !error && sources.length > 0">
-      <mat-card class="available-sources-header">
-        <mat-card-title>Available Sources</mat-card-title>
-        <mat-card-actions>
-          <button mat-raised-button color="accent" (click)="viewYaml()">View YAML</button>
-        </mat-card-actions>
-      </mat-card>
+    <div *ngIf="!loading && !error && sources.length > 0" class="available-sources-header">
+      <mat-card-title>Available Sources</mat-card-title>
+
+      <div class="header-actions">
+        <mat-form-field appearance="outline" class="search-bar">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Search sources" />
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="viewYaml()">View YAML</button>
+      </div>
     </div>
 
-    <!-- Fallback for No Sources -->
     <div *ngIf="!loading && !error && sources.length === 0" class="no-sources-message">
       <p>No sources available. Please add a source.</p>
     </div>
 
-    <!-- Source Table -->
     <div *ngIf="!loading && !error && sources.length > 0" class="table-section">
       <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-        <!-- Name Column -->
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
           <mat-cell *matCellDef="let source">{{ source.name }}</mat-cell>
         </ng-container>
 
-        <!-- Type Column -->
         <ng-container matColumnDef="type">
           <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
           <mat-cell *matCellDef="let source">{{ source.type }}</mat-cell>
         </ng-container>
 
-        <!-- Actions Column -->
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
           <mat-cell *matCellDef="let source">
-            <!-- View Source Button -->
             <a mat-icon-button color="primary" [routerLink]="['/data-preview', source.name]" matTooltip="Preview">
               <mat-icon>visibility</mat-icon>
-            </a>                       
-            <!-- Edit Button -->
+            </a>
             <button mat-icon-button color="primary" (click)="openUpdateSourceDialog(source.name)">
               <mat-icon>edit</mat-icon>
             </button>
-            <!-- Delete Button -->
             <button mat-icon-button color="warn" (click)="openDeleteDialog(source.name)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-cell>
         </ng-container>
 
-        <!-- Table Header and Rows -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="5"
+        showFirstLastButtons
+        aria-label="Pagination"
+      >
+      </mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>
