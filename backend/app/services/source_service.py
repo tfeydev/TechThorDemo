@@ -36,45 +36,31 @@ class SourceService(BaseYamlService):
 
     def serialize_source(self, source_data):
         """Serialize and clean the source data."""
+        # Define defaults for each source type
         source_type_defaults = {
-            "api": {
-                "url": "",
-                "headers": {},
-                "params": {},
-            },
-            "csv": {
-                "file_source_type": '',
-                "delimiter": ",",
-                "encoding": "utf-8",
-            },
-            "json": {
-                "file_source_type": '',
-                "encoding": "utf-8",
-            },
-            "database": {
-                "tables": [],
-                "queries": [],
-            },
+            "api": {"url": "", "headers": {}, "params": {}},
+            "csv": {"file_source_type": "local", "delimiter": ",", "encoding": "utf-8"},
+            "json": {"file_source_type": "local", "encoding": "utf-8"},
+            "database": {"tables": [], "queries": []},
         }
 
-        # Get defaults for the source type
+        # Merge defaults with the source data
         defaults = source_type_defaults.get(source_data.get("type"), {})
-
-        # Merge with provided data
         cleaned_source = {**defaults, **source_data}
 
-        # Determine the appropriate key order based on the source type
-        if source_data.get("type") == "api":
-            key_order = ["name", "type", "url", "headers", "params"]
-        else:
-            key_order = [
+        # Define a unified key order
+        key_order = [
             "name", "type", "url", "headers", "params", "file_source_type", "file_path",
             "delimiter", "encoding", "db_type", "host", "port", "user",
             "password", "db_name", "tables", "queries"
         ]
-            
-        ordered_source = OrderedDict((k, cleaned_source[k]) for k in key_order if k in cleaned_source)
-        return ordered_source
+
+        # Remove `file_source_type` for specific types
+        if source_data.get("type") in ["database", "api"]:
+            cleaned_source.pop("file_source_type", None)
+
+        # Return an ordered dictionary based on the key order
+        return OrderedDict((k, cleaned_source[k]) for k in key_order if k in cleaned_source)
 
     def save_config(self):
         """Save all sources to the YAML configuration file."""
