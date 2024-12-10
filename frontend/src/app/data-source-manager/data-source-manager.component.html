@@ -58,9 +58,9 @@
       <mat-paginator
         [pageSizeOptions]="[5, 10, 20]"
         [pageSize]="5"
-        showFirstLastButtons
-        aria-label="Pagination"
-      >
+        [length]="dataSource.data.length || 0"
+        [pageIndex]="currentPageIndex"
+        (page)="onPageChange($event)">
       </mat-paginator>
     </div>
   </mat-card-content>

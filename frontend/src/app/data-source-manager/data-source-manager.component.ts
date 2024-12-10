@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SourceService } from '../services/source.service';
@@ -46,7 +46,7 @@ export class DataSourceManagerComponent implements OnInit, AfterViewInit {
   loading = false;
   error: string | null = null;
 
-  private currentPageIndex: number = 0; // Store the current page index
+  currentPageIndex = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -66,31 +66,31 @@ export class DataSourceManagerComponent implements OnInit, AfterViewInit {
       if (this.paginator) {
         this.paginator.pageIndex = this.currentPageIndex;
       }
+      
     }
   }  
 
   loadSources(): void {
-    // Save the current page index
-    this.currentPageIndex = this.dataSource?.paginator?.pageIndex || 0;
-  
     this.loading = true;
+
     this.sourceService.loadSources();
     this.sourceService.sources$.subscribe({
       next: (sources) => {
         this.sources = sources;
-  
-        // Re-initialize the dataSource with the new data
+
+        // Preserve paginator state
+        const previousIndex = this.paginator ? this.paginator.pageIndex : this.currentPageIndex;
+
         this.dataSource = new MatTableDataSource(sources);
-  
-        // Reattach paginator and sort
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-  
-        // Restore the saved page index
+
         if (this.paginator) {
-          this.paginator.pageIndex = this.currentPageIndex;
+          this.dataSource.paginator = this.paginator;
+          this.paginator.pageIndex = previousIndex; // Restore the page index
         }
-  
+        if (this.sort) {
+          this.dataSource.sort = this.sort;
+        }
+
         this.loading = false;
       },
       error: () => {
@@ -98,17 +98,21 @@ export class DataSourceManagerComponent implements OnInit, AfterViewInit {
         this.loading = false;
       },
     });
-  }  
-  
+  }
+
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
-  
-    // Optionally, reset paginator if needed
+
+    // Retain the current page index when filtering
     if (this.dataSource.paginator) {
-      this.dataSource.paginator.pageIndex = this.currentPageIndex; // Keep the same page
+      this.dataSource.paginator.pageIndex = this.currentPageIndex;
     }
-  }  
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.currentPageIndex = event.pageIndex; // Update current page index
+  }
   
   openAddSourceDialog(): void {
     const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '600px' });
@@ -126,6 +130,7 @@ export class DataSourceManagerComponent implements OnInit, AfterViewInit {
     }
     const dialogRef = this.dialog.open(UpdateSourceDialogComponent, {
       width: '600px',
+      height: '450px',
       data: { source },
     });
     dialogRef.afterClosed().subscribe((result) => {
