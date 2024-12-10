@@ -63,12 +63,16 @@ class SourceService(BaseYamlService):
         # Merge with provided data
         cleaned_source = {**defaults, **source_data}
 
-        # Reorder keys based on key order
-        key_order = [
-            "name", "type", "url", "headers", "params", "file_source_type","file_path",
+        # Determine the appropriate key order based on the source type
+        if source_data.get("type") == "api":
+            key_order = ["name", "type", "url", "headers", "params"]
+        else:
+            key_order = [
+            "name", "type", "url", "headers", "params", "file_source_type", "file_path",
             "delimiter", "encoding", "db_type", "host", "port", "user",
             "password", "db_name", "tables", "queries"
         ]
+            
         ordered_source = OrderedDict((k, cleaned_source[k]) for k in key_order if k in cleaned_source)
         return ordered_source
 
