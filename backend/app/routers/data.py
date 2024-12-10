@@ -27,8 +27,10 @@ def preview_data(source_name: str):
                 return data_service.get_json_preview(source_name)
             else:
                 raise ValueError(f"Unsupported file_source_type for JSON: {file_source_type}")
+        elif source["type"] == "api":
+            return data_service.get_api_preview(source_name)
         else:
-            raise ValueError(f"Unsupported source type: {source_type}")
+             raise HTTPException(status_code=400, detail=f"Preview not supported for source type: {source['type']}")
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except FileNotFoundError as e:

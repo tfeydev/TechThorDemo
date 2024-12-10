@@ -129,22 +129,19 @@ class DataService:
         if response.status_code != 200:
             raise ValueError(f"Failed to fetch data from API. Status code: {response.status_code}")
 
-        # Parse the API response dynamically
+        # Parse the API response
         data = response.json()
 
-        # Flatten the response dynamically
-        flattened_data = []
-        if isinstance(data, dict):  # Handle JSON objects
-            flattened_data.append(flatten_json(data))  # Flatten the single object
-        elif isinstance(data, list):  # Handle JSON arrays
-            for item in data[:5]:  # Limit to the first 10 items
-                flattened_data.append(flatten_json(item))
+        # Filter fields based on params
+        required_fields = params.get("fields", None)  # Add a 'fields' key to the params if needed
+        if required_fields:
+            filtered_data = {k: v for k, v in flatten_json(data).items() if k in required_fields}
         else:
-            raise ValueError(f"Unsupported API response format for source '{source_name}'.")
+            filtered_data = flatten_json(data)  # Flatten all if no fields specified
 
         return {
             "source_name": source_name,
-            "preview": flattened_data
+            "preview": [filtered_data]
         }
 
     def get_database_preview(self, source_name: str):

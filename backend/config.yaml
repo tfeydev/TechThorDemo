@@ -18,6 +18,9 @@ sources:
   encoding: utf-8
 - name: api-test
   type: api
-  url: https://api.fxratesapi.com/latest?currencies=EUR,BRL
+  url: https://api.fxratesapi.com/latest
   headers: {}
-  params: {}
+  params:
+    base: USD
+    rates: rates_BRL
+    currencies: BRL,EUR
