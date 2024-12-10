@@ -89,27 +89,30 @@ class DataService:
     def get_json_preview(self, source_name: str):
         """Fetch a preview of the JSON source."""
         source = self.get_source_by_name(source_name)
+        if not source:
+            raise ValueError(f"Source '{source_name}' not found.")
+        
         file_path = source.get("file_path")
         file_source_type = source.get("file_source_type")
 
         if file_source_type == "local":
-            # Local file
+            # Local file handling
             if not os.path.exists(file_path):
                 raise FileNotFoundError(f"File '{file_path}' does not exist.")
             df = pd.read_json(file_path)
-        elif file_source_type in ["http"]:
-            # HTTP file
+        elif file_source_type == "http":
+            # HTTP file handling
             response = requests.get(file_path)
             if response.status_code != 200:
                 raise ValueError(f"Failed to fetch data from {file_path}. Status: {response.status_code}")
             df = pd.read_json(StringIO(response.text))
         else:
             raise ValueError(f"Unsupported file_source_type: {file_source_type}")
-
+        
         return {
-            "source_name": source_name,
-            "preview": df.head(10).to_dict(orient="records"),
-        }
+        "source_name": source_name,
+        "preview": df.head(10).to_dict(orient="records"),
+    }
 
     def get_api_preview(self, source_name: str):
         """Fetch a preview of the API source dynamically."""

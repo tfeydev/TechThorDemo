@@ -24,3 +24,20 @@ sources:
     base: USD
     rates: rates_BRL
     currencies: BRL,EUR
+- name: db-psql-test
+  type: database
+  db_type: postgresql
+  host: localhost
+  port: '5432'
+  user: postgres
+  password: passwd
+  db_name: dvdrental
+  tables: []
+  queries:
+  - name: default1
+    query: SELECT * FROM customer;
+- name: json-test-local
+  type: json
+  file_source_type: local
+  file_path: data/example.json
+  encoding: utf-8
