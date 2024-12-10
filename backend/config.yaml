@@ -1,42 +1,7 @@
 sources:
-- name: csv-test
+- name: csv-test-local
   type: csv
-  file_source_type: ''
+  file_source_type: local
   file_path: data/example.csv
   delimiter: ','
-  encoding: utf-8
-- name: csv-test2
-  type: csv
-  file_source_type: ''
-  file_path: data/example2.csv
-  delimiter: ','
-  encoding: utf-8
-- name: json-test
-  type: json
-  file_source_type: ''
-  file_path: data/example.json
-  encoding: utf-8
-- name: db-test
-  type: database
-  db_type: postgresql
-  host: localhost
-  port: '5432'
-  user: postgres
-  password: passwd
-  db_name: dvdrental
-  tables:
-  - actor
-  queries:
-  - name: default1
-    query: SELECT * FROM customer;
-- name: test
-  type: csv
-  file_source_type: html
-  file_path: http://192.168.1.142/shared/example.csv
-  delimiter: ','
-  encoding: utf-8
-- name: test2
-  type: json
-  file_source_type: html
-  file_path: http://192.168.1.142/shared/example.json
   encoding: utf-8

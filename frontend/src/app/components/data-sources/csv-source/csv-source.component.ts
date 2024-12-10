@@ -90,7 +90,7 @@ export class CsvSourceComponent {
       gdrive: (file_path) => file_path.startsWith('gdrive://'),
       onedrive: (file_path) => file_path.startsWith('onedrive://'),
       smb: (file_path) => file_path.startsWith('smb://') || file_path.startsWith('\\'),
-      html: (file_path) => file_path.startsWith('http://') || file_path.startsWith('https://'),
+      http: (file_path) => file_path.startsWith('http://') || file_path.startsWith('https://'),
     };
   
     // Check if file path starts correctly and ends with `.csv`
