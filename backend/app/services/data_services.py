@@ -72,8 +72,8 @@ class DataService:
             if not os.path.exists(file_path):
                 raise FileNotFoundError(f"File '{file_path}' does not exist.")
             df = pd.read_csv(file_path, delimiter=delimiter, encoding=encoding)
-        elif file_source_type in ["http", "html"]:
-            # HTTP/HTML file
+        elif file_source_type in ["http"]:
+            # HTTP file
             response = requests.get(file_path)
             if response.status_code != 200:
                 raise ValueError(f"Failed to fetch data from {file_path}. Status: {response.status_code}")
@@ -97,8 +97,8 @@ class DataService:
             if not os.path.exists(file_path):
                 raise FileNotFoundError(f"File '{file_path}' does not exist.")
             df = pd.read_json(file_path)
-        elif file_source_type in ["http", "html"]:
-            # HTTP/HTML file
+        elif file_source_type in ["http"]:
+            # HTTP file
             response = requests.get(file_path)
             if response.status_code != 200:
                 raise ValueError(f"Failed to fetch data from {file_path}. Status: {response.status_code}")
@@ -176,12 +176,12 @@ class DataService:
         }
     
     def get_http_preview(source_name: str):
-        """Fetch a preview for HTTP/HTML-based sources."""
+        """Fetch a preview for HTTP-based sources."""
         source = config_service.get_source_by_name(source_name)
 
         # Validate file_source_type
-        if source.get("file_source_type") not in ["http", "html"]:
-            raise ValueError(f"Source '{source_name}' is not an HTTP or HTML source.")
+        if source.get("file_source_type") not in ["http"]:
+            raise ValueError(f"Source '{source_name}' is not an HTTP source.")
 
         # Fetch data from the URL
         url = source.get("file_path")

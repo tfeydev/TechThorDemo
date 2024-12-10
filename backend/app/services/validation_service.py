@@ -5,7 +5,8 @@ import psycopg2
 from pymongo import MongoClient
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
-from onedrivesdk import get_default_client
+import uuid
+import msal
 from smbprotocol.connection import Connection
 from smbprotocol.session import Session
 from smbprotocol.tree import TreeConnect
@@ -61,7 +62,7 @@ class ValidationService:
     @staticmethod
     def validate_sql(db_type, host, port, user, password, db_name, query=None, tables=None):
         conn = None
-        try:
+        try:HTTP
             if db_type == "mysql":
                 conn = pymysql.connect(host=host, port=port, user=user, password=password, database=db_name)
             elif db_type == "postgresql":
