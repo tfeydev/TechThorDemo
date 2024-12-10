@@ -18,12 +18,12 @@ def preview_data(source_name: str):
         file_source_type = source.get("file_source_type")
 
         if source_type == "csv":
-            if file_source_type in ["local", "http", "html"]:
+            if file_source_type in ["local", "http"]:
                 return data_service.get_csv_preview(source_name)
             else:
                 raise ValueError(f"Unsupported file_source_type for CSV: {file_source_type}")
         elif source_type == "json":
-            if file_source_type in ["local", "http", "html"]:
+            if file_source_type in ["local", "http"]:
                 return data_service.get_json_preview(source_name)
             else:
                 raise ValueError(f"Unsupported file_source_type for JSON: {file_source_type}")

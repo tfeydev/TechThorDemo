@@ -95,6 +95,7 @@ class SourceService(BaseYamlService):
         self.save_config()
         return {"message": f"Source '{source_data['name']}' added or updated successfully."}
 
+
     def update_source(self, source_name, updated_data):
         """Upfrom io import StringIOdate an existing source."""
         try:
@@ -106,9 +107,9 @@ class SourceService(BaseYamlService):
             # Retrieve the source type and relevant fields
             source_type = self.sources[source_index].get("type")
             relevant_fields = {
+                "api": ["name", "type", "url", "headers", "params"],
                 "csv": ["name", "type", "file_source_type", "file_path", "delimiter", "encoding"],
                 "json": ["name", "type", "file_source_type", "file_path", "encoding"],
-                "api": ["name", "type", "url", "headers", "params"],
                 "database": [
                     "name", "type", "db_type", "host", "port", "user",
                     "password", "db_name", "tables", "queries"

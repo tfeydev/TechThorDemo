@@ -175,9 +175,9 @@ class DataService:
             "preview": df.head(5).to_dict(orient="records"),
         }
     
-    def get_http_preview(source_name: str):
+    def get_http_preview(self, source_name: str):
         """Fetch a preview for HTTP-based sources."""
-        source = config_service.get_source_by_name(source_name)
+        source = self.get_source_by_name(source_name)
 
         # Validate file_source_type
         if source.get("file_source_type") not in ["http"]:
