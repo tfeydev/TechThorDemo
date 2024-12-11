@@ -17,6 +17,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
     selector: 'app-dashboard',
@@ -36,6 +38,8 @@ import { FormsModule } from '@angular/forms';
         MatFormFieldModule,
         MatInputModule,
         RouterModule,
+        MatSelectModule,
+        MatOptionModule,
     ]
 })
 export class DataSourceManagerComponent implements OnInit {
@@ -44,6 +48,9 @@ export class DataSourceManagerComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   loading = false;
   error: string | null = null;
+
+  selectedType: string = ''; // Holds the selected filter type
+  availableTypes: string[] = []; // Holds unique types for the dropdown
 
   // Pagination
   length = this.sources.length
@@ -63,18 +70,23 @@ export class DataSourceManagerComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort; // Link Sort to Data Source
+    this.dataSource.sort = this.sort;
   }
 
   loadSources(): void {
     this.loading = true;
+  
     this.sourceService.loadSources();
     this.sourceService.sources$.subscribe({
       next: (sources) => {
         this.sources = sources;
-
+  
         // Update data source
         this.dataSource.data = sources;
+  
+        // Generate unique types for the dropdown
+        this.availableTypes = Array.from(new Set(sources.map((s) => s.type)));
+  
         this.length = sources.length; // Update paginator length
         this.loading = false;
       },
@@ -83,21 +95,43 @@ export class DataSourceManagerComponent implements OnInit {
         this.loading = false;
       },
     });
-  }
+  }  
 
   handlePageEvent(event: PageEvent): void {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
   }
 
+  filterPredicate(data: any, filter: string): boolean {
+    const matchesName = data.name.toLowerCase().includes(filter);
+    const matchesType = !this.selectedType || data.type === this.selectedType;
+
+    return matchesName && matchesType;
+  }
+
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+  
+    this.dataSource.filterPredicate = this.filterPredicate.bind(this);
     this.dataSource.filter = filterValue;
-
+  
     if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage(); // Reset to the first page
+      this.dataSource.paginator.firstPage();
     }
   }
+  
+  filterByType(): void {
+    // Filter rows by selected type
+    this.dataSource.filterPredicate = (data, filter) => {
+      return !this.selectedType || data.type === this.selectedType;
+    };
+    this.dataSource.filter = this.selectedType; // Trigger filtering
+
+    // Reset pagination after filtering
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }  
   
   openAddSourceDialog(): void {
     const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '600px' });

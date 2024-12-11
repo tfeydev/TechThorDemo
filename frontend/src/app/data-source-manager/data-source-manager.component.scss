@@ -140,6 +140,14 @@ mat-cell {
   display: flex;
 }
 
+.filter-dropdown {
+  width: 100%;
+  max-width: 250px;
+  max-height: 50px;
+  margin-right: 20px;
+  display: flex;
+}
+
 /* Pagination Styling */
 .mat-paginator {
   margin-top: 16px;

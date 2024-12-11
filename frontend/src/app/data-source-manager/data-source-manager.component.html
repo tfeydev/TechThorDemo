@@ -9,11 +9,19 @@
   <mat-card-content>
     <div *ngIf="!loading && !error && sources.length > 0" class="available-sources-header">
       <mat-card-title>Available Sources</mat-card-title>
-
+      
       <div class="header-actions">
         <mat-form-field appearance="outline" class="search-bar">
           <mat-label>Filter</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Search sources" />
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="filter-dropdown">
+          <mat-label>Filter by Type</mat-label>
+          <mat-select [(value)]="selectedType" (selectionChange)="filterByType()">
+            <mat-option *ngFor="let type of availableTypes" [value]="type">{{ type }}</mat-option>
+            <mat-option [value]="">All</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <button mat-raised-button color="primary" (click)="viewYaml()">View YAML</button>
