@@ -11,21 +11,20 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-update-source-dialog',
-  templateUrl: './update-source-dialog.component.html',
-  styleUrls: ['./update-source-dialog.component.scss'],
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    CommonModule,
-    MatIconModule,
-    MatOptionModule,
-    MatSelectModule
-  ],
+    selector: 'app-update-source-dialog',
+    templateUrl: './update-source-dialog.component.html',
+    styleUrls: ['./update-source-dialog.component.scss'],
+    imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        CommonModule,
+        MatIconModule,
+        MatOptionModule,
+        MatSelectModule
+    ]
 })
 export class UpdateSourceDialogComponent {
   updateForm: FormGroup;

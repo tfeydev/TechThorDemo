@@ -11,22 +11,21 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 
 @Component({
-  selector: 'app-analytics-hub',
-  standalone: true,
-  templateUrl: './analytics-hub.component.html',
-  styleUrls: ['./analytics-hub.component.scss'],
-  imports: [
-    MatTabsModule,
-    MonitoringComponent,
-    AnalysisComponent,
-    ReportsComponent,
-    RouterModule,
-    CommonModule,
-    RouterLink,
-    RouterOutlet,
-    MatMenuModule,
-    MatIconModule,
-    MatToolbarModule
+    selector: 'app-analytics-hub',
+    templateUrl: './analytics-hub.component.html',
+    styleUrls: ['./analytics-hub.component.scss'],
+    imports: [
+        MatTabsModule,
+        MonitoringComponent,
+        AnalysisComponent,
+        ReportsComponent,
+        RouterModule,
+        CommonModule,
+        RouterLink,
+        RouterOutlet,
+        MatMenuModule,
+        MatIconModule,
+        MatToolbarModule
     ]
 })
 export class AnalyticsHubComponent {

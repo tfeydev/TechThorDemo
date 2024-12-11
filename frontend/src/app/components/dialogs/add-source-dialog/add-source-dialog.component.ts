@@ -13,23 +13,22 @@ import { FormsModule } from '@angular/forms';
 
 
 @Component({
-  selector: 'app-add-source-dialog',
-  standalone: true,
-  templateUrl: './add-source-dialog.component.html',
-  styleUrls: ['./add-source-dialog.component.scss'],
-  imports: [
-    CsvSourceComponent,
-    JsonSourceComponent,
-    ApiSourceComponent,
-    DatabaseSourceComponent,
-    CommonModule,
-    FormsModule,
-    MatTableModule,
-    MatDialogModule,
-    MatTabsModule,
-    MatFormFieldModule,
-    MatSelectModule
-  ]
+    selector: 'app-add-source-dialog',
+    templateUrl: './add-source-dialog.component.html',
+    styleUrls: ['./add-source-dialog.component.scss'],
+    imports: [
+        CsvSourceComponent,
+        JsonSourceComponent,
+        ApiSourceComponent,
+        DatabaseSourceComponent,
+        CommonModule,
+        FormsModule,
+        MatTableModule,
+        MatDialogModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatSelectModule
+    ]
 })
 export class AddSourceDialogComponent {
   selectedSourceType: string = ''; // Selected source type

@@ -6,15 +6,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-data-viewer',
-  standalone: true,
-  imports: [MatDialogModule, MatButtonModule, CommonModule, JsonPipe],
-  template: `
+    selector: 'app-data-viewer',
+    imports: [MatDialogModule, MatButtonModule, CommonModule, JsonPipe],
+    template: `
     <h2>Data for {{ sourceName }}</h2>
     <div *ngIf="loading">Loading data...</div>
     <div *ngIf="error" class="error">{{ error }}</div>
     <pre *ngIf="data">{{ data | json }}</pre>
-  `,
+  `
 })
 export class DataViewerComponent implements OnInit {
   sourceName: string = '';

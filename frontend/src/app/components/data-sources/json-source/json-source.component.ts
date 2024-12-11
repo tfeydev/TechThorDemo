@@ -8,18 +8,17 @@ import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
-  selector: 'app-json-source',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatOptionModule,
-    MatSelectModule
-  ],
-  templateUrl: './json-source.component.html'
+    selector: 'app-json-source',
+    imports: [
+        CommonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatOptionModule,
+        MatSelectModule
+    ],
+    templateUrl: './json-source.component.html'
 })
 export class JsonSourceComponent {
   @Output() dataChange = new EventEmitter<any>();

@@ -7,11 +7,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatButtonModule, RouterModule, MatMenuModule, MatIconModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    imports: [CommonModule, MatToolbarModule, MatButtonModule, RouterModule, MatMenuModule, MatIconModule],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 }

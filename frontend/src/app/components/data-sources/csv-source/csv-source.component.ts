@@ -7,18 +7,17 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-csv-source',
-  templateUrl: './csv-source.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatOptionModule,
-    MatSelectModule
-  ],
+    selector: 'app-csv-source',
+    templateUrl: './csv-source.component.html',
+    imports: [
+        CommonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatOptionModule,
+        MatSelectModule
+    ]
 })
 
 export class CsvSourceComponent {

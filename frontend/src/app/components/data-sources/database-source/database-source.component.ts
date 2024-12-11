@@ -8,19 +8,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-database-source',
-  templateUrl: './database-source.component.html',
-  styleUrls: ['./database-source.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatIconModule,
-    FormsModule,
-  ],
+    selector: 'app-database-source',
+    templateUrl: './database-source.component.html',
+    styleUrls: ['./database-source.component.scss'],
+    imports: [
+        CommonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatIconModule,
+        FormsModule,
+    ]
 })
 export class DatabaseSourceComponent {
   @Output() dataChange = new EventEmitter<any>();

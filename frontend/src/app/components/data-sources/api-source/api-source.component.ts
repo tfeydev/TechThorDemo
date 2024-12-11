@@ -6,16 +6,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-api-source',
-  templateUrl: './api-source.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule
-  ],
+    selector: 'app-api-source',
+    templateUrl: './api-source.component.html',
+    imports: [
+        CommonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        FormsModule
+    ]
 })
 export class ApiSourceComponent {
   @Output() dataChange = new EventEmitter<any>();

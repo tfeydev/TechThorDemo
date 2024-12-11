@@ -15,26 +15,25 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 
 @Component({
-  selector: 'app-monitoring',
-  standalone: true,
-  templateUrl: './monitoring.component.html',
-  styleUrls: ['./monitoring.component.scss'],
-  imports: [
-    MatCardModule,
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    FormsModule,
-    CommonModule,
-    RouterModule,
-    RouterOutlet,
-    MatTabsModule
-  ]
+    selector: 'app-monitoring',
+    templateUrl: './monitoring.component.html',
+    styleUrls: ['./monitoring.component.scss'],
+    imports: [
+        MatCardModule,
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        FormsModule,
+        CommonModule,
+        RouterModule,
+        RouterOutlet,
+        MatTabsModule
+    ]
 })
 export class MonitoringComponent implements OnInit {
   sources: any[] = [];

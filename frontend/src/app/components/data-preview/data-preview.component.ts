@@ -10,20 +10,19 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-data-preview',
-  standalone: true,
-  templateUrl: './data-preview.component.html',
-  styleUrls: ['./data-preview.component.scss'],
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTableModule,
-    MatMenuModule,
-    RouterModule,
-    MatCardModule
-  ]
+    selector: 'app-data-preview',
+    templateUrl: './data-preview.component.html',
+    styleUrls: ['./data-preview.component.scss'],
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTableModule,
+        MatMenuModule,
+        RouterModule,
+        MatCardModule
+    ]
 })
 export class DataPreviewComponent implements OnInit {
   sourceName: string = '';

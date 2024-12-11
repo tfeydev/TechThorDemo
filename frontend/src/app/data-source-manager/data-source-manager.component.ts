@@ -19,25 +19,24 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  templateUrl: './data-source-manager.component.html',
-  styleUrls: ['./data-source-manager.component.scss'],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    RouterModule,
-  ],
+    selector: 'app-dashboard',
+    templateUrl: './data-source-manager.component.html',
+    styleUrls: ['./data-source-manager.component.scss'],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        RouterModule,
+    ]
 })
 export class DataSourceManagerComponent implements OnInit {
   sources: any[] = [];
