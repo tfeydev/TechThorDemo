@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,8 +29,6 @@ import { MatTabsModule } from '@angular/material/tabs';
         MatIconModule,
         FormsModule,
         CommonModule,
-        RouterModule,
-        RouterOutlet,
         MatTabsModule
     ]
 })
