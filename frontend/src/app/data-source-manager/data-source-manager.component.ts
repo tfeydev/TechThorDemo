@@ -41,28 +41,29 @@ import { FormsModule } from '@angular/forms';
 })
 export class DataSourceManagerComponent implements OnInit {
   sources: any[] = [];
-  totalItems = 0;
-  pageSize = 5; // Default page size
-  currentPage = 0; // Start on the first page
-  sortField = 'name';
-  sortDirection = 'asc';
   displayedColumns: string[] = ['name', 'type', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
   loading = false;
   error: string | null = null;
 
-  private currentPageIndex: number = 0;
+  // Pagination
+  length = this.sources.length
+  pageSize = 5;
+  pageIndex = 0;
+  pageSizeOptions = [5, 10, 25];
+  showFirstLastButtons = true;
 
-  setPageIndex(index: number): void {
-    this.currentPageIndex = index;
+  handlePageEvent(event: PageEvent) {
+    this.length = event.length;
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
   }
 
-  getPageIndex(): number {
-    return this.currentPageIndex;
+  // Filtering
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
   }
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private sourceService: SourceService, private dialog: MatDialog) {}
 
@@ -78,23 +79,8 @@ export class DataSourceManagerComponent implements OnInit {
       next: (sources) => {
         this.sources = sources;
   
-        // Track current page index to preserve it
-        const previousIndex = this.paginator ? this.paginator.pageIndex : this.currentPageIndex;
-  
         // Update data source
-        this.dataSource = new MatTableDataSource(sources);
-  
-        // Attach paginator and sort
-        if (this.paginator) {
-          this.dataSource.paginator = this.paginator;
-          this.paginator.pageIndex = previousIndex; // Restore the page index
-        }
-        if (this.sort) {
-          this.dataSource.sort = this.sort;
-        }
-  
-        // Update currentPageIndex to persist state
-        this.currentPageIndex = previousIndex;
+        this.dataSource = new MatTableDataSource(sources)
   
         this.loading = false;
       },
@@ -104,28 +90,6 @@ export class DataSourceManagerComponent implements OnInit {
       },
     });
   }  
-
-  onPageChange(event: any): void {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.loadSources();
-  }
-
-  onSortChange(event: any): void {
-    this.sortField = event.active;
-    this.sortDirection = event.direction;
-    this.loadSources();
-  }
-
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
-
-    // Retain the current page index when filtering
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.pageIndex = this.currentPageIndex;
-    }
-  }
   
   openAddSourceDialog(): void {
     const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '600px' });
