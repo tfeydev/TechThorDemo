@@ -67,11 +67,3 @@ def get_status():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/save-page-index")
-async def save_page_index(index: int, session: dict = Depends()):
-    session["page_index"] = index
-    return {"status": "success"}
-
-@router.get("/get-page-index")
-async def get_page_index(session: dict = Depends()):
-    return {"page_index": session.get("page_index", 0)}
