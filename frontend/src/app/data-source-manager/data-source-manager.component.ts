@@ -52,17 +52,8 @@ export class DataSourceManagerComponent implements OnInit {
   pageSizeOptions = [5, 10, 25];
   showFirstLastButtons = true;
 
-  handlePageEvent(event: PageEvent) {
-    this.length = event.length;
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-  }
-
-  // Filtering
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
-  }
+  @ViewChild(MatPaginator) paginator!: MatPaginator; // Link Paginator
+  @ViewChild(MatSort) sort!: MatSort; // Link Sort
 
   constructor(private sourceService: SourceService, private dialog: MatDialog) {}
 
@@ -70,17 +61,21 @@ export class DataSourceManagerComponent implements OnInit {
     this.loadSources();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort; // Link Sort to Data Source
+  }
+
   loadSources(): void {
     this.loading = true;
-  
     this.sourceService.loadSources();
     this.sourceService.sources$.subscribe({
       next: (sources) => {
         this.sources = sources;
-  
+
         // Update data source
-        this.dataSource = new MatTableDataSource(sources)
-  
+        this.dataSource.data = sources;
+        this.length = sources.length; // Update paginator length
         this.loading = false;
       },
       error: () => {
@@ -88,7 +83,21 @@ export class DataSourceManagerComponent implements OnInit {
         this.loading = false;
       },
     });
-  }  
+  }
+
+  handlePageEvent(event: PageEvent): void {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage(); // Reset to the first page
+    }
+  }
   
   openAddSourceDialog(): void {
     const dialogRef = this.dialog.open(AddSourceDialogComponent, { width: '600px' });
