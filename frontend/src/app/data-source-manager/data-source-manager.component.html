@@ -64,12 +64,11 @@
       </mat-table>
 
       <mat-paginator
-        [length]="length"
+        [length]="total"
         [pageSize]="pageSize"
-        [pageSizeOptions]="pageSizeOptions"
         [pageIndex]="pageIndex"
-        [showFirstLastButtons]="showFirstLastButtons"
-        aria-label="Select page"
+        [pageSizeOptions]="[5, 10, 25]"
+        [showFirstLastButtons]="true"
         (page)="handlePageEvent($event)">
       </mat-paginator>
     </div>
