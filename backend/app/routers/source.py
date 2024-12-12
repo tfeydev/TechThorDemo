@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from services.source_service import SourceService
 from services.data_services import DataService
 
@@ -8,8 +8,16 @@ data_service = DataService()
 
 
 @router.get("/sources")
-async def get_sources():
-    return source_service.get_sources()
+async def get_sources(page: int = Query(0, alias="page"), page_size: int = Query(10, alias="page_size")):
+    try:
+        sources = source_service.get_sources()  # Hole die Quellen über den Service
+        start = page * page_size
+        end = start + page_size
+        total = len(sources)
+        paginated_sources = sources[start:end]
+        return {"data": paginated_sources, "total": total}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/sources")
 async def add_source(source: dict):

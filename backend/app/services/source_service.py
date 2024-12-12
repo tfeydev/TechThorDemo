@@ -147,7 +147,6 @@ class SourceService(BaseYamlService):
         """Retrieve all sources."""
         return self.sources
 
-    
     def read_csv_from_gdrive(self, file_path, delimiter=",", encoding="utf-8"):
         try:
             gauth = GoogleAuth()
