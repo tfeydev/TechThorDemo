@@ -10,22 +10,22 @@
     <div *ngIf="!loading && !error && sources.length > 0" class="available-sources-header">
       <mat-card-title>Available Sources</mat-card-title>
       
-      <div class="header-actions">
+      <!-- <div class="header-actions">
         <mat-form-field appearance="outline" class="search-bar">
           <mat-label>Filter</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Search sources" />
-        </mat-form-field>
+        </mat-form-field> -->
         
-        <mat-form-field appearance="outline" class="filter-dropdown">
+        <!-- <mat-form-field appearance="outline" class="filter-dropdown">
           <mat-label>Filter by Type</mat-label>
           <mat-select [(value)]="selectedType" (selectionChange)="filterByType()">
             <mat-option *ngFor="let type of availableTypes" [value]="type">{{ type }}</mat-option>
             <mat-option [value]="">All</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
 
         <button mat-raised-button color="primary" (click)="viewYaml()">View YAML</button>
-      </div>
+      <!-- </div> -->
     </div>
 
     <div *ngIf="!loading && !error && sources.length === 0" class="no-sources-message">
@@ -63,14 +63,6 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
 
-      <mat-paginator
-        [length]="total"
-        [pageSize]="pageSize"
-        [pageIndex]="pageIndex"
-        [pageSizeOptions]="[5, 10, 25]"
-        [showFirstLastButtons]="true"
-        (page)="handlePageEvent($event)">
-      </mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>

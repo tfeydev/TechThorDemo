@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SourceService } from '../services/source.service';
 import { AddSourceDialogComponent } from '../components/dialogs/add-source-dialog/add-source-dialog.component';
@@ -49,28 +49,10 @@ export class DataSourceManagerComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  selectedType: string = ''; // Holds the selected filter type
-  availableTypes: string[] = []; // Holds unique types for the dropdown
-
-  // Pagination
-  length = this.sources.length
-  pageSize = 5;
-  pageIndex = 0;
-  pageSizeOptions = [5, 10, 25];
-  showFirstLastButtons = true;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator; // Link Paginator
-  @ViewChild(MatSort) sort!: MatSort; // Link Sort
-
   constructor(private sourceService: SourceService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadSources();
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   loadSources(): void {
@@ -83,11 +65,7 @@ export class DataSourceManagerComponent implements OnInit {
   
         // Update data source
         this.dataSource.data = sources;
-  
-        // Generate unique types for the dropdown
-        this.availableTypes = Array.from(new Set(sources.map((s) => s.type)));
-  
-        this.length = sources.length; // Update paginator length
+
         this.loading = false;
       },
       error: () => {
@@ -95,42 +73,6 @@ export class DataSourceManagerComponent implements OnInit {
         this.loading = false;
       },
     });
-  }  
-
-  handlePageEvent(event: PageEvent): void {
-    this.pageSize = event.pageSize;
-    this.pageIndex = event.pageIndex;
-  }
-
-  filterPredicate(data: any, filter: string): boolean {
-    const matchesName = data.name.toLowerCase().includes(filter);
-    const matchesType = !this.selectedType || data.type === this.selectedType;
-
-    return matchesName && matchesType;
-  }
-
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-  
-    this.dataSource.filterPredicate = this.filterPredicate.bind(this);
-    this.dataSource.filter = filterValue;
-  
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  
-  filterByType(): void {
-    // Filter rows by selected type
-    this.dataSource.filterPredicate = (data, filter) => {
-      return !this.selectedType || data.type === this.selectedType;
-    };
-    this.dataSource.filter = this.selectedType; // Trigger filtering
-
-    // Reset pagination after filtering
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }  
   
   openAddSourceDialog(): void {
